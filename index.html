@@ -2,32 +2,47 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Gloriam Store</title>
+    
     <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
     <div class="loader" id="loader">GLORIAM</div>
+
     <div id="toast" class="toast">HARAP LENGKAPI DATA!</div>
 
     <div class="page active" id="home">
         <header style="height:40vh; display:flex; flex-direction:column; justify-content:center; align-items:center;">
-            <h1 style="letter-spacing:12px; margin:0;">GLORIAM</h1>
+            <h1 style="letter-spacing:12px; margin:0; color:#00c853;">GLORIAM</h1>
             <p style="font-size:10px; opacity:0.4; letter-spacing:2px; margin-top:10px;">MAKE STAND WITH PRIDE</p>
         </header>
-        <div class="products" id="product-list" style="padding: 0 20px 120px; display:flex; flex-direction:column; gap:30px;"></div>
+        <div class="products" id="product-list">
+            </div>
     </div>
 
     <div class="page" id="detail">
         <div class="back-btn" onclick="showPage('home')">← BACK</div>
-        <div style="max-width:500px; margin:auto; padding:20px 24px 150px;">
-            <div id="detImgs" style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:50px;"></div>
+        <div class="detail-container" style="max-width:500px; margin:auto; padding:20px 24px 150px;">
+            <div id="detImgs" class="img-grid"></div>
             <h2 id="detName" style="margin-top:25px; font-size:24px;">-</h2>
-            <p id="detPrice" style="color:#00c853; font-weight:700; font-size:18px;"></p>
+            <p id="detPrice" style="color:#00c853; font-weight:700; font-size:18px; margin:10px 0;"></p>
+            
             <div id="colorArea"></div>
             <div id="sizeArea"></div>
+            
+            <p onclick="alert('Size Chart:\nS: 48x68\nM: 50x70\nL: 52x72\nXL: 54x74\nXXL: 56x76')" 
+               style="color:#00c853; font-size:12px; font-weight:700; margin-top:20px; text-decoration:underline; cursor:pointer;">
+               Size Guide (Sizing Information)
+            </p>
         </div>
         <div class="sticky-btn"><button onclick="validateDetail()">NEXT</button></div>
     </div>
@@ -35,15 +50,18 @@
     <div class="page" id="form">
         <div class="back-btn" onclick="showPage('detail')">← BACK</div>
         <div style="max-width:500px; margin:auto; padding:80px 24px 150px;">
-            <h2 style="margin-bottom:35px;">SHIPPING INFO</h2>
+            <h2 style="margin-bottom:35px; letter-spacing:1px;">SHIPPING INFO</h2>
+            
             <div class="input-group">
                 <label>Full Name</label>
                 <input type="text" id="inName" placeholder="Masukkan nama lengkap">
             </div>
+            
             <div class="input-group">
                 <label>WhatsApp Number</label>
                 <input type="number" id="inPhone" placeholder="08xxx">
             </div>
+            
             <div class="input-group">
                 <label>Full Address</label>
                 <textarea id="inAddress" rows="4" placeholder="Alamat lengkap pengiriman..."></textarea>
@@ -55,26 +73,46 @@
     <div class="page" id="summary">
         <div class="back-btn" onclick="showPage('form')">← BACK</div>
         <div style="max-width:500px; margin:auto; padding:80px 24px 180px;">
-            <h2 style="margin-bottom:25px;">ORDER SUMMARY</h2>
-            <div class="summary-card">
+            <h2 style="margin-bottom:25px; letter-spacing:1px;">ORDER SUMMARY</h2>
+            
+            <div class="summary-card" style="background:#0a0a0a; border:1px solid #1a1a1a; padding:25px; border-radius:20px;">
                 <h3 id="sumProd" style="margin:0; font-size:18px;">-</h3>
                 <p id="sumVar" style="font-size:12px; color:#888; margin:10px 0;">-</p>
-                <h3 id="sumPrice" style="color:#00c853; margin:15px 0 0;">-</h3>
+                <h3 id="sumPrice" style="color:#00c853; margin:15px 0 0; font-size:22px;">-</h3>
+                
                 <hr style="border:0; border-top:1px solid #1a1a1a; margin:20px 0;">
-                <p id="sumCust" style="font-size:13px; line-height:1.8; color:#fff;"></p>
+                
+                <p id="sumCust" style="font-size:14px; line-height:1.8; color:#fff; margin:0;"></p>
             </div>
-            <div class="payment-card">
-                <span style="font-size:10px; font-weight:700; color:#555;">REKENING PEMBAYARAN</span>
+
+            <div class="payment-card" style="background:#0a0a0a; border:1.5px solid #1a1a1a; padding:25px; border-radius:20px; margin-top:20px;">
+                <span style="font-size:10px; font-weight:700; color:#555; letter-spacing:1px;">REKENING PEMBAYARAN</span>
                 <div style="font-size:15px; font-weight:600; margin-top:12px; line-height:1.8;">
-                    MANDIRI: 1370023790229<br>DANA: 081910421976<br>
-                    <span style="opacity:0.5; font-size:13px;">A.N Dias Adhitya Purnama Putra</span>
+                    MANDIRI: 1370023790229<br>
+                    DANA: 081910421976<br>
+                    <span style="opacity:0.5; font-size:13px; font-weight:400;">A.N Dias Adhitya Purnama Putra</span>
                 </div>
             </div>
-            <p class="checkout-note">Tekan checkout dan anda akan diarahkan otomatis ke WhatsApp admin.</p>
+
+            <p style="font-size:11px; color:#444; text-align:center; margin:25px 0; line-height:1.5;">
+                Tekan checkout dan anda akan diarahkan otomatis ke WhatsApp admin.
+            </p>
         </div>
-        <div class="sticky-btn"><button onclick="sendWA()" class="checkout-btn">CHECKOUT (WA)</button></div>
+        <div class="sticky-btn">
+            <button onclick="sendWA()" style="background:#00c853; color:#fff;">CHECKOUT (WA)</button>
+        </div>
     </div>
 
     <script src="script.js"></script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('PWA Registered'))
+                    .catch(err => console.log('PWA Failed', err));
+            });
+        }
+    </script>
 </body>
 </html>
