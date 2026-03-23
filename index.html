@@ -21,7 +21,7 @@
         }
         .loader.hide { opacity: 0; pointer-events: none; }
 
-        /* TOAST & VIBRATE */
+        /* TOAST & ERROR ANIMATION */
         .toast {
             position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
             background: #ff3b3b; color: #fff; padding: 14px 28px; border-radius: 50px;
@@ -83,8 +83,7 @@
             text-decoration: line-through;
         }
 
-        /* FORM MODERN */
-        .form-section { padding-top: 60px; }
+        /* FORM */
         .input-group { margin-bottom: 25px; }
         .input-group label { display: block; font-size: 11px; font-weight: 700; color: #888; margin-bottom: 10px; margin-left: 5px; }
         input, textarea {
@@ -93,32 +92,28 @@
         }
         input:focus, textarea:focus { outline: none; border-color: #fff; background: #0f0f0f; }
 
-        /* REKENING BOX BIG */
+        /* PAYMENT CARD */
         .payment-card {
             background: #0a0a0a; border: 2px solid #1a1a1a; padding: 25px; 
             border-radius: 20px; margin-top: 15px;
         }
         .bank-info { font-size: 16px; line-height: 1.8; font-weight: 600; margin: 15px 0; }
-        .checkout-note { font-size: 11px; color: #666; text-align: center; margin-top: 15px; }
 
         /* BUTTONS */
         button { background: #fff; color: #000; border: none; padding: 20px; width: 100%; font-weight: 700; border-radius: 15px; cursor: pointer; transition: 0.2s; }
         button:active { transform: scale(0.98); }
-        
-        /* UPDATE: Sticky dihilangkan, sekarang menggunakan padding normal */
         .btn-container { margin-top: 40px; }
         
         .back-btn { position: fixed; top: 25px; left: 20px; z-index: 150; font-weight: 700; font-size: 12px; cursor: pointer; opacity: 0.6; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 10px; }
 
-        /* POPUP SIZE GUIDE */
+        /* MODAL */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 20px; }
-        .modal-content { max-width: 500px; width: 100%; position: relative; }
     </style>
 </head>
 <body>
 
     <div class="loader" id="loader">GLORIAM</div>
-    <div id="toast" class="toast">HARAP LENGKAPI DATA!</div>
+    <div id="toast" class="toast">LENGKAPI DATA!</div>
 
     <div class="page active" id="home">
         <header>
@@ -134,9 +129,11 @@
             <div class="img-grid" id="detImgs"></div>
             <h2 id="detName" style="margin-top:25px; font-size:24px;">Product</h2>
             <p id="detPrice" style="color:#00c853; font-weight:700; font-size:18px;"></p>
+            
             <div id="colorArea"></div>
             <div id="sizeArea"></div>
-            <p onclick="openSize()" style="color:#00c853; font-size:12px; font-weight:700; margin-top:15px; text-decoration:underline; cursor:pointer;">Size Guide (Sizing Information)</p>
+            
+            <p onclick="openSize()" style="color:#00c853; font-size:12px; font-weight:700; margin-top:20px; text-decoration:underline; cursor:pointer;">Size Guide (Sizing Information)</p>
             
             <div class="btn-container">
                 <button onclick="validateDetail()">NEXT</button>
@@ -145,28 +142,18 @@
     </div>
 
     <div id="sizeModal" class="modal-overlay" onclick="closeSize()">
-        <div class="modal-content">
+        <div style="max-width:500px; width:100%;">
             <img src="size.jpg" style="width:100%; border-radius:15px;">
         </div>
     </div>
 
     <div class="page" id="form">
         <div class="back-btn" onclick="vibrate(30); showPage('detail')">← BACK</div>
-        <div class="detail-container form-section">
+        <div class="detail-container" style="padding-top:80px;">
             <h2 style="margin-bottom:30px;">SHIPPING INFO</h2>
-            <div class="input-group">
-                <label>FULL NAME</label>
-                <input type="text" id="inName" placeholder="Masukkan nama lengkap">
-            </div>
-            <div class="input-group">
-                <label>WHATSAPP NUMBER</label>
-                <input type="number" id="inPhone" placeholder="08xxx">
-            </div>
-            <div class="input-group">
-                <label>FULL ADDRESS</label>
-                <textarea id="inAddress" rows="4" placeholder="Alamat lengkap pengiriman..."></textarea>
-            </div>
-            
+            <div class="input-group"><label>FULL NAME</label><input type="text" id="inName" placeholder="..."></div>
+            <div class="input-group"><label>WHATSAPP</label><input type="number" id="inPhone" placeholder="08xxx"></div>
+            <div class="input-group"><label>ADDRESS</label><textarea id="inAddress" rows="4" placeholder="..."></textarea></div>
             <div class="btn-container">
                 <button onclick="validateForm()">CONTINUE</button>
             </div>
@@ -175,7 +162,7 @@
 
     <div class="page" id="summary">
         <div class="back-btn" onclick="vibrate(30); showPage('form')">← BACK</div>
-        <div class="detail-container summary-container"> 
+        <div class="detail-container summary-container">
             <h2 style="margin-bottom:20px;">ORDER SUMMARY</h2>
             <div style="background:#0a0a0a; padding:20px; border-radius:15px; border:1px solid #1a1a1a;">
                 <h3 id="sumProd" style="margin:0; font-size:18px;">-</h3>
@@ -185,11 +172,8 @@
                 <p id="sumCust" style="font-size:13px; line-height:1.8; margin:0;"></p>
             </div>
             <div class="payment-card">
-                <span style="font-size:11px; font-weight:700; color:#555;">REKENING PEMBAYARAN</span>
                 <div class="bank-info">MANDIRI: 1370023790229<br>DANA: 081910421976<br><span style="font-size:14px; opacity:0.6;">A.N Dias Adhitya Purnama Putra</span></div>
             </div>
-            <p class="checkout-note">Tekan checkout dan anda akan diarahkan otomatis ke WhatsApp admin.</p>
-            
             <div class="btn-container">
                 <button onclick="sendWA()" style="background:#00c853; color:#fff;">CHECKOUT (WA)</button>
             </div>
@@ -198,7 +182,6 @@
 
     <script>
         const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR5wyzEXxKbCeS8SQWZQ7oz5lmPwszeLtW-TuQ5uzCV6GWcXP5IqOzjTqhIRg5yyLuRd86yLtXGMnoL/pub?output=csv';
-        
         let products = [];
         let cart = { prod: null, size: '', color: '' };
 
@@ -222,11 +205,9 @@
                 products = rows.map(row => {
                     const col = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.trim().replace(/^"|"$/g, ""));
                     return {
-                        id: parseInt(col[0]),
-                        name: col[1],
-                        price: parseInt(col[2]),
-                        badge: col[3].toLowerCase(),
-                        status: col[4],
+                        id: parseInt(col[0]), name: col[1], 
+                        price: col[2], // Teks bebas (Plain Text)
+                        badge: col[3].toLowerCase(), status: col[4],
                         colors: col[5].split('/').map(c => c.trim()),
                         stock: col[6].split('/').map(s => s.trim()),
                         imgs: [col[7], col[8]].filter(i => i !== "")
@@ -242,7 +223,15 @@
             products.forEach(p => {
                 const isSold = p.badge === 'sold';
                 container.innerHTML += `
-                    <div class="card"><div class="badge ${p.badge}">${p.status}</div><img src="${p.imgs[0]}"><div style="padding:25px"><h3 style="margin:0; font-size:20px;">${p.name}</h3><p style="opacity:0.5; margin:10px 0 20px;">${isSold ? 'OUT OF STOCK' : 'Rp' + p.price.toLocaleString('id-ID')}</p><button ${isSold ? 'disabled' : ''} onclick="vibrate(40); goDetail(${p.id})">${isSold ? 'HABIS' : 'SELECT'}</button></div></div>
+                    <div class="card">
+                        <div class="badge ${p.badge}">${p.status}</div>
+                        <img src="${p.imgs[0]}">
+                        <div style="padding:25px">
+                            <h3 style="margin:0; font-size:20px;">${p.name}</h3>
+                            <p style="opacity:0.5; margin:10px 0 20px; font-weight:600;">${isSold ? 'OUT OF STOCK' : 'Rp' + p.price}</p>
+                            <button ${isSold ? 'disabled' : ''} onclick="vibrate(40); goDetail(${p.id})">${isSold ? 'HABIS' : 'SELECT'}</button>
+                        </div>
+                    </div>
                 `;
             });
         }
@@ -257,7 +246,7 @@
             const p = products.find(x => x.id === id);
             cart = { prod: p, size: '', color: p.colors.length === 1 ? p.colors[0] : '' };
             document.getElementById('detName').innerText = p.name;
-            document.getElementById('detPrice').innerText = `Rp${p.price.toLocaleString('id-ID')}`;
+            document.getElementById('detPrice').innerText = 'Rp' + p.price;
             document.getElementById('detImgs').innerHTML = p.imgs.map(i => `<img src="${i}">`).join('');
             
             let cHTML = `<div class="section-label">PILIH WARNA</div><div class="option-box">`;
@@ -284,7 +273,7 @@
             const t = document.getElementById('toast');
             t.innerText = msg; t.classList.add('show');
             document.querySelector('.page.active').classList.add('vibrate-screen');
-            vibrate([100, 50, 100, 50, 100]);
+            vibrate([100, 50, 100]);
             setTimeout(() => { 
                 t.classList.remove('show'); 
                 document.querySelector('.page.active').classList.remove('vibrate-screen'); 
@@ -305,7 +294,7 @@
             if(!n || !p || !a) return triggerError("LENGKAPI DATA PENGIRIMAN!");
             document.getElementById('sumProd').innerText = cart.prod.name;
             document.getElementById('sumVar').innerText = `WARNA: ${cart.color} | SIZE: ${cart.size}`;
-            document.getElementById('sumPrice').innerText = `Rp${cart.prod.price.toLocaleString('id-ID')}`;
+            document.getElementById('sumPrice').innerText = 'Rp' + cart.prod.price;
             document.getElementById('sumCust').innerHTML = `<strong>${n}</strong><br>${p}<br>${a}`;
             showPage('summary');
         }
@@ -315,16 +304,14 @@
             const n = document.getElementById('inName').value;
             const p = document.getElementById('inPhone').value;
             const a = document.getElementById('inAddress').value;
-            const text = `*GLORIAM ORDER*\n\n${cart.prod.name}\nWarna: ${cart.color}\nSize: ${cart.size}\n\n*Data Pengiriman*\nNama: ${n}\nWhatsApp: ${p}\nAlamat: ${a}`;
+            const text = `*GLORIAM ORDER*\n\n${cart.prod.name}\nWarna: ${cart.color}\nSize: ${cart.size}\nTotal: Rp${cart.prod.price}\n\n*Data Pengiriman*\nNama: ${n}\nWhatsApp: ${p}\nAlamat: ${a}`;
             window.open(`https://wa.me/6283898588562?text=${encodeURIComponent(text)}`);
         }
 
         function openSize() {
-            vibrate(40);
             document.getElementById('sizeModal').style.display='flex';
         }
         function closeSize() {
-            vibrate(30);
             document.getElementById('sizeModal').style.display='none';
         }
     </script>
