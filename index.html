@@ -5,60 +5,59 @@
 <title>Gloriam Store</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
 <style>
-body{margin:0;font-family:'Montserrat',sans-serif;background:#fff;overflow-x:hidden}
-header{height:60vh;background:black;color:white;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;animation:fadeIn 1.2s}
-@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-.products{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;padding:20px}
-.card{position:relative;transition:0.3s}
-.card:hover{transform:translateY(-5px)}
-.card img{width:100%}
-.badge{position:absolute;top:10px;left:10px;background:black;color:white;padding:5px 10px;font-size:12px}
-.out{background:red}
-.disabled{opacity:0.4}
-button{background:black;color:white;border:none;padding:12px;width:100%;margin-top:10px;transition:0.3s}
-button:hover{background:#222}
-.page{display:none;animation:fadeIn 0.5s}
-.active{display:block}
-.swipe{display:flex;overflow-x:auto;gap:10px}
-.swipe img{width:80%;border-radius:10px}
-.size-box{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-.size-box div{padding:10px 15px;border:1px solid black;cursor:pointer}
-.size-box div.active{background:black;color:white}
-.size-disabled{opacity:0.3;pointer-events:none}
-input{width:100%;padding:12px;margin:8px 0}
-.scroll-down{margin-top:20px;font-size:12px;opacity:0.6;animation:bounce 2s infinite}
-@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+body{margin:0;font-family:'Montserrat',sans-serif;background:#0a0a0a;color:#fff}
+header{height:70vh;background:#000;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;animation:fadeIn 1.2s}
+header h1{font-size:42px;letter-spacing:3px}
+header p{opacity:0.7}.products{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;padding:20px} .card{position:relative;background:#111;border-radius:12px;overflow:hidden;transition:0.3s} .card:hover{transform:translateY(-6px)} .card img{width:100%} .badge{position:absolute;top:10px;left:10px;background:#fff;color:#000;padding:5px 10px;font-size:11px;font-weight:600} .out{background:red;color:white} .disabled{opacity:0.3}
+
+button{background:#fff;color:#000;border:none;padding:14px;width:100%;margin-top:15px;font-weight:600} button:hover{opacity:0.8}
+
+.page{display:none;animation:fadeIn 0.5s} .active{display:block}
+
+.swipe{display:flex;overflow-x:auto;gap:12px;margin-bottom:20px} .swipe img{width:85%;border-radius:12px}
+
+.option-box{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px} .option-box div{padding:14px 0;border:1px solid #555;text-align:center;cursor:pointer;border-radius:8px} .option-box div.active{background:#fff;color:#000} .size-disabled{opacity:0.2;pointer-events:none}
+
+.section-label{margin-top:25px;font-weight:600;font-size:14px}
+
+input{width:100%;padding:14px;margin:10px 0;background:#111;border:1px solid #333;color:#fff;border-radius:8px}
+
+.sticky-bar{position:fixed;bottom:0;left:0;width:100%;background:#000;padding:10px;border-top:1px solid #222}
+
+.fade{animation:fadeIn 0.6s} @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+.loader{position:fixed;width:100%;height:100%;background:#000;display:flex;justify-content:center;align-items:center;z-index:9999;font-size:24px;letter-spacing:3px}
+
 </style>
 </head>
-<body><!-- HOME --><div id="home" class="page active">
+<body><div id="loader" class="loader">GLORIAM</div><!-- HOME --><div id="home" class="page active">
 <header>
 <h1>GLORIAM</h1>
 <p>WELCOME TO GLORIAM Website</p>
-<p>Scroll down to explore our products</p>
-<div class="scroll-down">↓</div>
+<p>Scroll to explore</p>
 </header><div class="products"><div class="card">
 <div class="badge">PRE ORDER</div>
 <img src="images/soccer-addict.jpg">
-<h3>Soccer Addict</h3>
-<p>Rp110000 (DP 60000)</p>
-<button onclick="goDetail('Soccer Addict',110000,'pre')">SELECT OPTIONS</button>
+<h3 style="padding:10px">Soccer Addict</h3>
+<p style="padding:0 10px">Rp110000 (DP 60000)</p>
+<button onclick="goDetail('Soccer Addict',110000,'pre')">SELECT</button>
 </div><div class="card">
 <div class="badge">IN STOCK</div>
 <img src="images/sleman-soccer.jpg">
-<h3>Sleman Soccer</h3>
-<p>Rp100000</p>
-<button onclick="goDetail('Sleman Soccer',100000,'ready')">SELECT OPTIONS</button>
+<h3 style="padding:10px">Sleman Soccer</h3>
+<p style="padding:0 10px">Rp100000</p>
+<button onclick="goDetail('Sleman Soccer',100000,'ready')">SELECT</button>
 </div><div class="card">
 <div class="badge">IN STOCK</div>
 <img src="images/bless-home.jpg">
-<h3>Bless Home</h3>
-<p>Rp100000</p>
-<button onclick="goDetail('Bless Home',100000,'limited')">SELECT OPTIONS</button>
+<h3 style="padding:10px">Bless Home</h3>
+<p style="padding:0 10px">Rp100000</p>
+<button onclick="goDetail('Bless Home',100000,'limited')">SELECT</button>
 </div><div class="card disabled">
 <div class="badge out">SOLD OUT</div>
 <img src="images/take-me-home.jpg">
-<h3>Take Me Home</h3>
-<p>Sold Out</p>
+<h3 style="padding:10px">Take Me Home</h3>
+<p style="padding:0 10px">Sold Out</p>
 <button disabled>HABIS</button>
 </div></div>
 </div><!-- DETAIL --><div id="detail" class="page">
@@ -69,8 +68,9 @@ input{width:100%;padding:12px;margin:8px 0}
 </div>
 <h2 id="pname"></h2>
 <p id="pprice"></p><div id="sizeWrap"></div>
-<div id="colorWrap"></div><button onclick="goCheckout()">ADD TO CART</button>
-
+<div id="colorWrap"></div>
+</div><div class="sticky-bar">
+<button onclick="goCheckout()">ADD TO CART</button>
 </div>
 </div><!-- CHECKOUT --><div id="checkout" class="page">
 <div style="padding:20px">
@@ -81,7 +81,9 @@ input{width:100%;padding:12px;margin:8px 0}
 <button onclick="sendWA()">Checkout</button>
 </div>
 </div><script>
-let product='',price='',type='',selectedSize='';
+setTimeout(()=>{document.getElementById('loader').style.display='none'},1200)
+
+let product='',price='',type='',selectedSize='',selectedColor='';
 
 function goDetail(n,p,t){
 product=n;price=p;type=t;
@@ -91,7 +93,7 @@ document.getElementById('pname').innerText=n;
 document.getElementById('pprice').innerText='Rp'+p;
 
 let sizes=['S','M','L','XL','XXL','XXXL'];
-let sizeHTML='<label>Size</label><div class="size-box">';
+let sizeHTML='<div class="section-label">Size</div><div class="option-box">';
 
 sizes.forEach(s=>{
 if(t==='limited' && !['M','L'].includes(s)){
@@ -100,32 +102,37 @@ sizeHTML+=`<div class="size-disabled">${s}</div>`;
 sizeHTML+=`<div onclick="selectSize(this,'${s}')">${s}</div>`;
 }
 });
-
 sizeHTML+='</div>';
 
 let colorHTML='';
 if(t==='pre'){
-colorHTML=`<label>Warna</label>
-<select id="color">
-<option>Hitam</option>
-<option>Hijau</option>
-</select>`;
-}else{
-colorHTML=`<input type="hidden" id="color" value="Default">`;
-}
+colorHTML=`<div class="section-label">Warna</div>
+<div class="option-box">
+<div onclick="selectColor(this,'Hitam')">Hitam</div>
+<div onclick="selectColor(this,'Hijau')">Hijau</div>
+</div>`;
+}else{selectedColor='Default'}
+
 
 document.getElementById('sizeWrap').innerHTML=sizeHTML;
 document.getElementById('colorWrap').innerHTML=colorHTML;
 }
 
 function selectSize(el,size){
-document.querySelectorAll('.size-box div').forEach(d=>d.classList.remove('active'));
+document.querySelectorAll('#sizeWrap .option-box div').forEach(d=>d.classList.remove('active'));
 el.classList.add('active');
 selectedSize=size;
 }
 
+function selectColor(el,color){
+document.querySelectorAll('#colorWrap .option-box div').forEach(d=>d.classList.remove('active'));
+el.classList.add('active');
+selectedColor=color;
+}
+
 function goCheckout(){
 if(!selectedSize){alert('Pilih size dulu');return;}
+if(type==='pre' && !selectedColor){alert('Pilih warna dulu');return;}
 document.getElementById('detail').classList.remove('active');
 document.getElementById('checkout').classList.add('active');
 }
@@ -134,11 +141,10 @@ function sendWA(){
 let name=document.getElementById('name').value;
 let phone=document.getElementById('phone').value;
 let address=document.getElementById('address').value;
-let color=document.getElementById('color').value;
 
 if(!name||!phone||!address){alert('Isi data dulu');return;}
 
-let message=`Halo, saya ingin order:%0A%0A${product}%0A%0A*Format Order*%0ANama: ${name}%0AAlamat lengkap: ${address}%0ASize: ${selectedSize}%0ANo hp: ${phone}%0AWarna: ${color}`;
+let message=`Halo, saya ingin order:%0A%0A${product}%0A%0A*Format Order*%0ANama: ${name}%0AAlamat lengkap: ${address}%0ASize: ${selectedSize}%0ANo hp: ${phone}%0AWarna: ${selectedColor}`;
 
 window.location.href=`https://wa.me/6283898588562?text=${message}`;
 }
