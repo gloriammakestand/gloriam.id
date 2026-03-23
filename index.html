@@ -5,49 +5,58 @@
 <title>Gloriam Store</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
 <style>
-body{margin:0;font-family:'Montserrat',sans-serif;background:#fff}
-header{height:60vh;background:black;color:white;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+body{margin:0;font-family:'Montserrat',sans-serif;background:#fff;overflow-x:hidden}
+header{height:60vh;background:black;color:white;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;animation:fadeIn 1.2s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 .products{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;padding:20px}
-.card{position:relative}
+.card{position:relative;transition:0.3s}
+.card:hover{transform:translateY(-5px)}
 .card img{width:100%}
 .badge{position:absolute;top:10px;left:10px;background:black;color:white;padding:5px 10px;font-size:12px}
 .out{background:red}
 .disabled{opacity:0.4}
-button{background:black;color:white;border:none;padding:12px;width:100%;margin-top:10px}
-.page{display:none}
+button{background:black;color:white;border:none;padding:12px;width:100%;margin-top:10px;transition:0.3s}
+button:hover{background:#222}
+.page{display:none;animation:fadeIn 0.5s}
 .active{display:block}
 .swipe{display:flex;overflow-x:auto;gap:10px}
-.swipe img{width:80%}
-.size-disabled{opacity:0.3}
-input,select{width:100%;padding:12px;margin:8px 0}
+.swipe img{width:80%;border-radius:10px}
+.size-box{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.size-box div{padding:10px 15px;border:1px solid black;cursor:pointer}
+.size-box div.active{background:black;color:white}
+.size-disabled{opacity:0.3;pointer-events:none}
+input{width:100%;padding:12px;margin:8px 0}
+.scroll-down{margin-top:20px;font-size:12px;opacity:0.6;animation:bounce 2s infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
 </style>
 </head>
 <body><!-- HOME --><div id="home" class="page active">
 <header>
 <h1>GLORIAM</h1>
-<p>SOCCER ADDICT</p>
-<p>PRE ORDER OPEN</p>
-</header><div class="products"><!-- 1 PRE ORDER --><div class="card">
+<p>WELCOME TO GLORIAM Website</p>
+<p>Scroll down to explore our products</p>
+<div class="scroll-down">↓</div>
+</header><div class="products"><div class="card">
 <div class="badge">PRE ORDER</div>
-<img src="https://via.placeholder.com/300">
+<img src="images/soccer-addict.jpg">
 <h3>Soccer Addict</h3>
 <p>Rp110000 (DP 60000)</p>
 <button onclick="goDetail('Soccer Addict',110000,'pre')">SELECT OPTIONS</button>
-</div><!-- 2 READY --><div class="card">
+</div><div class="card">
 <div class="badge">IN STOCK</div>
-<img src="https://via.placeholder.com/300">
+<img src="images/sleman-soccer.jpg">
 <h3>Sleman Soccer</h3>
 <p>Rp100000</p>
 <button onclick="goDetail('Sleman Soccer',100000,'ready')">SELECT OPTIONS</button>
-</div><!-- 3 READY LIMITED SIZE --><div class="card">
+</div><div class="card">
 <div class="badge">IN STOCK</div>
-<img src="https://via.placeholder.com/300">
+<img src="images/bless-home.jpg">
 <h3>Bless Home</h3>
 <p>Rp100000</p>
 <button onclick="goDetail('Bless Home',100000,'limited')">SELECT OPTIONS</button>
-</div><!-- 4 SOLD OUT --><div class="card disabled">
+</div><div class="card disabled">
 <div class="badge out">SOLD OUT</div>
-<img src="https://via.placeholder.com/300">
+<img src="images/take-me-home.jpg">
 <h3>Take Me Home</h3>
 <p>Sold Out</p>
 <button disabled>HABIS</button>
@@ -55,8 +64,8 @@ input,select{width:100%;padding:12px;margin:8px 0}
 </div><!-- DETAIL --><div id="detail" class="page">
 <div style="padding:20px">
 <div class="swipe">
-<img src="https://via.placeholder.com/400">
-<img src="https://via.placeholder.com/400">
+<img src="images/detail1.jpg">
+<img src="images/detail2.jpg">
 </div>
 <h2 id="pname"></h2>
 <p id="pprice"></p><div id="sizeWrap"></div>
@@ -72,7 +81,7 @@ input,select{width:100%;padding:12px;margin:8px 0}
 <button onclick="sendWA()">Checkout</button>
 </div>
 </div><script>
-let product='',price='',type='';
+let product='',price='',type='',selectedSize='';
 
 function goDetail(n,p,t){
 product=n;price=p;type=t;
@@ -81,21 +90,18 @@ document.getElementById('detail').classList.add('active');
 document.getElementById('pname').innerText=n;
 document.getElementById('pprice').innerText='Rp'+p;
 
-let sizeHTML='';
-if(t==='limited'){
-sizeHTML=`<label>Size</label>
-<select id="size">
-<option class="size-disabled">S (Habis)</option>
-<option>M</option>
-<option>L</option>
-<option class="size-disabled">XL (Habis)</option>
-</select>`;
+let sizes=['S','M','L','XL','XXL','XXXL'];
+let sizeHTML='<label>Size</label><div class="size-box">';
+
+sizes.forEach(s=>{
+if(t==='limited' && !['M','L'].includes(s)){
+sizeHTML+=`<div class="size-disabled">${s}</div>`;
 }else{
-sizeHTML=`<label>Size</label>
-<select id="size">
-<option>S</option><option>M</option><option>L</option><option>XL</option>
-</select>`;
+sizeHTML+=`<div onclick="selectSize(this,'${s}')">${s}</div>`;
 }
+});
+
+sizeHTML+='</div>';
 
 let colorHTML='';
 if(t==='pre'){
@@ -105,17 +111,21 @@ colorHTML=`<label>Warna</label>
 <option>Hijau</option>
 </select>`;
 }else{
-colorHTML=`<label>Warna</label>
-<select id="color">
-<option>Default</option>
-</select>`;
+colorHTML=`<input type="hidden" id="color" value="Default">`;
 }
 
 document.getElementById('sizeWrap').innerHTML=sizeHTML;
 document.getElementById('colorWrap').innerHTML=colorHTML;
 }
 
+function selectSize(el,size){
+document.querySelectorAll('.size-box div').forEach(d=>d.classList.remove('active'));
+el.classList.add('active');
+selectedSize=size;
+}
+
 function goCheckout(){
+if(!selectedSize){alert('Pilih size dulu');return;}
 document.getElementById('detail').classList.remove('active');
 document.getElementById('checkout').classList.add('active');
 }
@@ -124,10 +134,11 @@ function sendWA(){
 let name=document.getElementById('name').value;
 let phone=document.getElementById('phone').value;
 let address=document.getElementById('address').value;
-let size=document.getElementById('size').value;
 let color=document.getElementById('color').value;
 
-let message=`Halo, saya ingin order:%0A%0A${product}%0A%0A*Format Order*%0ANama: ${name}%0AAlamat lengkap: ${address}%0ASize: ${size}%0ANo hp: ${phone}%0AWarna: ${color}%0A*Mohon diisi lengkap*%0A%0ASetelah melakukan pembayaran (DP/Lunas) & mengisi format order, Akan dimasukkan ke dalam grup.`;
+if(!name||!phone||!address){alert('Isi data dulu');return;}
+
+let message=`Halo, saya ingin order:%0A%0A${product}%0A%0A*Format Order*%0ANama: ${name}%0AAlamat lengkap: ${address}%0ASize: ${selectedSize}%0ANo hp: ${phone}%0AWarna: ${color}`;
 
 window.location.href=`https://wa.me/6283898588562?text=${message}`;
 }
