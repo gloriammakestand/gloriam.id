@@ -1,0 +1,23 @@
+{
+  "name": "Gloriam Store",
+  "short_name": "Gloriam",
+  "description": "Make Stand With Pride - Official Merchandise",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/192x192/000000/00c853?text=G",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://via.placeholder.com/512x512/000000/00c853?text=Gloriam",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
