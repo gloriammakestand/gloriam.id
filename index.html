@@ -3,89 +3,133 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gloriam Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
 <style>
-body {font-family: Arial; margin:0; background:#f5f5f5;}
-header {background:black; color:white; padding:20px; text-align:center;}
-.section {padding:20px;}
-.products {display:grid; grid-template-columns:repeat(2,1fr); gap:15px;}
-.card {background:white; padding:10px; text-align:center; border-radius:10px;}
-.card img {width:100%; border-radius:10px;}
-button {background:black; color:white; padding:10px; border:none; margin-top:10px; width:100%;}
-.modal {display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5);}
-.modal-content {background:white; margin:10% auto; padding:20px; width:90%; border-radius:10px;}
-input, select {width:100%; padding:10px; margin:5px 0;}
+body{margin:0;font-family:'Montserrat',sans-serif;background:#fff}
+header{height:60vh;background:black;color:white;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+.products{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;padding:20px}
+.card{position:relative}
+.card img{width:100%}
+.badge{position:absolute;top:10px;left:10px;background:black;color:white;padding:5px 10px;font-size:12px}
+.out{background:red}
+.disabled{opacity:0.4}
+button{background:black;color:white;border:none;padding:12px;width:100%;margin-top:10px}
+.page{display:none}
+.active{display:block}
+.swipe{display:flex;overflow-x:auto;gap:10px}
+.swipe img{width:80%}
+.size-disabled{opacity:0.3}
+input,select{width:100%;padding:12px;margin:8px 0}
 </style>
 </head>
-<body><header>
-<h1>PRE ORDER</h1>
+<body><!-- HOME --><div id="home" class="page active">
+<header>
+<h1>GLORIAM</h1>
 <p>SOCCER ADDICT</p>
-<p>Harga: Rp110.000 (DP 60.000)</p>
-</header><div class="section">
-<h2>Ready Stock</h2>
-<div class="products"><div class="card">
+<p>PRE ORDER OPEN</p>
+</header><div class="products"><!-- 1 PRE ORDER --><div class="card">
+<div class="badge">PRE ORDER</div>
 <img src="https://via.placeholder.com/300">
-<h3>Bless Home</h3>
-<p>Rp80.000</p>
-<button onclick="openProduct('Bless Home',80000)">Pilih</button>
-</div><div class="card">
+<h3>Soccer Addict</h3>
+<p>Rp110000 (DP 60000)</p>
+<button onclick="goDetail('Soccer Addict',110000,'pre')">SELECT OPTIONS</button>
+</div><!-- 2 READY --><div class="card">
+<div class="badge">IN STOCK</div>
 <img src="https://via.placeholder.com/300">
 <h3>Sleman Soccer</h3>
-<p>Rp90.000</p>
-<button onclick="openProduct('Sleman Soccer',90000)">Pilih</button>
+<p>Rp100000</p>
+<button onclick="goDetail('Sleman Soccer',100000,'ready')">SELECT OPTIONS</button>
+</div><!-- 3 READY LIMITED SIZE --><div class="card">
+<div class="badge">IN STOCK</div>
+<img src="https://via.placeholder.com/300">
+<h3>Bless Home</h3>
+<p>Rp100000</p>
+<button onclick="goDetail('Bless Home',100000,'limited')">SELECT OPTIONS</button>
+</div><!-- 4 SOLD OUT --><div class="card disabled">
+<div class="badge out">SOLD OUT</div>
+<img src="https://via.placeholder.com/300">
+<h3>Take Me Home</h3>
+<p>Sold Out</p>
+<button disabled>HABIS</button>
 </div></div>
-</div><!-- Modal Produk --><div class="modal" id="productModal">
-<div class="modal-content">
-<h3 id="productName"></h3>
-<p id="productPrice"></p><label>Size</label> <select id="size">
-
-<option>S</option>
-<option>M</option>
-<option>L</option>
-<option>XL</option>
-<option>XXL</option>
-</select><button onclick="openCheckout()">Checkout</button>
+</div><!-- DETAIL --><div id="detail" class="page">
+<div style="padding:20px">
+<div class="swipe">
+<img src="https://via.placeholder.com/400">
+<img src="https://via.placeholder.com/400">
+</div>
+<h2 id="pname"></h2>
+<p id="pprice"></p><div id="sizeWrap"></div>
+<div id="colorWrap"></div><button onclick="goCheckout()">ADD TO CART</button>
 
 </div>
-</div><!-- Modal Checkout --><div class="modal" id="checkoutModal">
-<div class="modal-content">
-<h3>Checkout</h3>
+</div><!-- CHECKOUT --><div id="checkout" class="page">
+<div style="padding:20px">
+<h2>Billing Details</h2>
 <input id="name" placeholder="Nama">
 <input id="phone" placeholder="No HP">
-<input id="address" placeholder="Alamat">
-<button onclick="sendWA()">Kirim ke WhatsApp</button>
+<input id="address" placeholder="Alamat lengkap">
+<button onclick="sendWA()">Checkout</button>
 </div>
 </div><script>
-let selectedProduct = '';
-let selectedPrice = 0;
+let product='',price='',type='';
 
-function openProduct(name, price){
-selectedProduct = name;
-selectedPrice = price;
-document.getElementById('productName').innerText = name;
-document.getElementById('productPrice').innerText = 'Rp'+price;
-document.getElementById('productModal').style.display='block';
+function goDetail(n,p,t){
+product=n;price=p;type=t;
+document.getElementById('home').classList.remove('active');
+document.getElementById('detail').classList.add('active');
+document.getElementById('pname').innerText=n;
+document.getElementById('pprice').innerText='Rp'+p;
+
+let sizeHTML='';
+if(t==='limited'){
+sizeHTML=`<label>Size</label>
+<select id="size">
+<option class="size-disabled">S (Habis)</option>
+<option>M</option>
+<option>L</option>
+<option class="size-disabled">XL (Habis)</option>
+</select>`;
+}else{
+sizeHTML=`<label>Size</label>
+<select id="size">
+<option>S</option><option>M</option><option>L</option><option>XL</option>
+</select>`;
 }
 
-function openCheckout(){
-document.getElementById('productModal').style.display='none';
-document.getElementById('checkoutModal').style.display='block';
+let colorHTML='';
+if(t==='pre'){
+colorHTML=`<label>Warna</label>
+<select id="color">
+<option>Hitam</option>
+<option>Hijau</option>
+</select>`;
+}else{
+colorHTML=`<label>Warna</label>
+<select id="color">
+<option>Default</option>
+</select>`;
+}
+
+document.getElementById('sizeWrap').innerHTML=sizeHTML;
+document.getElementById('colorWrap').innerHTML=colorHTML;
+}
+
+function goCheckout(){
+document.getElementById('detail').classList.remove('active');
+document.getElementById('checkout').classList.add('active');
 }
 
 function sendWA(){
-let name = document.getElementById('name').value;
-let phone = document.getElementById('phone').value;
-let address = document.getElementById('address').value;
-let size = document.getElementById('size').value;
+let name=document.getElementById('name').value;
+let phone=document.getElementById('phone').value;
+let address=document.getElementById('address').value;
+let size=document.getElementById('size').value;
+let color=document.getElementById('color').value;
 
-let message = `Halo, saya ingin order:%0AProduk: ${selectedProduct}%0ASize: ${size}%0AHarga: Rp${selectedPrice}%0ANama: ${name}%0AHP: ${phone}%0AAlamat: ${address}`;
+let message=`Halo, saya ingin order:%0A%0A${product}%0A%0A*Format Order*%0ANama: ${name}%0AAlamat lengkap: ${address}%0ASize: ${size}%0ANo hp: ${phone}%0AWarna: ${color}%0A*Mohon diisi lengkap*%0A%0ASetelah melakukan pembayaran (DP/Lunas) & mengisi format order, Akan dimasukkan ke dalam grup.`;
 
-window.location.href = `https://wa.me/62XXXXXXXXXX?text=${message}`;
-}
-
-window.onclick = function(e){
-if(e.target.classList.contains('modal')){
-e.target.style.display='none';
-}
+window.location.href=`https://wa.me/6283898588562?text=${message}`;
 }
 </script></body>
 </html>
