@@ -126,26 +126,26 @@
     </div>
 
     <div class="page" id="detail">
-        <div class="back-btn" onclick="showPage('home')">← BACK</div>
+        <div class="back-btn" onclick="vibrate(30); showPage('home')">← BACK</div>
         <div class="detail-container">
             <div class="img-grid" id="detImgs"></div>
             <h2 id="detName" style="margin-top:25px; font-size:24px;">Product</h2>
             <p id="detPrice" style="color:#00c853; font-weight:700; font-size:18px;"></p>
             <div id="colorArea"></div>
             <div id="sizeArea"></div>
-            <p onclick="document.getElementById('sizeModal').style.display='flex'" style="color:#00c853; font-size:12px; font-weight:700; margin-top:15px; text-decoration:underline; cursor:pointer;">Size Guide (Sizing Information)</p>
+            <p onclick="openSize()" style="color:#00c853; font-size:12px; font-weight:700; margin-top:15px; text-decoration:underline; cursor:pointer;">Size Guide (Sizing Information)</p>
         </div>
         <div class="sticky-btn"><button onclick="validateDetail()">NEXT</button></div>
     </div>
 
-    <div id="sizeModal" class="modal-overlay" onclick="this.style.display='none'">
+    <div id="sizeModal" class="modal-overlay" onclick="closeSize()">
         <div class="modal-content">
             <img src="size.jpg" style="width:100%; border-radius:15px;">
         </div>
     </div>
 
     <div class="page" id="form">
-        <div class="back-btn" onclick="showPage('detail')">← BACK</div>
+        <div class="back-btn" onclick="vibrate(30); showPage('detail')">← BACK</div>
         <div class="detail-container form-section">
             <h2 style="margin-bottom:30px;">SHIPPING INFO</h2>
             <div class="input-group">
@@ -165,7 +165,7 @@
     </div>
 
     <div class="page" id="summary">
-        <div class="back-btn" onclick="showPage('form')">← BACK</div>
+        <div class="back-btn" onclick="vibrate(30); showPage('form')">← BACK</div>
         <div class="detail-container summary-container"> 
             <h2 style="margin-bottom:20px;">ORDER SUMMARY</h2>
             <div style="background:#0a0a0a; padding:20px; border-radius:15px; border:1px solid #1a1a1a;">
@@ -185,17 +185,21 @@
     </div>
 
     <script>
-        // URL Spreadsheets CSV kamu
         const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR5wyzEXxKbCeS8SQWZQ7oz5lmPwszeLtW-TuQ5uzCV6GWcXP5IqOzjTqhIRg5yyLuRd86yLtXGMnoL/pub?output=csv';
         
         let products = [];
         let cart = { prod: null, size: '', color: '' };
 
+        // Fungsi bantu getar
+        function vibrate(ms) {
+            if (navigator.vibrate) navigator.vibrate(ms);
+        }
+
         window.onload = async () => {
             await fetchProducts();
             setTimeout(() => document.getElementById('loader').classList.add('hide'), 1000);
             if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('sw.js').then(reg => console.log('SW Reg')).catch(err => console.log('SW Err'));
+                navigator.serviceWorker.register('sw.js');
             }
         };
 
@@ -218,7 +222,7 @@
                     };
                 });
                 renderHome();
-            } catch (err) { console.error("Error loading sheet:", err); }
+            } catch (err) { console.error(err); }
         }
 
         function renderHome() {
@@ -227,7 +231,7 @@
             products.forEach(p => {
                 const isSold = p.badge === 'sold';
                 container.innerHTML += `
-                    <div class="card"><div class="badge ${p.badge}">${p.status}</div><img src="${p.imgs[0]}"><div style="padding:25px"><h3 style="margin:0; font-size:20px;">${p.name}</h3><p style="opacity:0.5; margin:10px 0 20px;">${isSold ? 'OUT OF STOCK' : 'Rp' + p.price.toLocaleString('id-ID')}</p><button ${isSold ? 'disabled' : ''} onclick="goDetail(${p.id})">${isSold ? 'HABIS' : 'SELECT'}</button></div></div>
+                    <div class="card"><div class="badge ${p.badge}">${p.status}</div><img src="${p.imgs[0]}"><div style="padding:25px"><h3 style="margin:0; font-size:20px;">${p.name}</h3><p style="opacity:0.5; margin:10px 0 20px;">${isSold ? 'OUT OF STOCK' : 'Rp' + p.price.toLocaleString('id-ID')}</p><button ${isSold ? 'disabled' : ''} onclick="vibrate(40); goDetail(${p.id})">${isSold ? 'HABIS' : 'SELECT'}</button></div></div>
                 `;
             });
         }
@@ -259,6 +263,7 @@
         }
 
         function selOpt(type, val, el) {
+            vibrate(20); // Getar singkat saat milih variasi
             cart[type] = val;
             el.parentElement.querySelectorAll('div').forEach(d => d.classList.remove('active'));
             el.classList.add('active');
@@ -268,7 +273,7 @@
             const t = document.getElementById('toast');
             t.innerText = msg; t.classList.add('show');
             document.querySelector('.page.active').classList.add('vibrate-screen');
-            if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 100]);
+            vibrate([100, 50, 100, 50, 100]); // Getar pola error
             setTimeout(() => { 
                 t.classList.remove('show'); 
                 document.querySelector('.page.active').classList.remove('vibrate-screen'); 
@@ -276,11 +281,13 @@
         }
 
         function validateDetail() {
+            vibrate(40);
             if(!cart.color || !cart.size) return triggerError("PILIH WARNA & UKURAN!");
             showPage('form');
         }
 
         function validateForm() {
+            vibrate(40);
             const n = document.getElementById('inName').value;
             const p = document.getElementById('inPhone').value;
             const a = document.getElementById('inAddress').value;
@@ -293,11 +300,21 @@
         }
 
         function sendWA() {
+            vibrate(60);
             const n = document.getElementById('inName').value;
             const p = document.getElementById('inPhone').value;
             const a = document.getElementById('inAddress').value;
             const text = `*GLORIAM ORDER*\n\n${cart.prod.name}\nWarna: ${cart.color}\nSize: ${cart.size}\n\n*Data Pengiriman*\nNama: ${n}\nWhatsApp: ${p}\nAlamat: ${a}`;
             window.open(`https://wa.me/6283898588562?text=${encodeURIComponent(text)}`);
+        }
+
+        function openSize() {
+            vibrate(40);
+            document.getElementById('sizeModal').style.display='flex';
+        }
+        function closeSize() {
+            vibrate(30);
+            document.getElementById('sizeModal').style.display='none';
         }
     </script>
 </body>
