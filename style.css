@@ -1,11 +1,10 @@
-/* --- RESET & BASE --- */
 * { box-sizing: border-box; }
 html, body {
     margin: 0; font-family: 'Montserrat', sans-serif;
     background: #000; color: #fff; overflow-x: hidden;
 }
 
-/* --- LOADER & TOAST --- */
+/* LOADER */
 .loader {
     position: fixed; inset: 0; background: #000; display: flex;
     justify-content: center; align-items: center; z-index: 10000;
@@ -13,55 +12,75 @@ html, body {
 }
 .loader.hide { opacity: 0; pointer-events: none; }
 
+/* TOAST & VIBRATE */
 .toast {
     position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
     background: #ff3b3b; color: #fff; padding: 14px 28px; border-radius: 50px;
-    transition: 0.5s; z-index: 9999; font-weight: 700; font-size: 12px;
+    transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 9999; 
+    font-weight: 700; font-size: 12px; box-shadow: 0 10px 20px rgba(255, 59, 59, 0.3);
 }
 .toast.show { top: 30px; }
 
-/* --- VIBRATE SCREEN --- */
 @keyframes screenShake {
     0%, 100% { transform: translateX(0); }
     10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
     20%, 40%, 60%, 80% { transform: translateX(8px); }
 }
-.vibrate-screen { animation: screenShake 0.4s both; }
+.vibrate-screen { animation: screenShake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
 
-/* --- BADGE (Sesuai Request) --- */
+/* HEADER */
+header { height: 50vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+header h1 { letter-spacing: 12px; font-size: 32px; margin: 0; color: #00c853; }
+header p { font-size: 10px; opacity: 0.4; margin-top: 10px; letter-spacing: 2px; }
+
+/* PRODUCTS */
+.products { display: flex; flex-direction: column; align-items: center; gap: 40px; padding: 0 20px 120px; }
+.card { width: 100%; max-width: 450px; background: #0a0a0a; border-radius: 20px; border: 1px solid #1a1a1a; overflow: hidden; position: relative; }
+.card img { width: 100%; display: block; }
 .badge { position: absolute; top: 15px; left: 15px; padding: 6px 14px; font-size: 10px; font-weight: 700; border-radius: 8px; z-index: 2; }
-.badge.pre { background: #00c853; color: #fff; }   /* HIJAU */
-.badge.ready { background: #fff; color: #000; }     /* PUTIH */
-.badge.sold { background: #ff3b3b; color: #fff; }    /* MERAH */
+.pre { background: #00c853; color: #fff; }
+.ready { background: #fff; color: #000; }
+.sold { background: #ff3b3b; color: #fff; }
 
-/* --- PAGE SYSTEM --- */
+/* PAGE TRANSITIONS */
 .page {
     position: fixed; inset: 0; overflow-y: auto; background: #000; 
-    opacity: 0; transform: translateY(20px); transition: 0.4s;
-    pointer-events: none;
+    opacity: 0; transform: translateY(20px); transition: 0.4s ease-out;
+    pointer-events: none; z-index: 1;
 }
 .page.active { opacity: 1; transform: translateY(0); pointer-events: auto; z-index: 10; }
 
-/* --- FORM STYLING (Sesuai Foto) --- */
+/* DETAIL IMAGES */
+.img-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 60px; }
+.img-grid img { width: 100%; border-radius: 15px; aspect-ratio: 4/5; object-fit: cover; border: 1px solid #1a1a1a; }
+
+/* OPTIONS */
+.detail-container { max-width: 500px; margin: auto; padding: 20px 24px 160px; }
+.summary-container { padding-top: 80px; }
+.section-label { margin-top: 30px; font-size: 11px; font-weight: 700; color: #555; letter-spacing: 1.5px; text-transform: uppercase; }
+.option-box { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+.option-box div {
+    padding: 16px; border: 1.5px solid #1a1a1a; text-align: center;
+    border-radius: 12px; cursor: pointer; background: #050505; font-size: 14px; font-weight: 600;
+}
+.option-box div.active { background: #fff; color: #000; border-color: #fff; }
+.option-box div.disabled { opacity: 0.1; cursor: not-allowed; text-decoration: line-through; border: 1px dashed #333; }
+
+/* FORM */
 .input-group { margin-bottom: 25px; }
-.input-group label { 
-    display: block; font-size: 11px; font-weight: 700; 
-    color: #888; margin-bottom: 12px; margin-left: 5px; 
-    text-transform: uppercase;
-}
-input, textarea {
-    width: 100%; padding: 18px; background: #0a0a0a; border: 1.5px solid #1a1a1a;
-    color: #fff; border-radius: 15px; font-family: inherit; font-size: 15px;
-}
-input:focus, textarea:focus { outline: none; border-color: #333; }
+.input-group label { display: block; font-size: 11px; font-weight: 700; color: #888; margin-bottom: 10px; margin-left: 5px; }
+input, textarea { width: 100%; padding: 18px; background: #0a0a0a; border: 1.5px solid #1a1a1a; color: #fff; border-radius: 15px; font-family: inherit; font-size: 15px; }
 
-/* --- BUTTONS --- */
+/* REKENING */
+.payment-card { background: #0a0a0a; border: 2px solid #1a1a1a; padding: 25px; border-radius: 20px; margin-top: 15px; }
+.bank-info { font-size: 16px; line-height: 1.8; font-weight: 600; margin: 15px 0; }
+.checkout-note { font-size: 11px; color: #666; text-align: center; margin-top: 15px; }
+
+/* BUTTONS */
 button { background: #fff; color: #000; border: none; padding: 20px; width: 100%; font-weight: 700; border-radius: 15px; cursor: pointer; }
-.checkout-btn { background: #00c853 ! stroke: none; color: #fff; }
 .sticky-btn { position: fixed; bottom: 0; left: 0; width: 100%; padding: 25px; background: linear-gradient(transparent, #000 30%); z-index: 100; }
-.back-btn { position: fixed; top: 25px; left: 20px; z-index: 150; font-weight: 700; font-size: 11px; cursor: pointer; opacity: 0.6; }
+.back-btn { position: fixed; top: 25px; left: 20px; z-index: 150; font-weight: 700; font-size: 12px; cursor: pointer; opacity: 0.6; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 10px; }
 
-/* --- SUMMARY --- */
-.summary-card { background: #0a0a0a; border: 1px solid #1a1a1a; padding: 25px; border-radius: 20px; }
-.payment-card { background: #0a0a0a; border: 1.5px solid #1a1a1a; padding: 25px; border-radius: 20px; margin-top: 20px; }
-.checkout-note { font-size: 11px; color: #444; text-align: center; margin: 20px 0 100px; padding: 0 20px; line-height: 1.5; }
+/* MODAL */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 20px; }
+.modal-content { max-width: 500px; width: 100%; }
