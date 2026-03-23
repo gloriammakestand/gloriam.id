@@ -109,30 +109,31 @@
     </div>
 
     <div class="page" id="form">
-    <div class="back-btn" onclick="vibrate(30); showPage('detail')">← BACK</div>
-    <div class="detail-container" style="padding-top:80px;">
-        <h2 style="margin-bottom:30px;">SHIPPING INFO</h2>
-        
-        <div class="input-group">
-            <label>FULL NAME</label>
-            <input type="text" id="inName" placeholder="Nama Lengkap...">
-        </div>
-        
-        <div class="input-group">
-            <label>WHATSAPP</label>
-            <input type="number" id="inPhone" placeholder="08xxx">
-        </div>
-        
-        <div class="input-group">
-            <label>ADDRESS</label>
-            <textarea id="inAddress" rows="4" placeholder="Alamat Lengkap..."></textarea>
-        </div>
-        
-        <div class="btn-container">
-            <button onclick="validateForm()">CONTINUE</button>
+        <div class="back-btn" onclick="vibrate(30); showPage('detail')">← BACK</div>
+        <div class="detail-container" style="padding-top:80px;">
+            <h2 style="margin-bottom:30px;">SHIPPING INFO</h2>
+            
+            <div class="input-group">
+                <label>FULL NAME</label>
+                <input type="text" id="inName" placeholder="Nama Lengkap...">
+            </div>
+            
+            <div class="input-group">
+                <label>WHATSAPP</label>
+                <input type="number" id="inPhone" placeholder="08xxx">
+            </div>
+            
+            <div class="input-group">
+                <label>ADDRESS</label>
+                <textarea id="inAddress" rows="4" placeholder="Alamat Lengkap..."></textarea>
+                <p style="font-size: 10px; color: #555; margin-top: 8px; margin-left: 5px;">*Mohon diisi lengkap untuk memudahkan pengiriman.</p>
+            </div>
+            
+            <div class="btn-container">
+                <button onclick="validateForm()">CONTINUE</button>
+            </div>
         </div>
     </div>
-</div>
 
     <div class="page" id="summary">
         <div class="back-btn" onclick="vibrate(30); showPage('form')">← BACK</div>
@@ -229,8 +230,6 @@
             cart = { prod: p, size: '', color: p.colors.length === 1 ? p.colors[0] : '' };
             document.getElementById('detName').innerText = p.name;
             document.getElementById('detPrice').innerText = 'Rp' + p.price;
-
-            // FIX: Lewati gambar pertama (thumbnail) agar tidak dobel
             const detailImgs = p.imgs.slice(1);
             document.getElementById('detImgs').innerHTML = detailImgs.map(i => `<img src="${i}">`).join('');
             
@@ -258,7 +257,7 @@
         function validateForm() {
             vibrate(40);
             const n = document.getElementById('inName').value, p = document.getElementById('inPhone').value, a = document.getElementById('inAddress').value;
-            if(!n || !p || !a) return;
+            if(!n || !p || !a) { document.getElementById('toast').innerText = "LENGKAPI DATA!"; document.getElementById('toast').classList.add('show'); setTimeout(() => document.getElementById('toast').classList.remove('show'), 2000); return; }
             document.getElementById('sumProd').innerText = cart.prod.name;
             document.getElementById('sumVar').innerText = `WARNA: ${cart.color} | SIZE: ${cart.size}`;
             document.getElementById('sumPrice').innerText = 'Rp' + cart.prod.price;
