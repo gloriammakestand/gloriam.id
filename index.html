@@ -21,21 +21,14 @@
         }
         .loader.hide { opacity: 0; pointer-events: none; }
 
-        /* TOAST & ERROR ANIMATION */
+        /* TOAST */
         .toast {
             position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
             background: #ff3b3b; color: #fff; padding: 14px 28px; border-radius: 50px;
             transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 9999; 
-            font-weight: 700; font-size: 12px; box-shadow: 0 10px 20px rgba(255, 59, 59, 0.3);
+            font-weight: 700; font-size: 12px;
         }
         .toast.show { top: 30px; }
-
-        @keyframes screenShake {
-            0%, 100% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
-            20%, 40%, 60%, 80% { transform: translateX(8px); }
-        }
-        .vibrate-screen { animation: screenShake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
 
         /* HEADER */
         header { height: 50vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
@@ -51,7 +44,7 @@
         .ready { background: #fff; color: #000; }
         .sold { background: #ff3b3b; }
 
-        /* PAGE TRANSITIONS */
+        /* PAGE SYSTEM */
         .page {
             position: fixed; inset: 0; overflow-y: auto; background: #000; 
             opacity: 0; transform: translateY(20px); transition: 0.4s ease-out;
@@ -59,54 +52,33 @@
         }
         .page.active { opacity: 1; transform: translateY(0); pointer-events: auto; z-index: 10; }
 
-        /* DETAIL IMAGES */
+        /* DETAIL & GRID */
+        .detail-container { max-width: 500px; margin: auto; padding: 20px 24px 160px; }
         .img-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 60px; }
         .img-grid img { width: 100%; border-radius: 15px; aspect-ratio: 4/5; object-fit: cover; border: 1px solid #1a1a1a; }
-
-        /* OPTIONS */
-        .detail-container { max-width: 500px; margin: auto; padding: 20px 24px 160px; }
-        .summary-container { padding-top: 80px; }
         
         .section-label { margin-top: 30px; font-size: 11px; font-weight: 700; color: #555; letter-spacing: 1.5px; text-transform: uppercase; }
         .option-box { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
         .option-box div {
             padding: 16px; border: 1.5px solid #1a1a1a; text-align: center;
             border-radius: 12px; cursor: pointer; background: #050505; font-size: 14px; font-weight: 600;
-            transition: 0.3s;
         }
         .option-box div.active { background: #fff; color: #000; border-color: #fff; }
-        
-        .option-box div.disabled { 
-            opacity: 0.1;
-            cursor: not-allowed; 
-            border: 1px dashed #333;
-            text-decoration: line-through;
-        }
+        .option-box div.disabled { opacity: 0.1; cursor: not-allowed; border: 1px dashed #333; text-decoration: line-through; }
 
-        /* FORM */
+        /* INPUTS */
         .input-group { margin-bottom: 25px; }
-        .input-group label { display: block; font-size: 11px; font-weight: 700; color: #888; margin-bottom: 10px; margin-left: 5px; }
+        .input-group label { display: block; font-size: 11px; font-weight: 700; color: #888; margin-bottom: 10px; }
         input, textarea {
             width: 100%; padding: 18px; background: #0a0a0a; border: 1.5px solid #1a1a1a;
-            color: #fff; border-radius: 15px; font-family: inherit; font-size: 15px; transition: 0.3s;
+            color: #fff; border-radius: 15px; font-family: inherit; font-size: 15px;
         }
-        input:focus, textarea:focus { outline: none; border-color: #fff; background: #0f0f0f; }
-
-        /* PAYMENT CARD */
-        .payment-card {
-            background: #0a0a0a; border: 2px solid #1a1a1a; padding: 25px; 
-            border-radius: 20px; margin-top: 15px;
-        }
-        .bank-info { font-size: 16px; line-height: 1.8; font-weight: 600; margin: 15px 0; }
 
         /* BUTTONS */
-        button { background: #fff; color: #000; border: none; padding: 20px; width: 100%; font-weight: 700; border-radius: 15px; cursor: pointer; transition: 0.2s; }
-        button:active { transform: scale(0.98); }
+        button { background: #fff; color: #000; border: none; padding: 20px; width: 100%; font-weight: 700; border-radius: 15px; cursor: pointer; }
         .btn-container { margin-top: 40px; }
-        
         .back-btn { position: fixed; top: 25px; left: 20px; z-index: 150; font-weight: 700; font-size: 12px; cursor: pointer; opacity: 0.6; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 10px; }
 
-        /* MODAL */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 20px; }
     </style>
 </head>
@@ -129,21 +101,10 @@
             <div class="img-grid" id="detImgs"></div>
             <h2 id="detName" style="margin-top:25px; font-size:24px;">Product</h2>
             <p id="detPrice" style="color:#00c853; font-weight:700; font-size:18px;"></p>
-            
             <div id="colorArea"></div>
             <div id="sizeArea"></div>
-            
             <p onclick="openSize()" style="color:#00c853; font-size:12px; font-weight:700; margin-top:20px; text-decoration:underline; cursor:pointer;">Size Guide (Sizing Information)</p>
-            
-            <div class="btn-container">
-                <button onclick="validateDetail()">NEXT</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="sizeModal" class="modal-overlay" onclick="closeSize()">
-        <div style="max-width:500px; width:100%;">
-            <img src="size.jpg" style="width:100%; border-radius:15px;">
+            <div class="btn-container"><button onclick="validateDetail()">NEXT</button></div>
         </div>
     </div>
 
@@ -151,19 +112,18 @@
         <div class="back-btn" onclick="vibrate(30); showPage('detail')">← BACK</div>
         <div class="detail-container" style="padding-top:80px;">
             <h2 style="margin-bottom:30px;">SHIPPING INFO</h2>
-            <div class="input-group"><label>FULL NAME</label><input type="text" id="inName" placeholder="Nama Lengkap..."></div>
-            <div class="input-group"><label>WHATSAPP</label><input type="number" id="inPhone" placeholder="08xxx"></div>
-            <div class="input-group"><label>ADDRESS</label><textarea id="inAddress" rows="4" placeholder="Alamat Lengkap..."></textarea></div>
-            <div class="btn-container">
-                <button onclick="validateForm()">CONTINUE</button>
-            </div>
+            <div class="input-group"><label>FULL NAME</label><input type="text" id="inName"></div>
+            <div class="input-group"><label>WHATSAPP</label><input type="number" id="inPhone"></div>
+            <div class="input-group"><label>ADDRESS</label><textarea id="inAddress" rows="4"></textarea></div>
+            <div class="btn-container"><button onclick="validateForm()">CONTINUE</button></div>
         </div>
     </div>
 
     <div class="page" id="summary">
         <div class="back-btn" onclick="vibrate(30); showPage('form')">← BACK</div>
-        <div class="detail-container summary-container">
+        <div class="detail-container" style="padding-top:80px;">
             <h2 style="margin-bottom:20px;">ORDER SUMMARY</h2>
+            
             <div style="background:#0a0a0a; padding:20px; border-radius:15px; border:1px solid #1a1a1a;">
                 <h3 id="sumProd" style="margin:0; font-size:18px;">-</h3>
                 <p id="sumVar" style="font-size:13px; color:#888; margin:8px 0;">-</p>
@@ -171,30 +131,38 @@
                 <hr style="border:0; border-top:1px solid #1a1a1a; margin:20px 0;">
                 <p id="sumCust" style="font-size:13px; line-height:1.8; margin:0;"></p>
             </div>
-            <div class="payment-card">
-                <div class="bank-info">MANDIRI: 1370023790229<br>DANA: 081910421976<br><span style="font-size:14px; opacity:0.6;">A.N Dias Adhitya Purnama Putra</span></div>
+
+            <div style="background:#0a0a0a; border:1px solid #1a1a1a; padding:20px; border-radius:15px; margin-top:15px;">
+                <span style="font-size:11px; font-weight:700; color:#555; letter-spacing:1px;">REKENING PEMBAYARAN</span>
+                <div style="margin-top:15px; font-size:15px; line-height:1.8; font-weight:600;">
+                    MANDIRI: 1370023790229<br>
+                    DANA: 081910421976<br>
+                    <span style="opacity:0.6; font-size:13px;">A.N Dias Adhitya Purnama Putra</span>
+                </div>
             </div>
-            <div class="btn-container">
+
+            <p style="font-size: 10px; color: #444; text-align: center; margin-top: 25px; line-height: 1.5;">
+                Tekan checkout dan anda akan diarahkan otomatis ke<br>WhatsApp admin.
+            </p>
+
+            <div class="btn-container" style="margin-top: 15px;">
                 <button onclick="sendWA()" style="background:#00c853; color:#fff;">CHECKOUT (WA)</button>
             </div>
         </div>
     </div>
+
+    <div id="sizeModal" class="modal-overlay" onclick="closeSize()"><div style="max-width:500px; width:100%;"><img src="size.jpg" style="width:100%; border-radius:15px;"></div></div>
 
     <script>
         const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR5wyzEXxKbCeS8SQWZQ7oz5lmPwszeLtW-TuQ5uzCV6GWcXP5IqOzjTqhIRg5yyLuRd86yLtXGMnoL/pub?output=csv';
         let products = [];
         let cart = { prod: null, size: '', color: '' };
 
-        function vibrate(ms) {
-            if (navigator.vibrate) navigator.vibrate(ms);
-        }
+        function vibrate(ms) { if (navigator.vibrate) navigator.vibrate(ms); }
 
         window.onload = async () => {
             await fetchProducts();
             setTimeout(() => document.getElementById('loader').classList.add('hide'), 1000);
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('sw.js');
-            }
         };
 
         async function fetchProducts() {
@@ -205,12 +173,11 @@
                 products = rows.map(row => {
                     const col = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.trim().replace(/^"|"$/g, ""));
                     return {
-                        id: parseInt(col[0]), name: col[1], 
-                        price: col[2], // Teks bebas (Plain Text)
+                        id: parseInt(col[0]), name: col[1], price: col[2],
                         badge: col[3].toLowerCase(), status: col[4],
                         colors: col[5].split('/').map(c => c.trim()),
                         stock: col[6].split('/').map(s => s.trim()),
-                        imgs: [col[7], col[8]].filter(i => i !== "")
+                        imgs: [col[7], col[8], col[9]].filter(i => i !== "")
                     };
                 });
                 renderHome();
@@ -227,8 +194,8 @@
                         <div class="badge ${p.badge}">${p.status}</div>
                         <img src="${p.imgs[0]}">
                         <div style="padding:25px">
-                            <h3 style="margin:0; font-size:20px;">${p.name}</h3>
-                            <p style="opacity:0.5; margin:10px 0 20px; font-weight:600;">${isSold ? 'OUT OF STOCK' : 'Rp' + p.price}</p>
+                            <h3>${p.name}</h3>
+                            <p style="opacity:0.5; font-weight:600;">${isSold ? 'OUT OF STOCK' : 'Rp' + p.price}</p>
                             <button ${isSold ? 'disabled' : ''} onclick="vibrate(40); goDetail(${p.id})">${isSold ? 'HABIS' : 'SELECT'}</button>
                         </div>
                     </div>
@@ -247,7 +214,10 @@
             cart = { prod: p, size: '', color: p.colors.length === 1 ? p.colors[0] : '' };
             document.getElementById('detName').innerText = p.name;
             document.getElementById('detPrice').innerText = 'Rp' + p.price;
-            document.getElementById('detImgs').innerHTML = p.imgs.map(i => `<img src="${i}">`).join('');
+
+            // FIX: Lewati gambar pertama (thumbnail) agar tidak dobel
+            const detailImgs = p.imgs.slice(1);
+            document.getElementById('detImgs').innerHTML = detailImgs.map(i => `<img src="${i}">`).join('');
             
             let cHTML = `<div class="section-label">PILIH WARNA</div><div class="option-box">`;
             p.colors.forEach(c => cHTML += `<div class="${cart.color === c ? 'active' : ''}" onclick="selOpt('color','${c}',this)">${c}</div>`);
@@ -262,36 +232,18 @@
             showPage('detail');
         }
 
-        function selOpt(type, val, el) {
-            vibrate(20);
-            cart[type] = val;
-            el.parentElement.querySelectorAll('div').forEach(d => d.classList.remove('active'));
-            el.classList.add('active');
-        }
-
-        function triggerError(msg) {
-            const t = document.getElementById('toast');
-            t.innerText = msg; t.classList.add('show');
-            document.querySelector('.page.active').classList.add('vibrate-screen');
-            vibrate([100, 50, 100]);
-            setTimeout(() => { 
-                t.classList.remove('show'); 
-                document.querySelector('.page.active').classList.remove('vibrate-screen'); 
-            }, 2500);
-        }
+        function selOpt(type, val, el) { vibrate(20); cart[type] = val; el.parentElement.querySelectorAll('div').forEach(d => d.classList.remove('active')); el.classList.add('active'); }
 
         function validateDetail() {
             vibrate(40);
-            if(!cart.color || !cart.size) return triggerError("PILIH WARNA & UKURAN!");
+            if(!cart.color || !cart.size) { document.getElementById('toast').classList.add('show'); setTimeout(() => document.getElementById('toast').classList.remove('show'), 2000); return; }
             showPage('form');
         }
 
         function validateForm() {
             vibrate(40);
-            const n = document.getElementById('inName').value;
-            const p = document.getElementById('inPhone').value;
-            const a = document.getElementById('inAddress').value;
-            if(!n || !p || !a) return triggerError("LENGKAPI DATA PENGIRIMAN!");
+            const n = document.getElementById('inName').value, p = document.getElementById('inPhone').value, a = document.getElementById('inAddress').value;
+            if(!n || !p || !a) return;
             document.getElementById('sumProd').innerText = cart.prod.name;
             document.getElementById('sumVar').innerText = `WARNA: ${cart.color} | SIZE: ${cart.size}`;
             document.getElementById('sumPrice').innerText = 'Rp' + cart.prod.price;
@@ -301,19 +253,13 @@
 
         function sendWA() {
             vibrate(60);
-            const n = document.getElementById('inName').value;
-            const p = document.getElementById('inPhone').value;
-            const a = document.getElementById('inAddress').value;
+            const n = document.getElementById('inName').value, p = document.getElementById('inPhone').value, a = document.getElementById('inAddress').value;
             const text = `*GLORIAM ORDER*\n\n${cart.prod.name}\nWarna: ${cart.color}\nSize: ${cart.size}\nTotal: Rp${cart.prod.price}\n\n*Data Pengiriman*\nNama: ${n}\nWhatsApp: ${p}\nAlamat: ${a}`;
             window.open(`https://wa.me/6283898588562?text=${encodeURIComponent(text)}`);
         }
 
-        function openSize() {
-            document.getElementById('sizeModal').style.display='flex';
-        }
-        function closeSize() {
-            document.getElementById('sizeModal').style.display='none';
-        }
+        function openSize() { document.getElementById('sizeModal').style.display='flex'; }
+        function closeSize() { document.getElementById('sizeModal').style.display='none'; }
     </script>
 </body>
 </html>
