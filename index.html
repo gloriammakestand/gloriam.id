@@ -104,7 +104,10 @@
         /* BUTTONS */
         button { background: #fff; color: #000; border: none; padding: 20px; width: 100%; font-weight: 700; border-radius: 15px; cursor: pointer; transition: 0.2s; }
         button:active { transform: scale(0.98); }
-        .sticky-btn { position: fixed; bottom: 0; left: 0; width: 100%; padding: 25px; background: linear-gradient(transparent, #000 30%); z-index: 100; }
+        
+        /* UPDATE: Sticky dihilangkan, sekarang menggunakan padding normal */
+        .btn-container { margin-top: 40px; }
+        
         .back-btn { position: fixed; top: 25px; left: 20px; z-index: 150; font-weight: 700; font-size: 12px; cursor: pointer; opacity: 0.6; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 10px; }
 
         /* POPUP SIZE GUIDE */
@@ -134,8 +137,11 @@
             <div id="colorArea"></div>
             <div id="sizeArea"></div>
             <p onclick="openSize()" style="color:#00c853; font-size:12px; font-weight:700; margin-top:15px; text-decoration:underline; cursor:pointer;">Size Guide (Sizing Information)</p>
+            
+            <div class="btn-container">
+                <button onclick="validateDetail()">NEXT</button>
+            </div>
         </div>
-        <div class="sticky-btn"><button onclick="validateDetail()">NEXT</button></div>
     </div>
 
     <div id="sizeModal" class="modal-overlay" onclick="closeSize()">
@@ -160,8 +166,11 @@
                 <label>FULL ADDRESS</label>
                 <textarea id="inAddress" rows="4" placeholder="Alamat lengkap pengiriman..."></textarea>
             </div>
+            
+            <div class="btn-container">
+                <button onclick="validateForm()">CONTINUE</button>
+            </div>
         </div>
-        <div class="sticky-btn"><button onclick="validateForm()">CONTINUE</button></div>
     </div>
 
     <div class="page" id="summary">
@@ -180,8 +189,11 @@
                 <div class="bank-info">MANDIRI: 1370023790229<br>DANA: 081910421976<br><span style="font-size:14px; opacity:0.6;">A.N Dias Adhitya Purnama Putra</span></div>
             </div>
             <p class="checkout-note">Tekan checkout dan anda akan diarahkan otomatis ke WhatsApp admin.</p>
+            
+            <div class="btn-container">
+                <button onclick="sendWA()" style="background:#00c853; color:#fff;">CHECKOUT (WA)</button>
+            </div>
         </div>
-        <div class="sticky-btn"><button onclick="sendWA()" style="background:#00c853; color:#fff;">CHECKOUT (WA)</button></div>
     </div>
 
     <script>
@@ -190,7 +202,6 @@
         let products = [];
         let cart = { prod: null, size: '', color: '' };
 
-        // Fungsi bantu getar
         function vibrate(ms) {
             if (navigator.vibrate) navigator.vibrate(ms);
         }
@@ -263,7 +274,7 @@
         }
 
         function selOpt(type, val, el) {
-            vibrate(20); // Getar singkat saat milih variasi
+            vibrate(20);
             cart[type] = val;
             el.parentElement.querySelectorAll('div').forEach(d => d.classList.remove('active'));
             el.classList.add('active');
@@ -273,7 +284,7 @@
             const t = document.getElementById('toast');
             t.innerText = msg; t.classList.add('show');
             document.querySelector('.page.active').classList.add('vibrate-screen');
-            vibrate([100, 50, 100, 50, 100]); // Getar pola error
+            vibrate([100, 50, 100, 50, 100]);
             setTimeout(() => { 
                 t.classList.remove('show'); 
                 document.querySelector('.page.active').classList.remove('vibrate-screen'); 
