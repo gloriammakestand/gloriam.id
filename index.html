@@ -1,152 +1,271 @@
-<!DOCTYPE html><html lang="id">
+<!DOCTYPE html>
+<html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gloriam Store</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
-<style>
-body{margin:0;font-family:'Montserrat',sans-serif;background:#0a0a0a;color:#fff}
-header{height:70vh;background:#000;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;animation:fadeIn 1.2s}
-header h1{font-size:42px;letter-spacing:3px}
-header p{opacity:0.7}.products{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;padding:20px} .card{position:relative;background:#111;border-radius:12px;overflow:hidden;transition:0.3s} .card:hover{transform:translateY(-6px)} .card img{width:100%} .badge{position:absolute;top:10px;left:10px;background:#fff;color:#000;padding:5px 10px;font-size:11px;font-weight:600} .out{background:red;color:white} .disabled{opacity:0.3}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Gloriam Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        html, body {
+            margin: 0; font-family: 'Montserrat', sans-serif;
+            background: #000; color: #fff; overflow-x: hidden;
+        }
 
-button{background:#fff;color:#000;border:none;padding:14px;width:100%;margin-top:15px;font-weight:600} button:hover{opacity:0.8}
+        /* LOADER */
+        .loader {
+            position: fixed; inset: 0; background: #000; display: flex;
+            justify-content: center; align-items: center; z-index: 10000;
+            font-size: 24px; letter-spacing: 8px; font-weight: 700; transition: 0.5s;
+        }
+        .loader.hide { opacity: 0; pointer-events: none; }
 
-.page{display:none;animation:fadeIn 0.5s} .active{display:block}
+        /* TOAST & VIBRATE */
+        .toast {
+            position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
+            background: #ff3b3b; color: #fff; padding: 14px 28px; border-radius: 50px;
+            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 9999; 
+            font-weight: 700; font-size: 12px; box-shadow: 0 10px 20px rgba(255, 59, 59, 0.3);
+        }
+        .toast.show { top: 30px; }
 
-.swipe{display:flex;overflow-x:auto;gap:12px;margin-bottom:20px} .swipe img{width:85%;border-radius:12px}
+        /* ANIMASI GETAR LAYAR */
+        @keyframes screenShake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
+            20%, 40%, 60%, 80% { transform: translateX(8px); }
+        }
+        .vibrate-screen { animation: screenShake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
 
-.option-box{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px} .option-box div{padding:14px 0;border:1px solid #555;text-align:center;cursor:pointer;border-radius:8px} .option-box div.active{background:#fff;color:#000} .size-disabled{opacity:0.2;pointer-events:none}
+        /* HEADER */
+        header { height: 50vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        header h1 { letter-spacing: 12px; font-size: 32px; margin: 0; color: #00c853; }
+        header p { font-size: 10px; opacity: 0.4; margin-top: 10px; letter-spacing: 2px; }
 
-.section-label{margin-top:25px;font-weight:600;font-size:14px}
+        /* PRODUCTS */
+        .products { display: flex; flex-direction: column; align-items: center; gap: 40px; padding: 0 20px 120px; }
+        .card { width: 100%; max-width: 450px; background: #0a0a0a; border-radius: 20px; border: 1px solid #1a1a1a; overflow: hidden; position: relative; }
+        .card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; }
+        
+        /* BADGE */
+        .badge { position: absolute; top: 15px; left: 15px; padding: 6px 14px; font-size: 10px; font-weight: 700; border-radius: 8px; z-index: 2; text-transform: uppercase; }
+        .badge.pre { background: #fbc02d; color: #000; }
+        .badge.ready { background: #00c853; color: #fff; }
+        .badge.sold { background: #ff3b3b; color: #fff; }
 
-input{width:100%;padding:14px;margin:10px 0;background:#111;border:1px solid #333;color:#fff;border-radius:8px}
+        /* PAGE SYSTEM */
+        .page {
+            position: fixed; inset: 0; overflow-y: auto; background: #000; 
+            opacity: 0; transform: translateY(20px); transition: 0.4s ease-out;
+            pointer-events: none; z-index: 1;
+        }
+        .page.active { opacity: 1; transform: translateY(0); pointer-events: auto; z-index: 10; }
 
-.sticky-bar{position:fixed;bottom:0;left:0;width:100%;background:#000;padding:10px;border-top:1px solid #222}
+        /* DETAIL PAGE */
+        .detail-container { max-width: 500px; margin: auto; padding: 20px 24px 160px; }
+        .img-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 60px; }
+        .img-grid img { width: 100%; border-radius: 15px; aspect-ratio: 4/5; object-fit: cover; border: 1px solid #1a1a1a; }
+        
+        .section-label { margin-top: 30px; font-size: 11px; font-weight: 700; color: #555; letter-spacing: 1.5px; text-transform: uppercase; }
+        .option-box { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+        .option-box div {
+            padding: 16px; border: 1.5px solid #1a1a1a; text-align: center;
+            border-radius: 12px; cursor: pointer; background: #050505; font-size: 14px; font-weight: 600;
+        }
+        .option-box div.active { background: #fff; color: #000; border-color: #fff; }
+        .option-box div.disabled { opacity: 0.1; cursor: not-allowed; text-decoration: line-through; }
 
-.fade{animation:fadeIn 0.6s} @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+        /* FORM */
+        input, textarea {
+            width: 100%; padding: 18px; background: #0a0a0a; border: 1.5px solid #1a1a1a;
+            color: #fff; border-radius: 15px; font-family: inherit; font-size: 15px; margin-top: 10px;
+        }
 
-.loader{position:fixed;width:100%;height:100%;background:#000;display:flex;justify-content:center;align-items:center;z-index:9999;font-size:24px;letter-spacing:3px}
+        /* SUMMARY & PAYMENT */
+        .payment-card { background: #0a0a0a; border: 2px solid #1a1a1a; padding: 25px; border-radius: 20px; margin-top: 15px; }
+        .bank-info { font-size: 16px; line-height: 1.8; font-weight: 600; margin: 15px 0; }
 
-</style>
+        /* BUTTONS */
+        button { background: #fff; color: #000; border: none; padding: 20px; width: 100%; font-weight: 700; border-radius: 15px; cursor: pointer; }
+        .sticky-btn { position: fixed; bottom: 0; left: 0; width: 100%; padding: 25px; background: linear-gradient(transparent, #000 30%); z-index: 100; }
+        .back-btn { position: fixed; top: 25px; left: 20px; z-index: 150; font-weight: 700; font-size: 12px; cursor: pointer; padding: 10px; background: rgba(0,0,0,0.5); border-radius: 10px; }
+    </style>
 </head>
-<body><div id="loader" class="loader">GLORIAM</div><!-- HOME --><div id="home" class="page active">
-<header>
-<h1>GLORIAM</h1>
-<p>WELCOME TO GLORIAM Website</p>
-<p>Scroll to explore</p>
-</header><div class="products"><div class="card">
-<div class="badge">PRE ORDER</div>
-<img src="images/soccer-addict.jpg">
-<h3 style="padding:10px">Soccer Addict</h3>
-<p style="padding:0 10px">Rp110000 (DP 60000)</p>
-<button onclick="goDetail('Soccer Addict',110000,'pre')">SELECT</button>
-</div><div class="card">
-<div class="badge">IN STOCK</div>
-<img src="images/sleman-soccer.jpg">
-<h3 style="padding:10px">Sleman Soccer</h3>
-<p style="padding:0 10px">Rp100000</p>
-<button onclick="goDetail('Sleman Soccer',100000,'ready')">SELECT</button>
-</div><div class="card">
-<div class="badge">IN STOCK</div>
-<img src="images/bless-home.jpg">
-<h3 style="padding:10px">Bless Home</h3>
-<p style="padding:0 10px">Rp100000</p>
-<button onclick="goDetail('Bless Home',100000,'limited')">SELECT</button>
-</div><div class="card disabled">
-<div class="badge out">SOLD OUT</div>
-<img src="images/take-me-home.jpg">
-<h3 style="padding:10px">Take Me Home</h3>
-<p style="padding:0 10px">Sold Out</p>
-<button disabled>HABIS</button>
-</div></div>
-</div><!-- DETAIL --><div id="detail" class="page">
-<div style="padding:20px">
-<div class="swipe">
-<img src="images/detail1.jpg">
-<img src="images/detail2.jpg">
-</div>
-<h2 id="pname"></h2>
-<p id="pprice"></p><div id="sizeWrap"></div>
-<div id="colorWrap"></div>
-</div><div class="sticky-bar">
-<button onclick="goCheckout()">ADD TO CART</button>
-</div>
-</div><!-- CHECKOUT --><div id="checkout" class="page">
-<div style="padding:20px">
-<h2>Billing Details</h2>
-<input id="name" placeholder="Nama">
-<input id="phone" placeholder="No HP">
-<input id="address" placeholder="Alamat lengkap">
-<button onclick="sendWA()">Checkout</button>
-</div>
-</div><script>
-setTimeout(()=>{document.getElementById('loader').style.display='none'},1200)
+<body>
 
-let product='',price='',type='',selectedSize='',selectedColor='';
+    <div class="loader" id="loader">GLORIAM</div>
+    <div id="toast" class="toast">HARAP LENGKAPI DATA!</div>
 
-function goDetail(n,p,t){
-product=n;price=p;type=t;
-document.getElementById('home').classList.remove('active');
-document.getElementById('detail').classList.add('active');
-document.getElementById('pname').innerText=n;
-document.getElementById('pprice').innerText='Rp'+p;
+    <div class="page active" id="home">
+        <header>
+            <h1>GLORIAM</h1>
+            <p>MAKE STAND WITH PRIDE</p>
+        </header>
+        <div class="products" id="product-list"></div>
+    </div>
 
-let sizes=['S','M','L','XL','XXL','XXXL'];
-let sizeHTML='<div class="section-label">Size</div><div class="option-box">';
+    <div class="page" id="detail">
+        <div class="back-btn" onclick="showPage('home')">← BACK</div>
+        <div class="detail-container">
+            <div class="img-grid" id="detImgs"></div>
+            <h2 id="detName" style="margin-top:25px; font-size:24px;">-</h2>
+            <p id="detPrice" style="color:#00c853; font-weight:700; font-size:18px; margin:10px 0;"></p>
+            <div id="colorArea"></div>
+            <div id="sizeArea"></div>
+        </div>
+        <div class="sticky-btn"><button onclick="validateDetail()">NEXT</button></div>
+    </div>
 
-sizes.forEach(s=>{
-if(t==='limited' && !['M','L'].includes(s)){
-sizeHTML+=`<div class="size-disabled">${s}</div>`;
-}else{
-sizeHTML+=`<div onclick="selectSize(this,'${s}')">${s}</div>`;
-}
-});
-sizeHTML+='</div>';
+    <div class="page" id="form">
+        <div class="back-btn" onclick="showPage('detail')">← BACK</div>
+        <div class="detail-container">
+            <h2 style="margin-top:60px;">SHIPPING INFO</h2>
+            <input type="text" id="inName" placeholder="Nama Lengkap">
+            <input type="number" id="inPhone" placeholder="WhatsApp (08xxx)">
+            <textarea id="inAddress" rows="4" placeholder="Alamat Lengkap..."></textarea>
+        </div>
+        <div class="sticky-btn"><button onclick="validateForm()">CONTINUE</button></div>
+    </div>
 
-let colorHTML='';
-if(t==='pre'){
-colorHTML=`<div class="section-label">Warna</div>
-<div class="option-box">
-<div onclick="selectColor(this,'Hitam')">Hitam</div>
-<div onclick="selectColor(this,'Hijau')">Hijau</div>
-</div>`;
-}else{selectedColor='Default'}
+    <div class="page" id="summary">
+        <div class="back-btn" onclick="showPage('form')">← BACK</div>
+        <div class="detail-container"> 
+            <h2 style="margin-top:60px;">ORDER SUMMARY</h2>
+            <div style="background:#0a0a0a; padding:20px; border-radius:15px; border:1px solid #1a1a1a;">
+                <h3 id="sumProd">-</h3>
+                <p id="sumVar" style="font-size:13px; color:#888;">-</p>
+                <h3 id="sumPrice" style="color:#00c853;">-</h3>
+                <hr style="border:0; border-top:1px solid #1a1a1a; margin:20px 0;">
+                <p id="sumCust" style="font-size:13px; line-height:1.8;"></p>
+            </div>
+            <div class="payment-card">
+                <span style="font-size:11px; font-weight:700; color:#555;">REKENING PEMBAYARAN</span>
+                <div class="bank-info">MANDIRI: 1370023790229<br>DANA: 081910421976<br><span style="font-size:14px; opacity:0.6;">A.N Dias Adhitya Purnama Putra</span></div>
+            </div>
+        </div>
+        <div class="sticky-btn"><button onclick="sendWA()" style="background:#00c853; color:#fff;">CHECKOUT (WA)</button></div>
+    </div>
 
+    <script>
+        const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR5wyzEXxKbCeS8SQWZQ7oz5lmPwszeLtW-TuQ5uzCV6GWcXP5IqOzjTqhIRg5yyLuRd86yLtXGMnoL/pub?output=csv'; 
+        let products = [];
+        let cart = { prod: null, size: '', color: '' };
 
-document.getElementById('sizeWrap').innerHTML=sizeHTML;
-document.getElementById('colorWrap').innerHTML=colorHTML;
-}
+        async function initApp() {
+            try {
+                const response = await fetch(SHEET_CSV_URL);
+                const csvText = await response.text();
+                const rows = csvText.split('\n').map(r => r.trim()).filter(r => r !== '');
+                const header = rows[0].split(',').map(h => h.trim().toLowerCase().replace(/["']/g, ""));
+                const getIdx = (name) => header.indexOf(name);
 
-function selectSize(el,size){
-document.querySelectorAll('#sizeWrap .option-box div').forEach(d=>d.classList.remove('active'));
-el.classList.add('active');
-selectedSize=size;
-}
+                products = rows.slice(1).map((row, index) => {
+                    const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.trim().replace(/^"|"$/g, ""));
+                    if (cols.length < 5) return null;
+                    return {
+                        id: parseInt(cols[getIdx('id')]) || (index + 1),
+                        name: cols[getIdx('name')],
+                        price: parseInt(cols[getIdx('price')].replace(/[^\d]/g, "")),
+                        dp: parseInt((cols[getIdx('dp')] || "0").replace(/[^\d]/g, "")),
+                        badge: cols[getIdx('badge')].toLowerCase(),
+                        status: cols[getIdx('status')],
+                        colors: cols[getIdx('colors')].split('/').map(i => i.trim()),
+                        stock: cols[getIdx('stock')].split('/').map(i => i.trim()),
+                        imgs: [cols[getIdx('thumbnail')], cols[getIdx('details1')]]
+                    };
+                }).filter(p => p !== null);
 
-function selectColor(el,color){
-document.querySelectorAll('#colorWrap .option-box div').forEach(d=>d.classList.remove('active'));
-el.classList.add('active');
-selectedColor=color;
-}
+                renderHome();
+                setTimeout(() => document.getElementById('loader').classList.add('hide'), 1000);
+            } catch (err) { console.error(err); }
+        }
 
-function goCheckout(){
-if(!selectedSize){alert('Pilih size dulu');return;}
-if(type==='pre' && !selectedColor){alert('Pilih warna dulu');return;}
-document.getElementById('detail').classList.remove('active');
-document.getElementById('checkout').classList.add('active');
-}
+        function renderHome() {
+            const container = document.getElementById('product-list');
+            container.innerHTML = '';
+            products.forEach(p => {
+                const isSold = p.badge === 'sold';
+                const dpLabel = p.dp > 0 ? `<span style="color:#fbc02d; font-size:12px;"> (DP ${p.dp/1000}K)</span>` : '';
+                container.innerHTML += `
+                    <div class="card">
+                        <div class="badge ${p.badge}">${p.status}</div>
+                        <img src="${p.imgs[0]}">
+                        <div style="padding:25px">
+                            <h3 style="margin:0;">${p.name}</h3>
+                            <p style="opacity:0.5; margin:10px 0 20px;">${isSold ? 'OUT OF STOCK' : 'Rp ' + p.price.toLocaleString('id-ID') + dpLabel}</p>
+                            <button ${isSold ? 'disabled' : ''} onclick="goDetail(${p.id})">${isSold ? 'HABIS' : 'SELECT'}</button>
+                        </div>
+                    </div>`;
+            });
+        }
 
-function sendWA(){
-let name=document.getElementById('name').value;
-let phone=document.getElementById('phone').value;
-let address=document.getElementById('address').value;
+        function triggerError(msg) {
+            if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+            const t = document.getElementById('toast');
+            t.innerText = msg; t.classList.add('show');
+            document.querySelector('.page.active').classList.add('vibrate-screen');
+            setTimeout(() => {
+                t.classList.remove('show');
+                document.querySelector('.page.active').classList.remove('vibrate-screen');
+            }, 2000);
+        }
 
-if(!name||!phone||!address){alert('Isi data dulu');return;}
+        function goDetail(id) {
+            const p = products.find(x => x.id === id);
+            cart = { prod: p, size: '', color: p.colors.length === 1 ? p.colors[0] : '' };
+            document.getElementById('detName').innerText = p.name;
+            const dpInfo = p.dp > 0 ? `<br><small style="color:#fbc02d; font-weight:normal;">Minimal DP: Rp ${p.dp.toLocaleString('id-ID')}</small>` : '';
+            document.getElementById('detPrice').innerHTML = `Rp ${p.price.toLocaleString('id-ID')}${dpInfo}`;
+            document.getElementById('detImgs').innerHTML = p.imgs.filter(i => i).map(i => `<img src="${i}">`).join('');
+            
+            let cHTML = `<div class="section-label">WARNA</div><div class="option-box">`;
+            p.colors.forEach(c => cHTML += `<div onclick="selOpt('color','${c}',this)">${c}</div>`);
+            document.getElementById('colorArea').innerHTML = cHTML + `</div>`;
 
-let message=`Halo, saya ingin order:%0A%0A${product}%0A%0A*Format Order*%0ANama: ${name}%0AAlamat lengkap: ${address}%0ASize: ${selectedSize}%0ANo hp: ${phone}%0AWarna: ${selectedColor}`;
+            let sHTML = `<div class="section-label">UKURAN</div><div class="option-box">`;
+            ["S", "M", "L", "XL", "XXL", "XXXL"].forEach(s => {
+                const isAvail = p.stock.includes(s);
+                sHTML += `<div class="${isAvail ? '' : 'disabled'}" onclick="${isAvail ? `selOpt('size','${s}',this)` : 'triggerError(\'STOK SIZE HABIS\')'}">${s}</div>`;
+            });
+            document.getElementById('sizeArea').innerHTML = sHTML + `</div>`;
+            showPage('detail');
+        }
 
-window.location.href=`https://wa.me/6283898588562?text=${message}`;
-}
-</script></body>
+        function selOpt(type, val, el) {
+            if (navigator.vibrate) navigator.vibrate(40);
+            cart[type] = val;
+            el.parentElement.querySelectorAll('div').forEach(d => d.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function validateDetail() {
+            if(!cart.color || !cart.size) return triggerError("PILIH WARNA & UKURAN!");
+            showPage('form');
+        }
+
+        function validateForm() {
+            const n = document.getElementById('inName').value, p = document.getElementById('inPhone').value, a = document.getElementById('inAddress').value;
+            if(!n || !p || !a) return triggerError("LENGKAPI DATA!");
+            document.getElementById('sumProd').innerText = cart.prod.name;
+            document.getElementById('sumVar').innerText = `WARNA: ${cart.color} | SIZE: ${cart.size}`;
+            document.getElementById('sumPrice').innerText = cart.prod.dp > 0 ? `Wajib DP: Rp ${cart.prod.dp.toLocaleString('id-ID')}` : `Total: Rp ${cart.prod.price.toLocaleString('id-ID')}`;
+            document.getElementById('sumCust').innerHTML = `<strong>${n}</strong><br>${p}<br>${a}`;
+            showPage('summary');
+        }
+
+        function sendWA() {
+            const n = document.getElementById('inName').value, p = document.getElementById('inPhone').value, a = document.getElementById('inAddress').value;
+            const dpWA = cart.prod.dp > 0 ? `\n*DP: Rp ${cart.prod.dp.toLocaleString('id-ID')}*` : `\n*Lunas*`;
+            const text = `*ORDER GLORIAM*\n\nProduk: ${cart.prod.name}\nWarna: ${cart.color}\nSize: ${cart.size}\nTotal Harga: Rp ${cart.prod.price.toLocaleString('id-ID')}${dpWA}\n\n*Pengiriman*\nNama: ${n}\nWA: ${p}\nAlamat: ${a}`;
+            window.open(`https://wa.me/6283898588562?text=${encodeURIComponent(text)}`);
+        }
+
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        window.onload = initApp;
+    </script>
+</body>
 </html>
