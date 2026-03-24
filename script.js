@@ -21,7 +21,8 @@ async function fetchProducts() {
                 badge: col[3].toLowerCase(), status: col[4],
                 colors: col[5].split('/').map(c => c.trim()),
                 stock: col[6].split('/').map(s => s.trim()),
-                imgs: [col[7], col[8], col[9]].filter(i => i !== "")
+                imgs: [col[7], col[8], col[9]].filter(i => i !== ""),
+                specs: col[10] // <--- Tambahkan koma di baris atasnya, lalu tambah baris ini
             };
         });
         renderHome();
