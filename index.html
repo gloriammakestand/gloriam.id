@@ -88,6 +88,9 @@
             <div id="colorArea"></div>
             <div id="sizeArea"></div>
             <p onclick="openSize()" style="color:#00c853; font-size:12px; font-weight:700; margin-top:20px; text-decoration:underline; cursor:pointer;">Size Guide (Sizing Information)</p>
+
+<p onclick="openSpecs()" style="color:#00c853; font-size:12px; font-weight:700; margin-top:10px; text-decoration:underline; cursor:pointer;">Product Specifications (Bahan & Detail)</p>
+
             <div class="btn-container"><button onclick="validateDetail()">NEXT</button></div>
         </div>
     </div>
@@ -146,7 +149,15 @@
 
     <div id="sizeModal" class="modal-overlay" onclick="closeSize()"><div style="max-width:500px; width:100%;"><img src="size.jpg" style="width:100%; border-radius:15px;"></div></div>
 
-    <!-- JavaScript -->
-    <script src="script.js"></script>
+<div id="specsModal" class="modal-overlay" onclick="closeSpecs()">
+    <div class="specs-box" onclick="event.stopPropagation()">
+        <h3 style="margin:0 0 15px 0; border-bottom:1px solid #222; padding-bottom:10px; font-size:16px; letter-spacing:1px;">SPESIFIKASI PRODUK</h3>
+        <p id="specContent" style="font-size:13px; line-height:1.8; color:#bbb; margin:0;"></p>
+        <button onclick="closeSpecs()" style="margin-top:25px; padding:15px; font-size:12px; background:#111; color:#fff; border:1px solid #222;">CLOSE</button>
+    </div>
+</div>
+
+<script src="script.js"></script>
+
 </body>
 </html>
