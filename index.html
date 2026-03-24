@@ -3,84 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gloriam Store</title>
+    <title>Gloriam | Make a Stand with Pride</title>
+
+    <meta name="description" content="Soccer culture, street attitude. Gloriam is built for those who carry football into everyday life.">
+    <meta name="author" content="Gloriam">
+    <link rel="icon" href="https://69c19e4422589ee00d527177.imgix.net/logo/unnamed.jpg?w=792&h=792&ar=792%3A792" type="image/x-icon">
+
     <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
+
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        * { box-sizing: border-box; }
-        html, body {
-            margin: 0; font-family: 'Montserrat', sans-serif;
-            background: #000; color: #fff; overflow-x: hidden;
-        }
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-        /* LOADER */
-        .loader {
-            position: fixed; inset: 0; background: #000; display: flex;
-            justify-content: center; align-items: center; z-index: 10000;
-            font-size: 24px; letter-spacing: 8px; font-weight: 700; transition: 0.5s;
-        }
-        .loader.hide { opacity: 0; pointer-events: none; }
-
-        /* TOAST */
-        .toast {
-            position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
-            background: #ff3b3b; color: #fff; padding: 14px 28px; border-radius: 50px;
-            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 9999; 
-            font-weight: 700; font-size: 12px;
-        }
-        .toast.show { top: 30px; }
-
-        /* HEADER */
-        header { height: 50vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        header h1 { letter-spacing: 12px; font-size: 32px; margin: 0; }
-        header p { font-size: 10px; opacity: 0.4; margin-top: 10px; letter-spacing: 2px; }
-
-        /* PRODUCTS */
-        .products { display: flex; flex-direction: column; align-items: center; gap: 40px; padding: 0 20px 120px; }
-        .card { width: 100%; max-width: 450px; background: #0a0a0a; border-radius: 20px; border: 1px solid #1a1a1a; overflow: hidden; position: relative; }
-        .card img { width: 100%; display: block; }
-        .badge { position: absolute; top: 15px; left: 15px; padding: 6px 14px; font-size: 10px; font-weight: 700; border-radius: 8px; z-index: 2; }
-        .pre { background: #00c853; }
-        .ready { background: #fff; color: #000; }
-        .sold { background: #ff3b3b; }
-
-        /* PAGE SYSTEM */
-        .page {
-            position: fixed; inset: 0; overflow-y: auto; background: #000; 
-            opacity: 0; transform: translateY(20px); transition: 0.4s ease-out;
-            pointer-events: none; z-index: 1;
-        }
-        .page.active { opacity: 1; transform: translateY(0); pointer-events: auto; z-index: 10; }
-
-        /* DETAIL & GRID */
-        .detail-container { max-width: 500px; margin: auto; padding: 20px 24px 160px; }
-        .img-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 60px; }
-        .img-grid img { width: 100%; border-radius: 15px; aspect-ratio: 4/5; object-fit: cover; border: 1px solid #1a1a1a; }
-        
-        .section-label { margin-top: 30px; font-size: 11px; font-weight: 700; color: #555; letter-spacing: 1.5px; text-transform: uppercase; }
-        .option-box { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
-        .option-box div {
-            padding: 16px; border: 1.5px solid #1a1a1a; text-align: center;
-            border-radius: 12px; cursor: pointer; background: #050505; font-size: 14px; font-weight: 600;
-        }
-        .option-box div.active { background: #fff; color: #000; border-color: #fff; }
-        .option-box div.disabled { opacity: 0.1; cursor: not-allowed; border: 1px dashed #333; text-decoration: line-through; }
-
-        /* INPUTS */
-        .input-group { margin-bottom: 25px; }
-        .input-group label { display: block; font-size: 11px; font-weight: 700; color: #888; margin-bottom: 10px; }
-        input, textarea {
-            width: 100%; padding: 18px; background: #0a0a0a; border: 1.5px solid #1a1a1a;
-            color: #fff; border-radius: 15px; font-family: inherit; font-size: 15px;
-        }
-
-        /* BUTTONS */
-        button { background: #fff; color: #000; border: none; padding: 20px; width: 100%; font-weight: 700; border-radius: 15px; cursor: pointer; }
-        .btn-container { margin-top: 40px; }
-        .back-btn { position: fixed; top: 25px; left: 20px; z-index: 150; font-weight: 700; font-size: 12px; cursor: pointer; opacity: 0.6; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 10px; }
-
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 20px; }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -90,9 +25,27 @@
     <div class="page active" id="home">
         <header>
             <h1>GLORIAM</h1>
-            <p>MAKE STAND WITH PRIDE</p>
+            <p class="slogan">MAKE STAND WITH PRIDE</p>
+            <p class="description">
+                Soccer culture, street attitude. Gloriam is built for those who carry football into everyday life.
+            </p>
         </header>
         <div class="products" id="product-list"></div>
+        <footer>
+            <div class="footer-logo">GLORIAM</div>
+            <div class="footer-slogan">MAKE STAND WITH PRIDE</div>
+            <div class="footer-socials">
+                <a href="https://www.instagram.com/gloriam____?" target="_blank" onclick="vibrate(30)"><i class="fab fa-instagram"></i></a>
+                <a href="https://wa.me/6283898588562" target="_blank" onclick="vibrate(30)"><i class="fab fa-whatsapp"></i></a>
+                <a href="http://shopee.co.id/gloriam__" target="_blank" onclick="vibrate(30)"><i class="fas fa-shopping-bag"></i></a>
+            </div>
+            <div class="footer-contact-title">KONTAK KAMI :</div>
+            <div class="footer-contact-info">
+                WhatsApp : <a href="https://wa.me/6283898588562">083898588562</a><br>
+                Email : <a href="mailto:gloriammakestand@gmail.com">gloriammakestand@gmail.com</a>
+            </div>
+            <p class="copyright">© 2026 Gloriam Store. All rights reserved.</p>
+        </footer>
     </div>
 
     <div class="page" id="detail">
@@ -103,7 +56,7 @@
             <p id="detPrice" style="color:#00c853; font-weight:700; font-size:18px;"></p>
             <div id="colorArea"></div>
             <div id="sizeArea"></div>
-            <p onclick="openSize()" style="color:#00c853; font-size:12px; font-weight:700; margin-top:20px; text-decoration:underline; cursor:pointer;">Size Guide (Sizing Information)</p>
+            <p onclick="openSize()" style="color:#00c853; font-size:12px; font-weight:700; margin-top:20px; text-decoration:underline; cursor:pointer;">Size Guide</p>
             <div class="btn-container"><button onclick="validateDetail()">NEXT</button></div>
         </div>
     </div>
@@ -111,169 +64,48 @@
     <div class="page" id="form">
         <div class="back-btn" onclick="vibrate(30); showPage('detail')">← BACK</div>
         <div class="detail-container" style="padding-top:80px;">
-            <h2 style="margin-bottom:30px;">SHIPPING INFO</h2>
-            
+            <h2>SHIPPING INFO</h2>
             <div class="input-group">
                 <label>FULL NAME</label>
                 <input type="text" id="inName" placeholder="Nama Lengkap...">
             </div>
-            
             <div class="input-group">
                 <label>WHATSAPP</label>
                 <input type="number" id="inPhone" placeholder="08xxx">
             </div>
-            
             <div class="input-group">
                 <label>ADDRESS</label>
                 <textarea id="inAddress" rows="4" placeholder="Alamat Lengkap..."></textarea>
-                <p style="font-size: 10px; color: #555; margin-top: 8px; margin-left: 5px;">*Mohon diisi lengkap untuk memudahkan pengiriman.</p>
             </div>
-            
-            <div class="btn-container">
-                <button onclick="validateForm()">CONTINUE</button>
-            </div>
+            <div class="btn-container"><button onclick="validateForm()">CONTINUE</button></div>
         </div>
     </div>
 
     <div class="page" id="summary">
         <div class="back-btn" onclick="vibrate(30); showPage('form')">← BACK</div>
         <div class="detail-container" style="padding-top:80px;">
-            <h2 style="margin-bottom:20px;">ORDER SUMMARY</h2>
-            
-            <div style="background:#0a0a0a; padding:20px; border-radius:15px; border:1px solid #1a1a1a;">
-                <h3 id="sumProd" style="margin:0; font-size:18px;">-</h3>
-                <p id="sumVar" style="font-size:13px; color:#888; margin:8px 0;">-</p>
-                <h3 id="sumPrice" style="color:#00c853; margin:15px 0 0;">-</h3>
-                <hr style="border:0; border-top:1px solid #1a1a1a; margin:20px 0;">
-                <p id="sumCust" style="font-size:13px; line-height:1.8; margin:0;"></p>
+            <h2>ORDER SUMMARY</h2>
+            <div class="summary-box">
+                <h3 id="sumProd">-</h3>
+                <p id="sumVar">-</p>
+                <h3 id="sumPrice">-</h3>
+                <hr>
+                <p id="sumCust"></p>
             </div>
-
-            <div style="background:#0a0a0a; border:1px solid #1a1a1a; padding:20px; border-radius:15px; margin-top:15px;">
-                <span style="font-size:11px; font-weight:700; color:#555; letter-spacing:1px;">REKENING PEMBAYARAN</span>
-                <div style="margin-top:15px; font-size:15px; line-height:1.8; font-weight:600;">
-                    MANDIRI: 1370023790229<br>
-                    DANA: 081910421976<br>
-                    <span style="opacity:0.6; font-size:13px;">A.N Dias Adhitya Purnama Putra</span>
-                </div>
+            <div class="payment-box">
+                <span>REKENING PEMBAYARAN</span>
+                <div>MANDIRI: 1370023790229<br>DANA: 081910421976<br>A.N Dias Adhitya Purnama Putra</div>
             </div>
-
-            <p style="font-size: 10px; color: #444; text-align: center; margin-top: 25px; line-height: 1.5;">
-                Tekan checkout dan anda akan diarahkan otomatis ke<br>WhatsApp admin.
-            </p>
-
-            <div class="btn-container" style="margin-top: 15px;">
+            <div class="btn-container">
                 <button onclick="sendWA()" style="background:#00c853; color:#fff;">CHECKOUT (WA)</button>
             </div>
         </div>
     </div>
 
-    <div id="sizeModal" class="modal-overlay" onclick="closeSize()"><div style="max-width:500px; width:100%;"><img src="size.jpg" style="width:100%; border-radius:15px;"></div></div>
+    <div id="sizeModal" class="modal-overlay" onclick="closeSize()">
+        <div style="max-width:500px; width:100%;"><img src="size.jpg" style="width:100%; border-radius:15px;"></div>
+    </div>
 
-    <script>
-        const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR5wyzEXxKbCeS8SQWZQ7oz5lmPwszeLtW-TuQ5uzCV6GWcXP5IqOzjTqhIRg5yyLuRd86yLtXGMnoL/pub?output=csv';
-        let products = [];
-        let cart = { prod: null, size: '', color: '' };
-
-        function vibrate(ms) { if (navigator.vibrate) navigator.vibrate(ms); }
-
-        window.onload = async () => {
-            await fetchProducts();
-            setTimeout(() => document.getElementById('loader').classList.add('hide'), 1000);
-        };
-
-        async function fetchProducts() {
-            try {
-                const response = await fetch(SHEET_CSV);
-                const data = await response.text();
-                const rows = data.split('\n').slice(1);
-                products = rows.map(row => {
-                    const col = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.trim().replace(/^"|"$/g, ""));
-                    return {
-                        id: parseInt(col[0]), name: col[1], price: col[2],
-                        badge: col[3].toLowerCase(), status: col[4],
-                        colors: col[5].split('/').map(c => c.trim()),
-                        stock: col[6].split('/').map(s => s.trim()),
-                        imgs: [col[7], col[8], col[9]].filter(i => i !== "")
-                    };
-                });
-                renderHome();
-            } catch (err) { console.error(err); }
-        }
-
-        function renderHome() {
-            const container = document.getElementById('product-list');
-            container.innerHTML = '';
-            products.forEach(p => {
-                const isSold = p.badge === 'sold';
-                container.innerHTML += `
-                    <div class="card">
-                        <div class="badge ${p.badge}">${p.status}</div>
-                        <img src="${p.imgs[0]}">
-                        <div style="padding:25px">
-                            <h3>${p.name}</h3>
-                            <p style="opacity:0.5; font-weight:600;">${isSold ? 'OUT OF STOCK' : 'Rp' + p.price}</p>
-                            <button ${isSold ? 'disabled' : ''} onclick="vibrate(40); goDetail(${p.id})">${isSold ? 'HABIS' : 'SELECT'}</button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function showPage(id) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            document.getElementById(id).scrollTop = 0;
-        }
-
-        function goDetail(id) {
-            const p = products.find(x => x.id === id);
-            cart = { prod: p, size: '', color: p.colors.length === 1 ? p.colors[0] : '' };
-            document.getElementById('detName').innerText = p.name;
-            document.getElementById('detPrice').innerText = 'Rp' + p.price;
-            const detailImgs = p.imgs.slice(1);
-            document.getElementById('detImgs').innerHTML = detailImgs.map(i => `<img src="${i}">`).join('');
-            
-            let cHTML = `<div class="section-label">PILIH WARNA</div><div class="option-box">`;
-            p.colors.forEach(c => cHTML += `<div class="${cart.color === c ? 'active' : ''}" onclick="selOpt('color','${c}',this)">${c}</div>`);
-            document.getElementById('colorArea').innerHTML = cHTML + `</div>`;
-
-            let sHTML = `<div class="section-label">PILIH UKURAN</div><div class="option-box">`;
-            ["S", "M", "L", "XL", "XXL", "XXXL"].forEach(s => {
-                const isAvail = p.stock.includes(s);
-                sHTML += `<div class="${isAvail ? '' : 'disabled'}" onclick="${isAvail ? `selOpt('size','${s}',this)` : ''}">${s}</div>`;
-            });
-            document.getElementById('sizeArea').innerHTML = sHTML + `</div>`;
-            showPage('detail');
-        }
-
-        function selOpt(type, val, el) { vibrate(20); cart[type] = val; el.parentElement.querySelectorAll('div').forEach(d => d.classList.remove('active')); el.classList.add('active'); }
-
-        function validateDetail() {
-            vibrate(40);
-            if(!cart.color || !cart.size) { document.getElementById('toast').classList.add('show'); setTimeout(() => document.getElementById('toast').classList.remove('show'), 2000); return; }
-            showPage('form');
-        }
-
-        function validateForm() {
-            vibrate(40);
-            const n = document.getElementById('inName').value, p = document.getElementById('inPhone').value, a = document.getElementById('inAddress').value;
-            if(!n || !p || !a) { document.getElementById('toast').innerText = "LENGKAPI DATA!"; document.getElementById('toast').classList.add('show'); setTimeout(() => document.getElementById('toast').classList.remove('show'), 2000); return; }
-            document.getElementById('sumProd').innerText = cart.prod.name;
-            document.getElementById('sumVar').innerText = `WARNA: ${cart.color} | SIZE: ${cart.size}`;
-            document.getElementById('sumPrice').innerText = 'Rp' + cart.prod.price;
-            document.getElementById('sumCust').innerHTML = `<strong>${n}</strong><br>${p}<br>${a}`;
-            showPage('summary');
-        }
-
-        function sendWA() {
-            vibrate(60);
-            const n = document.getElementById('inName').value, p = document.getElementById('inPhone').value, a = document.getElementById('inAddress').value;
-            const text = `*GLORIAM ORDER*\n\n${cart.prod.name}\nWarna: ${cart.color}\nSize: ${cart.size}\nTotal: Rp${cart.prod.price}\n\n*Data Pengiriman*\nNama: ${n}\nWhatsApp: ${p}\nAlamat: ${a}`;
-            window.open(`https://wa.me/6283898588562?text=${encodeURIComponent(text)}`);
-        }
-
-        function openSize() { document.getElementById('sizeModal').style.display='flex'; }
-        function closeSize() { document.getElementById('sizeModal').style.display='none'; }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
