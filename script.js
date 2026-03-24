@@ -2,12 +2,18 @@ const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR5wyzEXxKbCe
 let products = [];
 let cart = { prod: null, size: '', color: '' };
 
+function vibrate(ms) { if (navigator.vibrate) navigator.vibrate(ms); }
+
 window.onload = async () => {
-    await loadProducts();
+    await fetchProducts();
+    // Registrasi Service Worker untuk PWA
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js').catch(err => console.log("SW failed", err));
+    }
     setTimeout(() => document.getElementById('loader').classList.add('hide'), 1000);
 };
 
-async function loadProducts() {
+async function fetchProducts() {
     try {
         const response = await fetch(SHEET_CSV);
         const data = await response.text();
@@ -15,18 +21,15 @@ async function loadProducts() {
         products = rows.map(row => {
             const col = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.trim().replace(/^"|"$/g, ""));
             return {
-                id: parseInt(col[0]),
-                name: col[1],
-                price: parseInt(col[2]),
-                badge: col[3].toLowerCase(),
-                status: col[4],
+                id: parseInt(col[0]), name: col[1], price: col[2],
+                badge: col[3].toLowerCase(), status: col[4],
                 colors: col[5].split('/').map(c => c.trim()),
                 stock: col[6].split('/').map(s => s.trim()),
-                imgs: [col[7], col[8]].filter(i => i)
+                imgs: [col[7], col[8], col[9]].filter(i => i !== "")
             };
         });
         renderHome();
-    } catch (e) { console.error("Sheet Error:", e); }
+    } catch (err) { console.error("Error fetching data:", err); }
 }
 
 function renderHome() {
@@ -35,7 +38,15 @@ function renderHome() {
     products.forEach(p => {
         const isSold = p.badge === 'sold';
         container.innerHTML += `
-            <div class="card"><div class="badge ${p.badge}">${p.status}</div><img src="${p.imgs[0]}"><div style="padding:25px"><h3 style="margin:0; font-size:20px;">${p.name}</h3><p style="opacity:0.5; margin:10px 0 20px;">${isSold ? 'OUT OF STOCK' : 'Rp' + p.price.toLocaleString('id-ID')}</p><button ${isSold ? 'disabled' : ''} onclick="goDetail(${p.id})">${isSold ? 'HABIS' : 'SELECT'}</button></div></div>
+            <div class="card ${isSold ? 'sold-out' : ''}">
+                <div class="badge ${p.badge}">${p.status}</div>
+                <img src="${p.imgs[0]}">
+                <div style="padding:25px">
+                    <h3>${p.name}</h3>
+                    <p style="opacity:0.5; font-weight:600;">${isSold ? 'OUT OF STOCK' : 'Rp' + p.price}</p>
+                    <button onclick="vibrate(40); goDetail(${p.id})" ${isSold ? 'disabled' : ''}>${isSold ? 'HABIS' : 'SELECT'}</button>
+                </div>
+            </div>
         `;
     });
 }
@@ -50,8 +61,8 @@ function goDetail(id) {
     const p = products.find(x => x.id === id);
     cart = { prod: p, size: '', color: p.colors.length === 1 ? p.colors[0] : '' };
     document.getElementById('detName').innerText = p.name;
-    document.getElementById('detPrice').innerText = `Rp${p.price.toLocaleString('id-ID')}`;
-    document.getElementById('detImgs').innerHTML = p.imgs.map(i => `<img src="${i}">`).join('');
+    document.getElementById('detPrice').innerText = 'Rp' + p.price;
+    document.getElementById('detImgs').innerHTML = p.imgs.slice(1).map(i => `<img src="${i}">`).join('');
     
     let cHTML = `<div class="section-label">PILIH WARNA</div><div class="option-box">`;
     p.colors.forEach(c => cHTML += `<div class="${cart.color === c ? 'active' : ''}" onclick="selOpt('color','${c}',this)">${c}</div>`);
@@ -66,44 +77,38 @@ function goDetail(id) {
     showPage('detail');
 }
 
-function selOpt(type, val, el) {
-    if (navigator.vibrate) navigator.vibrate(40);
-    cart[type] = val;
-    el.parentElement.querySelectorAll('div').forEach(d => d.classList.remove('active'));
-    el.classList.add('active');
-}
+function selOpt(type, val, el) { vibrate(20); cart[type] = val; el.parentElement.querySelectorAll('div').forEach(d => d.classList.remove('active')); el.classList.add('active'); }
 
-function triggerError(msg) {
-    const t = document.getElementById('toast');
-    t.innerText = msg; t.classList.add('show');
-    document.querySelector('.page.active').classList.add('vibrate-screen');
-    if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
-    setTimeout(() => { 
-        t.classList.remove('show'); 
-        document.querySelector('.page.active').classList.remove('vibrate-screen'); 
-    }, 2500);
+function triggerAlert(msg) {
+    vibrate([50, 50, 50]);
+    const toast = document.getElementById('toast');
+    toast.innerText = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
 }
 
 function validateDetail() {
-    if(!cart.color || !cart.size) return triggerError("PILIH WARNA & UKURAN!");
+    if (!cart.color || !cart.size) return triggerAlert("PILIH WARNA & UKURAN!");
+    vibrate(40);
     showPage('form');
 }
 
 function validateForm() {
     const n = document.getElementById('inName').value, p = document.getElementById('inPhone').value, a = document.getElementById('inAddress').value;
-    if(!n || !p || !a) return triggerError("LENGKAPI DATA PENGIRIMAN!");
+    if(!n || !p || !a) return triggerAlert("LENGKAPI DATA!");
+    vibrate(40);
     document.getElementById('sumProd').innerText = cart.prod.name;
     document.getElementById('sumVar').innerText = `WARNA: ${cart.color} | SIZE: ${cart.size}`;
-    document.getElementById('sumPrice').innerText = `Rp${cart.prod.price.toLocaleString('id-ID')}`;
+    document.getElementById('sumPrice').innerText = 'Rp' + cart.prod.price;
     document.getElementById('sumCust').innerHTML = `<strong>${n}</strong><br>${p}<br>${a}`;
     showPage('summary');
 }
 
 function sendWA() {
     const n = document.getElementById('inName').value, p = document.getElementById('inPhone').value, a = document.getElementById('inAddress').value;
-    const text = `*GLORIAM ORDER*\n\n${cart.prod.name}\nWarna: ${cart.color}\nSize: ${cart.size}\n\n*Data Pengiriman*\nNama: ${n}\nWhatsApp: ${p}\nAlamat: ${a}`;
+    const text = `*GLORIAM ORDER*\n\n${cart.prod.name}\nWarna: ${cart.color}\nSize: ${cart.size}\nTotal: Rp${cart.prod.price}\n\n*Data Pengiriman*\nNama: ${n}\nWhatsApp: ${p}\nAlamat: ${a}`;
     window.open(`https://wa.me/6283898588562?text=${encodeURIComponent(text)}`);
 }
 
-function openSize() { document.getElementById('sizeModal').style.display='flex'; }
+function openSize() { vibrate(30); document.getElementById('sizeModal').style.display='flex'; }
 function closeSize() { document.getElementById('sizeModal').style.display='none'; }
