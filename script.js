@@ -112,3 +112,17 @@ function sendWA() {
 
 function openSize() { vibrate(30); document.getElementById('sizeModal').style.display='flex'; }
 function closeSize() { document.getElementById('sizeModal').style.display='none'; }
+
+// Fungsi untuk membuka modal spesifikasi
+function openSpecs() { 
+    vibrate(30); 
+    // Ambil data specs dari produk yang sedang aktif di cart
+    const text = cart.prod.specs ? cart.prod.specs.replace(/\\n/g, '<br>') : "Spesifikasi belum tersedia.";
+    document.getElementById('specContent').innerHTML = text;
+    document.getElementById('specsModal').style.display = 'flex'; 
+}
+
+// Fungsi untuk menutup modal spesifikasi
+function closeSpecs() { 
+    document.getElementById('specsModal').style.display = 'none'; 
+}
