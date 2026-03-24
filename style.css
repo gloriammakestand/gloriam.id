@@ -8,7 +8,7 @@ html, body {
 .loader {
     position: fixed; 
     inset: 0; 
-    background: #000; 
+    background: #000; /* Background hitam pekat */
     display: flex;
     justify-content: center; 
     align-items: center; 
@@ -17,24 +17,25 @@ html, body {
 }
 
 .loader img {
-    width: 120px; /* Atur besar kecilnya logo di sini */
+    width: 350px; /* Ukuran logo sudah dibesarkan dari 120px ke 350px */
     height: auto;
-    /* Memberikan efek animasi berdenyut pelan */
-    animation: pulse 1.5s ease-in-out infinite;
+    /* Efek animasi berdenyut pelan */
+    animation: pulse 1.8s ease-in-out infinite;
 }
 
-/* Animasi denyut (biar loadingnya nggak kaku) */
+/* Animasi denyut halus (Pulse) */
 @keyframes pulse {
-    0% { transform: scale(0.9); opacity: 0.6; }
-    50% { transform: scale(1); opacity: 1; }
-    100% { transform: scale(0.9); opacity: 0.6; }
+    0% { transform: scale(0.96); opacity: 0.7; }
+    50% { transform: scale(1.04); opacity: 1; }
+    100% { transform: scale(0.96); opacity: 0.7; }
 }
 
 .loader.hide { 
     opacity: 0; 
     pointer-events: none; 
-    transform: scale(1.1); /* Efek zoom sedikit saat loading selesai */
+    transform: scale(1.1); /* Efek zoom out halus saat loading selesai */
 }
+
 
 
 /* TOAST & SHAKE */
