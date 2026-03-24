@@ -12,75 +12,47 @@ html, body {
 }
 .loader.hide { opacity: 0; pointer-events: none; }
 
-/* TOAST & VIBRATE */
+/* TOAST */
 .toast {
     position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
     background: #ff3b3b; color: #fff; padding: 14px 28px; border-radius: 50px;
     transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 9999; 
-    font-weight: 700; font-size: 12px; box-shadow: 0 10px 20px rgba(255, 59, 59, 0.3);
+    font-weight: 700; font-size: 11px; text-transform: uppercase;
 }
 .toast.show { top: 30px; }
 
-@keyframes screenShake {
-    0%, 100% { transform: translateX(0); }
-    10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
-    20%, 40%, 60%, 80% { transform: translateX(8px); }
-}
-.vibrate-screen { animation: screenShake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
-
 /* HEADER */
-header { height: 50vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-header h1 { letter-spacing: 12px; font-size: 32px; margin: 0; color: #00c853; }
-header p { font-size: 10px; opacity: 0.4; margin-top: 10px; letter-spacing: 2px; }
+header { padding: 80px 20px 40px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+header h1 { letter-spacing: 12px; font-size: 32px; margin: 0; }
+header .slogan { font-size: 10px; font-weight: 700; opacity: 0.8; margin-top: 10px; letter-spacing: 2px; text-transform: uppercase; }
+header .description { max-width: 300px; margin-top: 20px; font-size: 11px; line-height: 1.8; opacity: 0.4; letter-spacing: 0.5px; }
 
 /* PRODUCTS */
-.products { display: flex; flex-direction: column; align-items: center; gap: 40px; padding: 0 20px 120px; }
-.card { width: 100%; max-width: 450px; background: #0a0a0a; border-radius: 20px; border: 1px solid #1a1a1a; overflow: hidden; position: relative; }
+.products { display: flex; flex-direction: column; align-items: center; gap: 40px; padding: 0 20px 80px; }
+.card { width: 100%; max-width: 450px; background: #0a0a0a; border-radius: 20px; border: 1px solid #1a1a1a; overflow: hidden; position: relative; transition: 0.3s; }
 .card img { width: 100%; display: block; }
-.badge { position: absolute; top: 15px; left: 15px; padding: 6px 14px; font-size: 10px; font-weight: 700; border-radius: 8px; z-index: 2; }
-.pre { background: #00c853; color: #fff; }
-.ready { background: #fff; color: #000; }
-.sold { background: #ff3b3b; color: #fff; }
 
-/* PAGE TRANSITIONS */
-.page {
-    position: fixed; inset: 0; overflow-y: auto; background: #000; 
-    opacity: 0; transform: translateY(20px); transition: 0.4s ease-out;
-    pointer-events: none; z-index: 1;
-}
+/* FOOTER */
+footer { background: #0a0a0a; border-top: 1px solid #1a1a1a; padding: 60px 20px; text-align: center; }
+
+/* PAGE SYSTEM */
+.page { position: fixed; inset: 0; overflow-y: auto; background: #000; opacity: 0; transform: translateY(20px); transition: 0.4s ease-out; pointer-events: none; z-index: 1; }
 .page.active { opacity: 1; transform: translateY(0); pointer-events: auto; z-index: 10; }
 
-/* DETAIL IMAGES */
-.img-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 60px; }
-.img-grid img { width: 100%; border-radius: 15px; aspect-ratio: 4/5; object-fit: cover; border: 1px solid #1a1a1a; }
+/* CUSTOM CLASSES FOR SUMMARY */
+.summary-box { background:#0a0a0a; padding:20px; border-radius:15px; border:1px solid #1a1a1a; }
+.payment-box { background:#0a0a0a; border:1px solid #1a1a1a; padding:20px; border-radius:15px; margin-top:15px; }
 
-/* OPTIONS */
-.detail-container { max-width: 500px; margin: auto; padding: 20px 24px 160px; }
-.summary-container { padding-top: 80px; }
-.section-label { margin-top: 30px; font-size: 11px; font-weight: 700; color: #555; letter-spacing: 1.5px; text-transform: uppercase; }
-.option-box { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
-.option-box div {
-    padding: 16px; border: 1.5px solid #1a1a1a; text-align: center;
-    border-radius: 12px; cursor: pointer; background: #050505; font-size: 14px; font-weight: 600;
-}
-.option-box div.active { background: #fff; color: #000; border-color: #fff; }
-.option-box div.disabled { opacity: 0.1; cursor: not-allowed; text-decoration: line-through; border: 1px dashed #333; }
-
-/* FORM */
-.input-group { margin-bottom: 25px; }
-.input-group label { display: block; font-size: 11px; font-weight: 700; color: #888; margin-bottom: 10px; margin-left: 5px; }
-input, textarea { width: 100%; padding: 18px; background: #0a0a0a; border: 1.5px solid #1a1a1a; color: #fff; border-radius: 15px; font-family: inherit; font-size: 15px; }
-
-/* REKENING */
-.payment-card { background: #0a0a0a; border: 2px solid #1a1a1a; padding: 25px; border-radius: 20px; margin-top: 15px; }
-.bank-info { font-size: 16px; line-height: 1.8; font-weight: 600; margin: 15px 0; }
-.checkout-note { font-size: 11px; color: #666; text-align: center; margin-top: 15px; }
-
-/* BUTTONS */
-button { background: #fff; color: #000; border: none; padding: 20px; width: 100%; font-weight: 700; border-radius: 15px; cursor: pointer; }
-.sticky-btn { position: fixed; bottom: 0; left: 0; width: 100%; padding: 25px; background: linear-gradient(transparent, #000 30%); z-index: 100; }
+/* Utility & Modal */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 20px; }
 .back-btn { position: fixed; top: 25px; left: 20px; z-index: 150; font-weight: 700; font-size: 12px; cursor: pointer; opacity: 0.6; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 10px; }
 
-/* MODAL */
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 20px; }
-.modal-content { max-width: 500px; width: 100%; }
+/* Grid & Form */
+.img-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 60px; }
+.img-grid img { width: 100%; border-radius: 15px; aspect-ratio: 4/5; object-fit: cover; border: 1px solid #1a1a1a; }
+.option-box { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+.option-box div { padding: 16px; border: 1.5px solid #1a1a1a; text-align: center; border-radius: 12px; cursor: pointer; background: #050505; font-size: 14px; }
+.option-box div.active { background: #fff; color: #000; border-color: #fff; }
+.input-group { margin-bottom: 25px; }
+input, textarea { width: 100%; padding: 18px; background: #0a0a0a; border: 1.5px solid #1a1a1a; color: #fff; border-radius: 15px; }
+button { background: #fff; color: #000; border: none; padding: 20px; width: 100%; font-weight: 700; border-radius: 15px; cursor: pointer; }
