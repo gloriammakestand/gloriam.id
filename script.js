@@ -1,3 +1,5 @@
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwCWTzzrRx3TkJb8JZ0mf5eJmbO9Ukt1d9yhc5RacFUdGnJZx5x9pnJK64kTlz1AHRcQw/exec";
+
 const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR5wyzEXxKbCeS8SQWZQ7oz5lmPwszeLtW-TuQ5uzCV6GWcXP5IqOzjTqhIRg5yyLuRd86yLtXGMnoL/pub?output=csv';
 let products = [];
 let cart = { prod: null, size: '', color: '' };
@@ -161,6 +163,7 @@ function validateDetail() {
     vibrate(40);
     showPage('form');
 }
+
 function validateForm() { vibrate(40);
     const n = document.getElementById('inName').value, p = document.getElementById('inPhone').value, a = document.getElementById('inAddress').value;
     if(!n || !p || !a) return triggerAlert("LENGKAPI DATA!");
@@ -170,11 +173,43 @@ function validateForm() { vibrate(40);
     document.getElementById('sumCust').innerHTML = `<strong>${n}</strong><br>${p}<br>${a}`;
     showPage('summary');
 }
-function sendWA() { vibrate(40);
-    const n = document.getElementById('inName').value, p = document.getElementById('inPhone').value, a = document.getElementById('inAddress').value;
+
+async function sendWA() { 
+    vibrate(40);
+
+    const n = document.getElementById('inName').value;
+    const p = document.getElementById('inPhone').value;
+    const a = document.getElementById('inAddress').value;
+
+    const orderData = {
+        nama: n,
+        wa: p,
+        alamat: a,
+        produk: cart.prod.name,
+        warna: cart.color,
+        size: cart.size,
+        harga: cart.prod.price
+    };
+
+    try {
+        // 🔥 kirim ke Google Sheets
+        await fetch(SCRIPT_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(orderData)
+        });
+    } catch (err) {
+        console.error("Gagal kirim ke spreadsheet:", err);
+    }
+
+    // 🔥 kirim ke WhatsApp
     const text = `*GLORIAM ORDER*\n\n${cart.prod.name}\nWarna: ${cart.color}\nSize: ${cart.size}\nTotal: Rp${cart.prod.price}\n\n*Data Pengiriman*\nNama: ${n}\nWhatsApp: ${p}\nAlamat: ${a}`;
+
     window.open(`https://wa.me/6283898588562?text=${encodeURIComponent(text)}`);
 }
+
 function openSize() { document.getElementById('sizeModal').style.display='flex'; }
 function closeSize() { document.getElementById('sizeModal').style.display='none'; }
 function openSpecs() { 
