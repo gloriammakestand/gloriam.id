@@ -156,7 +156,31 @@
                     DANA: 081910421976<br>
                     <span style="opacity:0.6; font-size:13px;">A.N Dias Adhitya Purnama Putra</span>
                 </div>
-            </div>
+            <div style="margin-top:15px; border-top: 1px solid #1a1a1a; padding-top: 15px;">
+        <p onclick="openQRIS()" style="color:#00c853; font-size:12px; font-weight:700; cursor:pointer; text-decoration: none; margin:0;">
+            <i class="fas fa-qrcode" style="margin-right:5px;"></i> Atau lihat QRIS PEMBAYARAN (Tap di sini)
+        </p>
+<p style="font-size: 11px; color: #666; margin-top: 12px; line-height: 1.5; font-weight: 500;">
+            Kirim bukti pembayaran ke WhatsApp Admin.
+        </p>
+    </div>
+</div>
+
+<div id="qrisModal" class="modal-overlay" onclick="closeQRIS()">
+    <div class="specs-box" onclick="event.stopPropagation()">
+        <h3 style="margin:0 0 15px 0; border-bottom:1px solid #222; padding-bottom:10px; font-size:16px; letter-spacing:1px;">QRIS PEMBAYARAN</h3>
+
+        <div style="background:#fff; padding:10px; border-radius:10px; margin-bottom:15px;">
+            <img src="qris.jpg" alt="QRIS Gloriam" style="width:100%; display:block; border-radius:5px;">
+        </div>
+
+        <p style="font-size:12px; line-height:1.6; color:#bbb; margin:0; text-align:center;">
+            Silakan scan QRIS di atas melalui aplikasi Bank atau E-Wallet kamu untuk pembayaran instan.
+        </p>
+
+        <button onclick="closeQRIS()" style="margin-top:25px; padding:15px; font-size:12px; background:#111; color:#fff; border:1px solid #222;">TUTUP</button>
+    </div>
+</div>
 
             <p style="font-size: 10px; color: #444; text-align: center; margin-top: 25px; line-height: 1.5;">
                 Tekan checkout dan anda akan diarahkan otomatis ke<br>WhatsApp admin.
