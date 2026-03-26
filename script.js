@@ -218,3 +218,14 @@ function openSpecs() {
     document.getElementById('specsModal').style.display = 'flex'; 
 }
 function closeSpecs() { document.getElementById('specsModal').style.display = 'none'; }
+
+// Fungsi untuk membuka modal QRIS
+function openQRIS() { 
+    vibrate(30); 
+    document.getElementById('qrisModal').style.display = 'flex'; 
+}
+
+// Fungsi untuk menutup modal QRIS
+function closeQRIS() { 
+    document.getElementById('qrisModal').style.display = 'none'; 
+}
