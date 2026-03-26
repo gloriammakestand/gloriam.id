@@ -1,4 +1,3 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwCWTzzrRx3TkJb8JZ0mf5eJmbO9Ukt1d9yhc5RacFUdGnJZx5x9pnJK64kTlz1AHRcQw/exec";
 
 const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR5wyzEXxKbCeS8SQWZQ7oz5lmPwszeLtW-TuQ5uzCV6GWcXP5IqOzjTqhIRg5yyLuRd86yLtXGMnoL/pub?output=csv';
 let products = [];
@@ -181,6 +180,7 @@ async function sendWA() {
     const p = document.getElementById('inPhone').value;
     const a = document.getElementById('inAddress').value;
 
+    // Data yang dikirim ke Spreadsheet (Warna & Size dipisah)
     const orderData = {
         nama: n,
         wa: p,
@@ -191,20 +191,21 @@ async function sendWA() {
         harga: cart.prod.price
     };
 
-    try {
-        // 🔥 kirim ke Google Sheets
-        await fetch(SCRIPT_URL, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(orderData)
-        });
-    } catch (err) {
-        console.error("Gagal kirim ke spreadsheet:", err);
-    }
+    // URL Web App Google Apps Script terbaru kamu
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby6l5ZUat66Df-2g0lMKUJ9Xtd3Lk4glWpyMnDWwjDAVpTr6uZY0UJsuY1HKqKGM8NVgA/exec';
 
-    // 🔥 kirim ke WhatsApp
+    // 🔥 Kirim ke Google Sheets (Background Process)
+    fetch(SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors", 
+        cache: "no-cache",
+        headers: {
+            "Content-Type": "text/plain"
+        },
+        body: JSON.stringify(orderData)
+    }).catch(err => console.error("Gagal kirim ke spreadsheet:", err));
+
+    // 🔥 Langsung arahkan ke WhatsApp
     const text = `*GLORIAM ORDER*\n\n${cart.prod.name}\nWarna: ${cart.color}\nSize: ${cart.size}\nTotal: Rp${cart.prod.price}\n\n*Data Pengiriman*\nNama: ${n}\nWhatsApp: ${p}\nAlamat: ${a}`;
 
     window.open(`https://wa.me/6283898588562?text=${encodeURIComponent(text)}`);
