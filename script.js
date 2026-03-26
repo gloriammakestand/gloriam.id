@@ -192,7 +192,7 @@ async function sendWA() {
     };
 
     // URL Web App Google Apps Script terbaru kamu
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOo_30eMWaQ6xkfl7AFNUlf0Tu6l3b0z7HLzC7dnZqnedATsA31da4zru1yY54zSeJww/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwXBtryzfkaN2skkCDNAsv0jYV3i5UI7vdjTn1-opSGymVOTBNAPtBqbRvVC2ZnjQM2BA/exec';
 
     // 🔥 Kirim ke Google Sheets (Background Process)
     fetch(SCRIPT_URL, {
