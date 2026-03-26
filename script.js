@@ -2,6 +2,7 @@
 const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR5wyzEXxKbCeS8SQWZQ7oz5lmPwszeLtW-TuQ5uzCV6GWcXP5IqOzjTqhIRg5yyLuRd86yLtXGMnoL/pub?output=csv';
 let products = [];
 let cart = { prod: null, size: '', color: '' };
+let lastPage = 'home'; // Default ke home
 
 function vibrate(ms) { 
     if (navigator.vibrate) {
@@ -107,11 +108,19 @@ function navTo(pageId) { toggleSidebar(); showPage(pageId); }
 
 function showPage(id) {
     const menuBtn = document.querySelector('.menu-btn');
+    
+    // Simpan history jika halaman yang dibuka adalah salah satu menu utama
+    const mainMenus = ['home', 'preorder', 'katalog', 'arsip', 'tentang'];
+    if (mainMenus.includes(id)) {
+        lastPage = id;
+    }
+
     if (id === 'detail' || id === 'form' || id === 'summary') {
         menuBtn.style.display = 'none';
     } else {
         menuBtn.style.display = 'flex';
     }
+    
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(id).classList.add('active');
     document.getElementById(id).scrollTop = 0;
