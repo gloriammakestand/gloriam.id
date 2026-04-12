@@ -140,8 +140,13 @@ function goDetail(id) {
 
     document.getElementById('detName').innerText = p.name;
     document.getElementById('detPrice').innerText = 'Rp' + p.price;
-    document.getElementById('detImgs').innerHTML = p.imgs.slice(1).map(i => `<img src="${i}">`).join('');
 
+    // Masukkan semua gambar ke dalam slider
+    const slider = document.getElementById('detImgs');
+    slider.innerHTML = p.imgs.map(i => `<img src="${i}">`).join('');
+    slider.scrollLeft = 0; 
+
+    // Kod pemilihan warna & saiz tetap sama
     let cHTML = `<div class="section-label">PILIH WARNA</div><div class="option-box">`;
     p.colors.forEach(c => cHTML += `<div class="${cart.color === c ? 'active' : ''}" onclick="selOpt('color','${c}',this)">${c}</div>`);
     document.getElementById('colorArea').innerHTML = cHTML + `</div>`;
@@ -154,6 +159,7 @@ function goDetail(id) {
     document.getElementById('sizeArea').innerHTML = sHTML + `</div>`;
     showPage('detail');
 }
+
 
 function selOpt(type, val, el) { vibrate(20); cart[type] = val; el.parentElement.querySelectorAll('div').forEach(d => d.classList.remove('active')); el.classList.add('active'); }
 function triggerAlert(msg) {
