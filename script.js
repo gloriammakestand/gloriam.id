@@ -1,3 +1,4 @@
+let galleryImages = []; // Untuk menyimpan link dari kolom Q
 
 const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR5wyzEXxKbCeS8SQWZQ7oz5lmPwszeLtW-TuQ5uzCV6GWcXP5IqOzjTqhIRg5yyLuRd86yLtXGMnoL/pub?output=csv';
 let products = [];
@@ -22,8 +23,16 @@ async function fetchProducts() {
         const response = await fetch(SHEET_CSV);
         const data = await response.text();
         const rows = data.split('\n').slice(1);
+        
+        galleryImages = []; // Reset galeri setiap kali ambil data baru
+
         products = rows.map(row => {
             const col = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.trim().replace(/^"|"$/g, ""));
+
+            // --- TAMBAHAN UNTUK GALERI (KOLOM Q / INDEX 16) ---
+            if (col[16] && col[16].startsWith("http")) {
+                galleryImages.push(col[16]);
+            }
 
             return {
                 id: parseInt(col[0]), 
@@ -33,19 +42,15 @@ async function fetchProducts() {
                 status: col[4],
                 colors: col[5] ? col[5].split('/').map(c => c.trim()) : [],
                 stock: col[6] ? col[6].split('/').map(s => s.trim()) : [],
-
-                // Thumbnail (Kolom H / Index 7)
                 thumbnail: col[7],
-
-                // Gambar Detail 1-5 (Kolom I sampai M / Index 8-12)
-                // Filter ini memastikan link yang kosong atau cuma spasi tidak masuk
                 details: [col[8], col[9], col[10], col[11], col[12]].filter(i => i && i.trim() !== ""),
-
-                specs: col[13], // Kolom N
-                showcase: col[14] ? col[14].toLowerCase().trim() : "" // Kolom O
+                specs: col[13], 
+                showcase: col[14] ? col[14].toLowerCase().trim() : "" 
             };
         });
+
         renderAllSections(); 
+        renderGallery(); // <--- Panggil fungsi render galeri di sini
     } catch (err) { console.error("Gagal ambil data:", err); }
 }
 
@@ -79,6 +84,16 @@ function renderList(items, containerId) {
     });
 }
 
+function renderGallery() {
+    const container = document.getElementById('gallery-container');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    galleryImages.forEach(img => {
+        container.innerHTML += `<img src="${img}" loading="lazy" onclick="vibrate(20)">`;
+    });
+}
+
 function injectFooters() {
     const footerHTML = `
         <footer>
@@ -98,7 +113,7 @@ function injectFooters() {
         </footer>`;
 
     // Daftar ID footer yang ada di HTML kamu
-    ['home', 'pre', 'kat', 'ars', 'about'].forEach(id => {
+    ['home', 'pre', 'kat', 'ars', 'about', 'galeri'].forEach(id => {
         const el = document.getElementById(`footer-${id}`);
         if(el) el.innerHTML = footerHTML;
     });
@@ -116,7 +131,7 @@ function showPage(id) {
     const menuBtn = document.querySelector('.menu-btn');
     
     // Simpan history jika halaman yang dibuka adalah salah satu menu utama
-    const mainMenus = ['home', 'preorder', 'katalog', 'arsip', 'tentang'];
+    const mainMenus = ['home', 'preorder', 'katalog', 'arsip', 'galeri', 'tentang'];
     if (mainMenus.includes(id)) {
         lastPage = id;
     }
