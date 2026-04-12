@@ -248,3 +248,31 @@ button { background: #fff; color: #000; border: none; padding: 20px; width: 100%
     opacity: 0.7;
     filter: grayscale(0.5);
 }
+
+/* Slider Kontainer */
+.img-slider {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 10px;
+    margin-top: 60px;
+    padding-bottom: 10px;
+    -webkit-overflow-scrolling: touch; /* Halus di iOS */
+}
+
+/* Sembunyikan scrollbar tapi tetap bisa digeser */
+.img-slider::-webkit-scrollbar {
+    display: none;
+}
+
+.img-slider img {
+    flex: 0 0 85%; /* Gambar mengambil 85% lebar layar agar gambar berikutnya sedikit terlihat (ngintip) */
+    width: 85%;
+    border-radius: 15px;
+    aspect-ratio: 4/5;
+    object-fit: cover;
+    border: 1px solid #1a1a1a;
+    scroll-snap-align: center;
+}
+
+/* Jika hanya ada 1 atau 2 gambar dan ingin full, kita atur lewat JS nanti atau biarkan 85% agar konsisten */
