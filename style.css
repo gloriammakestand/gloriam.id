@@ -315,8 +315,8 @@ button { background: #fff; color: #000; border: none; padding: 20px; width: 100%
 }
 
 .img-slider img {
-    flex: 0 0 60%; /* (Ubah untuk rasio mengintip) Gambar mengambil 85% lebar layar agar gambar berikutnya sedikit terlihat (ngintip) */
-    width: 60%; /* Atur Lebar (Samakan dengan angka di atas) */
+    flex: 0 0 75%; /* (Ubah untuk rasio mengintip) Gambar mengambil 85% lebar layar agar gambar berikutnya sedikit terlihat (ngintip) */
+    width: 75%; /* Atur Lebar (Samakan dengan angka di atas) */
     border-radius: 15px;
     aspect-ratio: 4/5;
     object-fit: cover;
