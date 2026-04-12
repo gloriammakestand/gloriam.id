@@ -24,6 +24,7 @@ async function fetchProducts() {
         const rows = data.split('\n').slice(1);
         products = rows.map(row => {
             const col = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.trim().replace(/^"|"$/g, ""));
+            
             return {
                 id: parseInt(col[0]), 
                 name: col[1], 
@@ -33,14 +34,14 @@ async function fetchProducts() {
                 colors: col[5] ? col[5].split('/').map(c => c.trim()) : [],
                 stock: col[6] ? col[6].split('/').map(s => s.trim()) : [],
                 
-                // MENGAMBIL 6 KOLOM GAMBAR (Thumbnail + 5 Detail)
-                // Index 7, 8, 9, 10, 11, 12
-                imgs: [col[7], col[8], col[9], col[10], col[11], col[12]].filter(i => i && i !== ""),
+                // Thumbnail disimpan sendiri (Kolom H / Index 7)
+                thumbnail: col[7],
                 
-                // SPECS sekarang di Index 13 (Kolom N)
-                specs: col[13],
-                // SHOWCASE sekarang di Index 14 (Kolom O)
-                showcase: col[14] ? col[14].toLowerCase().trim() : "" 
+                // Gambar Detail 1-5 disimpan dalam array (Kolom I sampai M / Index 8-12)
+                details: [col[8], col[9], col[10], col[11], col[12]].filter(i => i && i !== ""),
+                
+                specs: col[13], // Kolom N
+                showcase: col[14] ? col[14].toLowerCase().trim() : "" // Kolom O
             };
         });
         renderAllSections(); 
@@ -68,8 +69,7 @@ function renderList(items, containerId) {
         container.innerHTML += `
             <div class="card ${isSold ? 'sold-out-display' : ''}">
                 <div class="badge ${p.badge}">${p.status}</div>
-                <img src="${p.imgs[0]}">
-                <div style="padding:25px">
+                <img src="${p.thumbnail}"> <div style="padding:25px">
                     <h3>${p.name}</h3>
                     <p style="opacity:0.5; font-weight:600;">${isSold ? 'OUT OF STOCK' : 'Rp' + p.price}</p>
                     <button onclick="vibrate(40); goDetail(${p.id})" ${isSold ? 'disabled' : ''}>${isSold ? 'SOLD' : 'SELECT'}</button>
@@ -141,12 +141,19 @@ function goDetail(id) {
     document.getElementById('detName').innerText = p.name;
     document.getElementById('detPrice').innerText = 'Rp' + p.price;
 
-    // Masukkan semua gambar ke dalam slider
+    // RENDER SLIDER: Hanya menampilkan Gambar Detail 1-5 (Tanpa Thumbnail)
     const slider = document.getElementById('detImgs');
-    slider.innerHTML = p.imgs.map(i => `<img src="${i}">`).join('');
+    
+    if (p.details.length > 0) {
+        slider.innerHTML = p.details.map(i => `<img src="${i}">`).join('');
+    } else {
+        // Jika tidak ada gambar detail sama sekali, tampilkan thumbnail sebagai fallback
+        slider.innerHTML = `<img src="${p.thumbnail}">`;
+    }
+    
     slider.scrollLeft = 0; 
 
-    // Kod pemilihan warna & saiz tetap sama
+    // Sisa kode pemilihan warna & size
     let cHTML = `<div class="section-label">PILIH WARNA</div><div class="option-box">`;
     p.colors.forEach(c => cHTML += `<div class="${cart.color === c ? 'active' : ''}" onclick="selOpt('color','${c}',this)">${c}</div>`);
     document.getElementById('colorArea').innerHTML = cHTML + `</div>`;
