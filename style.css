@@ -325,3 +325,20 @@ button { background: #fff; color: #000; border: none; padding: 20px; width: 100%
 }
 
 /* Jika hanya ada 1 atau 2 gambar dan ingin full, kita atur lewat JS nanti atau biarkan 85% agar konsisten */
+
+/* --- FITUR GALERI --- */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 Kolom kesamping */
+    gap: 12px;
+    padding: 0 20px 100px;
+}
+
+.gallery-grid img {
+    width: 100%;
+    aspect-ratio: 1 / 1; /* Kotak sempurna */
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid #1a1a1a;
+    background: #0a0a0a;
+}
