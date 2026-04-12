@@ -134,9 +134,12 @@ function showPage(id) {
 
 function goDetail(id) {
     const p = products.find(x => x.id === id);
+    if (!p) return;
+
     if (document.getElementById('sidebar').classList.contains('open')) {
         toggleSidebar();
     }
+    
     cart = { prod: p, size: '', color: p.colors.length === 1 ? p.colors[0] : '' };
 
     document.getElementById('detName').innerText = p.name;
@@ -144,22 +147,35 @@ function goDetail(id) {
 
     const slider = document.getElementById('detImgs');
 
-    // LOGIKA FILTER: Cek apakah ada gambar di array details
+    // Cek apakah ada gambar detail (I-M)
     if (p.details && p.details.length > 0) {
-        // HANYA RENDER GAMBAR DETAIL
+        // Hanya tampilkan gambar detail 1-5
         slider.innerHTML = p.details.map(i => `<img src="${i}">`).join('');
     } else {
-        // FALLBACK: Kalau detail kosong semua, baru thumbnail muncul biar tidak sepi
+        // Kalau detail kosong, thumbnail baru muncul sebagai cadangan
         slider.innerHTML = `<img src="${p.thumbnail}">`;
     }
 
     slider.scrollLeft = 0; 
-    
-    // ... (sisa kode warna dan size tetap sama)
-    renderOptions(p); // (Opsional: pisahkan logika render option agar bersih)
+
+    // Render Warna
+    let cHTML = `<div class="section-label">PILIH WARNA</div><div class="option-box">`;
+    p.colors.forEach(c => {
+        cHTML += `<div class="${cart.color === c ? 'active' : ''}" onclick="selOpt('color','${c}',this)">${c}</div>`;
+    });
+    document.getElementById('colorArea').innerHTML = cHTML + `</div>`;
+
+    // Render Ukuran
+    let sHTML = `<div class="section-label">PILIH UKURAN</div><div class="option-box">`;
+    ["S", "M", "L", "XL", "XXL", "XXXL"].forEach(s => {
+        const isAvail = p.stock.includes(s);
+        sHTML += `<div class="${isAvail ? '' : 'disabled'}" onclick="${isAvail ? `selOpt('size','${s}',this)` : ''}">${s}</div>`;
+    });
+    document.getElementById('sizeArea').innerHTML = sHTML + `</div>`;
+
+    // Pindah halaman
     showPage('detail');
 }
-
 
 function selOpt(type, val, el) { vibrate(20); cart[type] = val; el.parentElement.querySelectorAll('div').forEach(d => d.classList.remove('active')); el.classList.add('active'); }
 function triggerAlert(msg) {
