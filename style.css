@@ -156,21 +156,36 @@ button { background: #fff; color: #000; border: none; padding: 20px; width: 100%
 }
 
 /* Judul (SPESIFIKASI PRODUK) */
+/* Container Modal Spesifikasi */
+.specs-box {
+    background: #0a0a0a;
+    border: 1px solid #1a1a1a;
+    padding: 30px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 400px;
+    text-align: left;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+}
+
+/* Judul (H3) - Tetap ada Garis Bawah */
 .specs-box h3 {
     margin: 0 0 15px 0;
-    border-bottom: 1px solid #222;
     padding-bottom: 10px;
+    border-bottom: 1px solid #222; /* Garis pembatas tetap ada */
     letter-spacing: 1px;
-    /* Ganti warna & size di sini */
+    
+    /* Ukuran & Warna Baru */
     font-size: 18px; 
     color: #00c853; 
 }
 
-/* Isi Teks Deskripsi */
+/* Isi Teks (P) */
 #specContent {
     margin: 0;
     line-height: 1.8;
-    /* Ganti warna & size di sini */
+    
+    /* Ukuran & Warna Baru */
     font-size: 14px;
     color: #ffffff; 
 }
@@ -182,11 +197,11 @@ button { background: #fff; color: #000; border: none; padding: 20px; width: 100%
     width: 100%;
     font-size: 12px;
     font-weight: 700;
-    background: #111;
-    color: #00c853;
-    border: 1px solid #222;
     border-radius: 10px;
     cursor: pointer;
+    background: #111;
+    color: #fff;
+    border: 1px solid #222;
 }
 
 /* --- CSS UNTUK SIDEBAR & MENU --- */
