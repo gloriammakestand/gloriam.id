@@ -32,10 +32,15 @@ async function fetchProducts() {
                 status: col[4],
                 colors: col[5] ? col[5].split('/').map(c => c.trim()) : [],
                 stock: col[6] ? col[6].split('/').map(s => s.trim()) : [],
-                imgs: [col[7], col[8], col[9]].filter(i => i && i !== ""),
-                specs: col[10],
-                // MEMBACA KOLOM L (INDEX 11)
-                showcase: col[11] ? col[11].toLowerCase().trim() : "" 
+                
+                // MENGAMBIL 6 KOLOM GAMBAR (Thumbnail + 5 Detail)
+                // Index 7, 8, 9, 10, 11, 12
+                imgs: [col[7], col[8], col[9], col[10], col[11], col[12]].filter(i => i && i !== ""),
+                
+                // SPECS sekarang di Index 13 (Kolom N)
+                specs: col[13],
+                // SHOWCASE sekarang di Index 14 (Kolom O)
+                showcase: col[14] ? col[14].toLowerCase().trim() : "" 
             };
         });
         renderAllSections(); 
