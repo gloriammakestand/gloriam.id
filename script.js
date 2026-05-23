@@ -90,8 +90,28 @@ function renderGallery() {
     
     container.innerHTML = '';
     galleryImages.forEach(img => {
-        container.innerHTML += `<img src="${img}" loading="lazy" onclick="vibrate(20)">`;
+        // Kita tambahkan onclick="openImage('${img}')" agar saat diklik gambar membesar
+        container.innerHTML += `<img src="${img}" loading="lazy" onclick="vibrate(20); openImage('${img}')">`;
     });
+}
+
+// Fungsi untuk membuka modal
+function openImage(src) {
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImg');
+    modalImg.src = src;
+    modal.style.display = 'flex'; // Mengubah display menjadi flex agar muncul
+    vibrate(20);
+}
+
+// Fungsi untuk menutup modal (dipanggil saat klik area gelap)
+function closeImage() {
+    document.getElementById('imageModal').style.display = 'none';
+}
+
+// Fungsi untuk menutup modal (dipanggil saat klik area gelap)
+function closeImage() {
+    document.getElementById('imageModal').style.display = 'none';
 }
 
 function injectFooters() {
