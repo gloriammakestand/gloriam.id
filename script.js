@@ -22,6 +22,22 @@ const SLUG_TO_PAGE = {
     'order/summary': 'summary'
 };
 
+function updateMeta(title, description) {
+    document.title = title;
+    document.querySelector('meta[name="description"]').content = description;
+    document.querySelector('meta[property="og:title"]').content = title;
+    document.querySelector('meta[property="og:description"]').content = description;
+}
+
+const META = {
+    home: { title: 'Gloriam | Make a Stand with Pride', desc: 'Soccer culture, street attitude.' },
+    katalog: { title: 'Katalog | Gloriam', desc: 'Koleksi lengkap Gloriam Store.' },
+    preorder: { title: 'Pre Order | Gloriam', desc: 'Pre order produk terbaru Gloriam.' },
+    arsip: { title: 'Arsip | Gloriam', desc: 'Koleksi arsip Gloriam Store.' },
+    galeri: { title: 'Galeri | Gloriam', desc: 'Galeri foto Gloriam Store.' },
+    tentang: { title: 'Tentang Kami | Gloriam', desc: 'Gloriam, built for those who carry football into everyday life.' }
+};
+
 let galleryImages = []; // Untuk menyimpan link dari kolom Q
 
 const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR5wyzEXxKbCeS8SQWZQ7oz5lmPwszeLtW-TuQ5uzCV6GWcXP5IqOzjTqhIRg5yyLuRd86yLtXGMnoL/pub?output=csv';
@@ -210,6 +226,7 @@ function toggleSidebar() {
 function navTo(pageId) { toggleSidebar(); showPage(pageId); }
 
 function showPage(id) {
+    if (META[id]) updateMeta(META[id].title, META[id].desc);
     const menuBtn = document.querySelector('.menu-btn');
     const mainMenus = ['home', 'preorder', 'katalog', 'arsip', 'galeri', 'tentang'];
     const orderPages = ['detail', 'form', 'summary'];
