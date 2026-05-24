@@ -64,8 +64,26 @@ window.onload = async () => {
     // Cek apakah path adalah order page
     const orderMatch = path.match(/^order\/(.+)\/(detail|form|summary)$/);
     if (orderMatch) {
-        // Ada data produk? tampilkan, kalau tidak redirect home
-        if (!cart.prod) {
+        const productSlug = orderMatch[1]; // contoh: soccer-madness
+        const pageId = orderMatch[2];      // detail, form, atau summary
+
+        // Cari produk berdasarkan slug
+        const found = products.find(p => slugify(p.name) === productSlug);
+
+        if (found) {
+            // Set cart dari data produk
+            cart = { 
+                prod: found, 
+                size: '', 
+                color: found.colors.length === 1 ? found.colors[0] : '' 
+            };
+            // Render ulang detail produk
+            goDetailSilent(found);
+            // Tampilkan halaman yang sesuai
+            showPageSilent(pageId);
+        } else {
+            // Produk tidak ditemukan, redirect home
+            history.replaceState({ page: 'home' }, '', '/');
             showPage('home');
         }
     } else {
@@ -398,4 +416,46 @@ function openQRIS() {
 // Fungsi untuk menutup modal QRIS
 function closeQRIS() { 
     document.getElementById('qrisModal').style.display = 'none'; 
+}
+
+function goDetailSilent(p) {
+    document.getElementById('detName').innerText = p.name;
+    document.getElementById('detPrice').innerText = 'Rp' + p.price;
+
+    const slider = document.getElementById('detImgs');
+    if (p.details && p.details.length > 0) {
+        slider.innerHTML = p.details.map(i => `<img src="${i}">`).join('');
+    } else {
+        slider.innerHTML = `<img src="${p.thumbnail}">`;
+    }
+    slider.scrollLeft = 0;
+
+    let cHTML = `<div class="section-label">PILIH WARNA</div><div class="option-box">`;
+    p.colors.forEach(c => {
+        cHTML += `<div class="${cart.color === c ? 'active' : ''}" onclick="selOpt('color','${c}',this)">${c}</div>`;
+    });
+    document.getElementById('colorArea').innerHTML = cHTML + `</div>`;
+
+    let sHTML = `<div class="section-label">PILIH UKURAN</div><div class="option-box">`;
+    ["S", "M", "L", "XL", "XXL", "XXXL"].forEach(s => {
+        const isAvail = p.stock.includes(s);
+        sHTML += `<div class="${isAvail ? '' : 'disabled'}" onclick="${isAvail ? `selOpt('size','${s}',this)` : ''}">${s}</div>`;
+    });
+    document.getElementById('sizeArea').innerHTML = sHTML + `</div>`;
+}
+
+function showPageSilent(id) {
+    if (META[id]) updateMeta(META[id].title, META[id].desc);
+    const menuBtn = document.querySelector('.menu-btn');
+    const orderPages = ['detail', 'form', 'summary'];
+
+    if (orderPages.includes(id)) {
+        menuBtn.style.display = 'none';
+    } else {
+        menuBtn.style.display = 'flex';
+    }
+
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.getElementById(id).scrollTop = 0;
 }
