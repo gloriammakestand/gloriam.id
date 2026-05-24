@@ -38,6 +38,13 @@ const META = {
     tentang: { title: 'Tentang Kami | Gloriam', desc: 'Gloriam, built for those who carry football into everyday life.' }
 };
 
+function slugify(text) {
+    return text.toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .trim();
+}
+
 let galleryImages = []; // Untuk menyimpan link dari kolom Q
 
 const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR5wyzEXxKbCeS8SQWZQ7oz5lmPwszeLtW-TuQ5uzCV6GWcXP5IqOzjTqhIRg5yyLuRd86yLtXGMnoL/pub?output=csv';
