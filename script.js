@@ -1,3 +1,27 @@
+const PAGE_SLUGS = {
+    home: '/',
+    preorder: '/preorder',
+    katalog: '/katalog',
+    arsip: '/arsip',
+    galeri: '/galeri',
+    tentang: '/tentang',
+    detail: '/order/detail',
+    form: '/order/form',
+    summary: '/order/summary'
+};
+
+const SLUG_TO_PAGE = {
+    '': 'home',
+    'preorder': 'preorder',
+    'katalog': 'katalog',
+    'arsip': 'arsip',
+    'galeri': 'galeri',
+    'tentang': 'tentang',
+    'order/detail': 'detail',
+    'order/form': 'form',
+    'order/summary': 'summary'
+};
+
 let galleryImages = []; // Untuk menyimpan link dari kolom Q
 
 const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR5wyzEXxKbCeS8SQWZQ7oz5lmPwszeLtW-TuQ5uzCV6GWcXP5IqOzjTqhIRg5yyLuRd86yLtXGMnoL/pub?output=csv';
