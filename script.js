@@ -233,7 +233,6 @@ function showPage(id) {
     const mainMenus = ['home', 'preorder', 'katalog', 'arsip', 'galeri', 'tentang'];
     const orderPages = ['detail', 'form', 'summary'];
 
-    // Kalau buka order page tapi tidak ada data produk, redirect ke home
     if (orderPages.includes(id) && !cart.prod) {
         history.pushState({ page: 'home' }, '', '/');
         id = 'home';
@@ -241,11 +240,15 @@ function showPage(id) {
 
     if (mainMenus.includes(id)) {
         lastPage = id;
+        const slug = PAGE_SLUGS[id] || '/';
+        history.pushState({ page: id }, '', slug);
     }
 
-    // Update URL untuk semua halaman
-    const slug = PAGE_SLUGS[id] || '/';
-    history.pushState({ page: id }, '', slug);
+    // URL dinamis untuk order pages
+    if (orderPages.includes(id) && cart.prod) {
+        const productSlug = slugify(cart.prod.name);
+        history.pushState({ page: id, product: productSlug }, '', `/order/${productSlug}/${id}`);
+    }
 
     if (orderPages.includes(id)) {
         menuBtn.style.display = 'none';
