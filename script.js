@@ -62,7 +62,8 @@ window.onload = async () => {
     const path = window.location.pathname.replace(/^\//, '').toLowerCase();
 
     // Cek apakah path adalah order page
-    const orderMatch = path.match(/^order\/(.+)\/(detail|form|summary)$/);
+    const orderMatch = path.match(/^order\/(.+?)\/(detail|form|summary)$/) || 
+                   path.match(/^order\/(.+)$/) && [null, path.replace('order/', ''), 'detail'];
     if (orderMatch) {
         const productSlug = orderMatch[1]; // contoh: soccer-madness
         const pageId = orderMatch[2];      // detail, form, atau summary
