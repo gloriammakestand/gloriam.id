@@ -40,6 +40,44 @@ function vibrate(ms) {
 window.onload = async () => {
     await fetchProducts();
     setTimeout(() => document.getElementById('loader').classList.add('hide'), 1000);
+
+    // Deteksi URL saat pertama kali dibuka
+    const slug = window.location.pathname.replace(/^\//, '').toLowerCase();
+    const targetPage = SLUG_TO_PAGE[slug] || 'home';
+
+    // Kalau buka langsung /order/* tanpa data, arahkan ke home
+    const orderPages = ['detail', 'form', 'summary'];
+    if (orderPages.includes(targetPage) && !cart.prod) {
+        showPage('home');
+    } else if (targetPage !== 'home') {
+        showPage(targetPage);
+    }
+
+    // Handle tombol back/forward browser
+    window.addEventListener('popstate', (e) => {
+        const page = e.state?.page || 'home';
+        const menuBtn = document.querySelector('.menu-btn');
+
+        // Kalau back ke order page tapi cart kosong, balik ke home
+        if (orderPages.includes(page) && !cart.prod) {
+            history.replaceState({ page: 'home' }, '', '/');
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('home').classList.add('active');
+            menuBtn.style.display = 'flex';
+            return;
+        }
+
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(page).classList.add('active');
+        document.getElementById(page).scrollTop = 0;
+
+        if (['detail', 'form', 'summary'].includes(page)) {
+            menuBtn.style.display = 'none';
+        } else {
+            menuBtn.style.display = 'flex';
+            lastPage = page;
+        }
+    });
 };
 
 async function fetchProducts() {
