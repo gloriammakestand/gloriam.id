@@ -204,6 +204,7 @@ function injectFooters() {
             </div>
             <div class="footer-contact-title">KONTAK KAMI :</div>
             <div class="footer-contact-info">
+                <a href="https://whatsapp.com/channel/0029Vb7jjbj8vd1GK8ZiTz0y" target="_blank">Saluran WhatsApp</a><br>
                 WhatsApp : <a href="https://wa.me/6283898588562">083898588562</a><br>
                 Email : <a href="mailto:gloriammakestand@gmail.com">gloriammakestand@gmail.com</a>
             </div>
