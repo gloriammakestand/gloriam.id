@@ -173,19 +173,29 @@ function navTo(pageId) { toggleSidebar(); showPage(pageId); }
 
 function showPage(id) {
     const menuBtn = document.querySelector('.menu-btn');
-    
-    // Simpan history jika halaman yang dibuka adalah salah satu menu utama
     const mainMenus = ['home', 'preorder', 'katalog', 'arsip', 'galeri', 'tentang'];
+    const orderPages = ['detail', 'form', 'summary'];
+
+    // Kalau buka order page tapi tidak ada data produk, redirect ke home
+    if (orderPages.includes(id) && !cart.prod) {
+        history.pushState({ page: 'home' }, '', '/');
+        id = 'home';
+    }
+
     if (mainMenus.includes(id)) {
         lastPage = id;
     }
 
-    if (id === 'detail' || id === 'form' || id === 'summary') {
+    // Update URL untuk semua halaman
+    const slug = PAGE_SLUGS[id] || '/';
+    history.pushState({ page: id }, '', slug);
+
+    if (orderPages.includes(id)) {
         menuBtn.style.display = 'none';
     } else {
         menuBtn.style.display = 'flex';
     }
-    
+
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(id).classList.add('active');
     document.getElementById(id).scrollTop = 0;
