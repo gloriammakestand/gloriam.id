@@ -4,10 +4,7 @@ const PAGE_SLUGS = {
     katalog: '/katalog',
     arsip: '/arsip',
     galeri: '/galeri',
-    tentang: '/tentang',
-    detail: '/order/detail',
-    form: '/order/form',
-    summary: '/order/summary'
+    tentang: '/tentang'
 };
 
 const SLUG_TO_PAGE = {
@@ -16,10 +13,7 @@ const SLUG_TO_PAGE = {
     'katalog': 'katalog',
     'arsip': 'arsip',
     'galeri': 'galeri',
-    'tentang': 'tentang',
-    'order/detail': 'detail',
-    'order/form': 'form',
-    'order/summary': 'summary'
+    'tentang': 'tentang'
 };
 
 function updateMeta(title, description) {
