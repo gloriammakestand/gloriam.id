@@ -1,4 +1,19 @@
-import { auth, loginAdmin, logoutAdmin, getOrders, updateOrderStatus, getProduk, saveProduk, updateProduk, deleteProduk, getGaleri, saveGaleri, deleteGaleri, uploadGambar } from '/firebase.js';
+import {
+    auth,
+    loginAdmin,
+    logoutAdmin,
+    getOrders,
+    updateOrderStatus,
+    getProduk,
+    saveProduk,
+    updateProduk,
+    deleteProduk,
+    getGaleri,
+    saveGaleri,
+    deleteGaleri,
+    updateGaleri,
+    uploadGambar
+} from '/firebase.js';
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
 
     let allOrders = [];
