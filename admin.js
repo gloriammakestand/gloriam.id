@@ -25,8 +25,6 @@ import {
     let currentFilter = 'semua';
     let editingProdukId = null;
 
-let editingProdukId = null;
-
     // ===== AUTH =====
     onAuthStateChanged(auth, async (user) => {
         if (user) {
@@ -104,7 +102,9 @@ let editingProdukId = null;
 
         list.innerHTML = filtered.map(o => {
             const date = new Date(o.createdAt).toLocaleString('id-ID', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
-            const bayar = o.tipeBayar === 'lunas' ? 'LUNAS' : `DP Rp${parseInt(o.dp).toLocaleString('id-ID')}`;
+            const bayar = o.tipeBayar === 'lunas'
+    ? 'LUNAS'
+    : `DP Rp${Number(String(o.dp).replace(/\D/g,'')).toLocaleString('id-ID')}`;
             const sc = o.status === 'approved' ? 's-approved' : o.status === 'rejected' ? 's-rejected' : 's-pending';
             const st = o.status === 'approved' ? 'APPROVED' : o.status === 'rejected' ? 'DITOLAK' : 'PENDING';
 
@@ -119,7 +119,7 @@ let editingProdukId = null;
                 <div class="order-info">
                     <div class="info-item">Produk <span>${o.produk}</span></div>
                     <div class="info-item">Warna / Size <span>${o.warna} / ${o.size}</span></div>
-                    <div class="info-item">Harga <span>Rp${parseInt(o.harga).toLocaleString('id-ID')}</span></div>
+                    <div class="info-item">Harga <span>Rp${Number(String(o.harga).replace(/\D/g,'')).toLocaleString('id-ID')}</span></div>
                     <div class="info-item">Pembayaran <span>${bayar}</span></div>
                     <div class="info-item">WhatsApp <span>${o.wa}</span></div>
                     <div class="info-item">Alamat <span>${o.alamat}</span></div>
