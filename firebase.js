@@ -136,7 +136,7 @@ export async function saveGaleri(url) {
 
 export async function getGaleri() {
     try {
-        const q = query(collection(db, "galeri"), orderBy("order", "asc");
+        const q = query(collection(db, "galeri"), orderBy("order", "asc"));
         const snapshot = await getDocs(q);
         return snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
     } catch (err) { console.error("Gagal ambil galeri:", err); return []; }
