@@ -298,14 +298,38 @@ import {
     }
 
     function renderGaleri() {
-        const grid = document.getElementById('galeriGrid');
-        grid.innerHTML = allGaleri.map(g => `
-            <div class="galeri-item">
-                <img src="${g.url}" loading="lazy">
-                <div class="galeri-del" onclick="hapusGaleri('${g.id}')"><i class="fas fa-times"></i></div>
+
+    const grid = document.getElementById('galeriGrid');
+
+    grid.innerHTML = allGaleri.map(g => `
+
+        <div class="galeri-item">
+
+            <img src="${g.url}" loading="lazy">
+
+            <div class="galeri-del"
+                 onclick="hapusGaleri('${g.id}')">
+
+                <i class="fas fa-times"></i>
+
             </div>
-        `).join('');
-    }
+
+            <div class="galeri-move">
+
+                <button onclick="moveGaleriUp('${g.id}')">
+                    ↑
+                </button>
+
+                <button onclick="moveGaleriDown('${g.id}')">
+                    ↓
+                </button>
+
+            </div>
+
+        </div>
+
+    `).join('');
+}
 
     window.uploadGaleriFoto = async (input) => {
 
@@ -360,3 +384,47 @@ import {
         reader.onload = e => { img.src = e.target.result; img.style.display = 'block'; };
         reader.readAsDataURL(file);
     };
+
+window.moveGaleriUp = async (id) => {
+
+    const index = allGaleri.findIndex(g => g.id === id);
+
+    if (index <= 0) return;
+
+    const current = allGaleri[index];
+    const prev = allGaleri[index - 1];
+
+    const temp = current.order;
+
+    await updateGaleri(current.id, {
+        order: prev.order
+    });
+
+    await updateGaleri(prev.id, {
+        order: temp
+    });
+
+    await loadGaleri();
+};
+
+window.moveGaleriDown = async (id) => {
+
+    const index = allGaleri.findIndex(g => g.id === id);
+
+    if (index >= allGaleri.length - 1) return;
+
+    const current = allGaleri[index];
+    const next = allGaleri[index + 1];
+
+    const temp = current.order;
+
+    await updateGaleri(current.id, {
+        order: next.order
+    });
+
+    await updateGaleri(next.id, {
+        order: temp
+    });
+
+    await loadGaleri();
+};
