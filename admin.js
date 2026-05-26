@@ -25,6 +25,8 @@ import {
     let currentFilter = 'semua';
     let editingProdukId = null;
 
+let editingProdukId = null;
+
     // ===== AUTH =====
     onAuthStateChanged(auth, async (user) => {
         if (user) {
@@ -431,3 +433,36 @@ window.moveGaleriDown = async (id) => {
 
     await loadGaleri();
 };
+
+function formatHarga(value) {
+
+    let angka = String(value)
+        .toLowerCase()
+        .replace(/\s/g, '');
+
+    // support 135k
+    if (angka.includes('k')) {
+        angka = angka.replace('k', '000');
+    }
+
+    angka = angka.replace(/\D/g, '');
+
+    return Number(angka || 0).toLocaleString('id-ID');
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+
+    const hargaInput = document.getElementById('pHarga');
+
+    if (!hargaInput) return;
+
+    hargaInput.addEventListener('input', (e) => {
+
+        const cursor = e.target.selectionStart;
+
+        e.target.value = formatHarga(e.target.value);
+
+        e.target.setSelectionRange(cursor, cursor);
+    });
+
+});
