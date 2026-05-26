@@ -41,7 +41,7 @@ function slugify(text) {
 
 let galleryImages = []; // Untuk menyimpan link dari kolom Q
 
-const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR5wyzEXxKbCeS8SQWZQ7oz5lmPwszeLtW-TuQ5uzCV6GWcXP5IqOzjTqhIRg5yyLuRd86yLtXGMnoL/pub?output=csv';
+import { getProduk, getGaleri } from './firebase.js';
 let products = [];
 let cart = { prod: null, size: '', color: '' };
 let lastPage = 'home'; // Default ke home
@@ -177,38 +177,31 @@ window.onload = async () => {
 
 async function fetchProducts() {
     try {
-        const response = await fetch(SHEET_CSV);
-        const data = await response.text();
-        const rows = data.split('\n').slice(1);
-        
-        galleryImages = []; // Reset galeri setiap kali ambil data baru
+        const firestoreProducts = await getProduk();
+        const firestoreGaleri = await getGaleri();
 
-        products = rows.map(row => {
-            const col = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.trim().replace(/^"|"$/g, ""));
+        galleryImages = firestoreGaleri.map(g => g.url);
 
-            // --- TAMBAHAN UNTUK GALERI (KOLOM Q / INDEX 16) ---
-            if (col[16] && col[16].startsWith("http")) {
-                galleryImages.push(col[16]);
-            }
+        products = firestoreProducts.map(p => ({
+            id: p.id,
+            name: p.nama,
+            price: p.harga,
+            badge: p.badge?.toLowerCase() || '',
+            status: p.status || '',
+            colors: p.warna ? p.warna.split('/').map(c => c.trim()) : [],
+            stock: p.stok ? p.stok.split('/').map(s => s.trim()) : [],
+            thumbnail: p.thumbnail || '',
+            details: p.details || [],
+            specs: p.specs || '',
+            showcase: p.showcase || 'no'
+        }));
 
-            return {
-                id: parseInt(col[0]), 
-                name: col[1], 
-                price: col[2],
-                badge: col[3] ? col[3].toLowerCase() : "", 
-                status: col[4],
-                colors: col[5] ? col[5].split('/').map(c => c.trim()) : [],
-                stock: col[6] ? col[6].split('/').map(s => s.trim()) : [],
-                thumbnail: col[7],
-                details: [col[8], col[9], col[10], col[11], col[12]].filter(i => i && i.trim() !== ""),
-                specs: col[13], 
-                showcase: col[14] ? col[14].toLowerCase().trim() : "" 
-            };
-        });
+        renderAllSections();
+        renderGallery();
 
-        renderAllSections(); 
-        renderGallery(); // <--- Panggil fungsi render galeri di sini
-    } catch (err) { console.error("Gagal ambil data:", err); }
+    } catch (err) {
+        console.error('Gagal ambil Firestore:', err);
+    }
 }
 
 function renderAllSections() { 
