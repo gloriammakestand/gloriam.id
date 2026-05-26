@@ -118,14 +118,25 @@ export async function deleteProduk(id) {
 // ===== GALERI =====
 export async function saveGaleri(url) {
     try {
-        await addDoc(collection(db, "galeri"), { url, createdAt: new Date().toISOString() });
+        await addDoc(collection(db, "galeri"), {
+            url,
+            order: Date.now(),
+            createdAt: new Date().toISOString()
+        });
+
         return true;
-    } catch (err) { console.error("Gagal simpan galeri:", err); return false; }
+
+    } catch (err) {
+
+        console.error("Gagal simpan galeri:", err);
+
+        return false;
+    }
 }
 
 export async function getGaleri() {
     try {
-        const q = query(collection(db, "galeri"), orderBy("createdAt", "desc"));
+        const q = query(collection(db, "galeri"), orderBy("order", "asc");
         const snapshot = await getDocs(q);
         return snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
     } catch (err) { console.error("Gagal ambil galeri:", err); return []; }
