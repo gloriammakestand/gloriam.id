@@ -411,8 +411,8 @@ if (tipeBayar === 'dp' && parseInt(dp) < 60000) return triggerAlert("DP MINIMAL 
 
     try {
         // 1. Upload bukti ke Cloudinary
-        const { uploadBukti, saveOrder } = await import('./firebase.js');
-        const buktiURL = await uploadBukti(buktiFile);
+        const { uploadGambar, saveOrder } = await import('./firebase.js');
+        const buktiURL = await uploadGambar(buktiFile, 'bukti');
         if (!buktiURL) throw new Error("Gagal upload bukti");
 
         // 2. Data order
