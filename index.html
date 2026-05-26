@@ -150,6 +150,32 @@
                 <p id="sumCust" style="font-size:13px; line-height:1.8; margin:0;"></p>
             </div>
 
+<!-- Pilihan Pembayaran -->
+<div style="margin-top:20px;">
+    <div style="font-size:11px; font-weight:700; color:#555; letter-spacing:1px; margin-bottom:12px;">TIPE PEMBAYARAN</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div id="btnLunas" onclick="pilihBayar('lunas')" style="padding:16px; border:1.5px solid #fff; border-radius:12px; text-align:center; font-weight:700; font-size:13px; cursor:pointer; background:#fff; color:#000;">LUNAS</div>
+        <div id="btnDP" onclick="pilihBayar('dp')" style="padding:16px; border:1.5px solid #1a1a1a; border-radius:12px; text-align:center; font-weight:700; font-size:13px; cursor:pointer; background:#050505; color:#fff;">DP</div>
+    </div>
+</div>
+
+<!-- Input DP (muncul kalau pilih DP) -->
+<div id="dpArea" style="display:none; margin-top:15px;">
+    <div style="font-size:11px; font-weight:700; color:#555; letter-spacing:1px; margin-bottom:10px;">NOMINAL DP</div>
+    <input type="number" id="inDP" placeholder="Rp..." style="width:100%; padding:18px; background:#0a0a0a; border:1.5px solid #1a1a1a; color:#fff; border-radius:15px; font-family:inherit; font-size:15px;">
+</div>
+
+<!-- Upload Bukti -->
+<div style="margin-top:20px;">
+    <div style="font-size:11px; font-weight:700; color:#555; letter-spacing:1px; margin-bottom:12px;">UPLOAD BUKTI BAYAR</div>
+    <label for="inputBukti" style="display:block; padding:20px; border:1.5px dashed #1a1a1a; border-radius:15px; text-align:center; cursor:pointer; color:#555; font-size:13px;">
+        <i class="fas fa-camera" style="font-size:24px; margin-bottom:8px; display:block;"></i>
+        <span id="labelBukti">Tap untuk upload foto bukti</span>
+    </label>
+    <input type="file" id="inputBukti" accept="image/*" style="display:none;" onchange="previewBukti(this)">
+    <img id="previewImg" src="" style="display:none; width:100%; border-radius:12px; margin-top:12px; border:1px solid #1a1a1a;">
+</div>
+
             <div style="background:#0a0a0a; border:1px solid #1a1a1a; padding:20px; border-radius:15px; margin-top:15px;">
                 <span style="font-size:11px; font-weight:700; color:#555; letter-spacing:1px;">REKENING PEMBAYARAN</span>
                 <div style="margin-top:15px; font-size:15px; line-height:1.8; font-weight:600;">
