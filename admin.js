@@ -639,15 +639,8 @@ window.hapusOrder = hapusOrder;
 
 async function hapusProdukOrder() {
 
-    if (currentProdukFilter === 'semua') {
-
-        return alert(
-            "Pilih produk dulu"
-        );
-    }
-
     const yakin = confirm(
-        `Hapus semua order ${currentProdukFilter}?`
+        "Hapus semua order sesuai filter?"
     );
 
     if (!yakin) return;
@@ -655,13 +648,24 @@ async function hapusProdukOrder() {
     try {
 
         const data = allOrders.filter(
-    o =>
-        o.produk === currentProdukFilter &&
-        (
-            currentFilter === 'semua'
-            || o.status === currentFilter
-        )
-);
+            o =>
+                (
+                    currentProdukFilter === 'semua'
+                    || o.produk === currentProdukFilter
+                )
+                &&
+                (
+                    currentFilter === 'semua'
+                    || o.status === currentFilter
+                )
+        );
+
+        if (data.length === 0) {
+
+            return alert(
+                "Tidak ada order untuk dihapus"
+            );
+        }
 
         for (const order of data) {
 
@@ -670,7 +674,9 @@ async function hapusProdukOrder() {
             );
         }
 
-        alert("Semua order berhasil dihapus");
+        showToast(
+            `${data.length} ORDER DIHAPUS`
+        );
 
         await loadOrders();
 
