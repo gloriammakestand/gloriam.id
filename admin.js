@@ -270,9 +270,38 @@ if (currentProdukFilter !== 'semua') {
     Rp${Number(String(p.harga).replace(/\D/g,'')).toLocaleString('id-ID')}
 </div>
                     <div class="produk-actions">
-                        <div class="btn-icon" onclick="editProduk('${p.id}')"><i class="fas fa-pen"></i></div>
-                        <div class="btn-icon del" onclick="hapusProduk('${p.id}')"><i class="fas fa-trash"></i></div>
-                    </div>
+
+    <div class="btn-icon"
+        onclick="moveProdukUp('${p.id}')">
+
+        ↑
+
+    </div>
+
+    <div class="btn-icon"
+        onclick="moveProdukDown('${p.id}')">
+
+        ↓
+
+    </div>
+
+    <div class="btn-icon"
+        onclick="editProduk('${p.id}')">
+
+        <i class="fas fa-pen"></i>
+
+    </div>
+
+    <div class="btn-icon del"
+        onclick="hapusProduk('${p.id}')">
+
+        <i class="fas fa-trash"></i>
+
+    </div>
+
+</div>
+                        
+                   
                 </div>
             </div>
         `).join('')}</div>`;
@@ -356,7 +385,10 @@ if (currentProdukFilter !== 'semua') {
             const data = {
 
     order: editingProdukId
-        ? allProduk.find(x => x.id === editingProdukId)?.order || Date.now()
+        ? (
+            allProduk.find(x => x.id === editingProdukId)?.order
+            ?? 0
+          )
         : Date.now(),
 
     nama: document.getElementById('pNama').value,
@@ -649,6 +681,60 @@ async function hapusProdukOrder() {
         alert("Gagal hapus");
     }
 }
+
+window.moveProdukUp = async (id) => {
+
+    const sortedProduk = [...allProduk].sort(
+        (a, b) => (b.order || 0) - (a.order || 0)
+    );
+
+    const index =
+        sortedProduk.findIndex(p => p.id === id);
+
+    if (index <= 0) return;
+
+    const current = sortedProduk[index];
+    const prev = sortedProduk[index - 1];
+
+    const temp = current.order;
+
+    await updateProduk(current.id, {
+        order: prev.order
+    });
+
+    await updateProduk(prev.id, {
+        order: temp
+    });
+
+    await loadProduk();
+};
+
+window.moveProdukDown = async (id) => {
+
+    const sortedProduk = [...allProduk].sort(
+        (a, b) => (b.order || 0) - (a.order || 0)
+    );
+
+    const index =
+        sortedProduk.findIndex(p => p.id === id);
+
+    if (index >= sortedProduk.length - 1) return;
+
+    const current = sortedProduk[index];
+    const next = sortedProduk[index + 1];
+
+    const temp = current.order;
+
+    await updateProduk(current.id, {
+        order: next.order
+    });
+
+    await updateProduk(next.id, {
+        order: temp
+    });
+
+    await loadProduk();
+};
 
 window.hapusProdukOrder =
     hapusProdukOrder;
