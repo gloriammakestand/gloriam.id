@@ -61,17 +61,31 @@ function pilihBayar(tipe) {
     }
 }
 
-function previewBukti(input) {
+let uploadedBuktiURL = null;
+
+async function previewBukti(input) {
     const file = input.files[0];
-    if (file) {
-        document.getElementById('labelBukti').innerText = file.name;
-        const reader = new FileReader();
-        reader.onload = e => {
-            const img = document.getElementById('previewImg');
-            img.src = e.target.result;
-            img.style.display = 'block';
-        };
-        reader.readAsDataURL(file);
+    if (!file) return;
+
+    // Tampilkan preview lokal dulu
+    const reader = new FileReader();
+    reader.onload = e => {
+        const img = document.getElementById('previewImg');
+        img.src = e.target.result;
+        img.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+
+    // Upload ke Cloudinary langsung
+    document.getElementById('labelBukti').innerText = 'Mengupload...';
+    const { uploadGambar } = await import('./firebase.js');
+    uploadedBuktiURL = await uploadGambar(file, 'bukti');
+
+    if (uploadedBuktiURL) {
+        document.getElementById('labelBukti').innerText = '✓ Upload berhasil!';
+    } else {
+        document.getElementById('labelBukti').innerText = '✗ Gagal upload, coba lagi';
+        uploadedBuktiURL = null;
     }
 }
 
@@ -411,9 +425,9 @@ if (tipeBayar === 'dp' && parseInt(dp) < 60000) return triggerAlert("DP MINIMAL 
 
     try {
         // 1. Upload bukti ke Cloudinary
-        const { uploadGambar, saveOrder } = await import('./firebase.js');
-        const buktiURL = await uploadGambar(buktiFile, 'bukti');
-        if (!buktiURL) throw new Error("Gagal upload bukti");
+        const { saveOrder } = await import('./firebase.js');
+const buktiURL = uploadedBuktiURL;
+if (!buktiURL) throw new Error("Gagal upload bukti");
 
         // 2. Data order
         const orderData = {
