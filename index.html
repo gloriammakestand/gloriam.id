@@ -203,16 +203,11 @@
     <button onclick="sendWA()" style="background:#00c853; color:#fff;">CHECKOUT (WA)</button>
 </div>
 
-    <div id="sizeModal" class="modal-overlay" onclick="closeSize()"><div style="max-width:500px; width:100%;"><img src="/size.jpg" style="width:100%; border-radius:15px;"></div></div>
-
-<div id="specsModal" class="modal-overlay" onclick="closeSpecs()">
-    <div class="specs-box" onclick="event.stopPropagation()">
-        <h3>SPESIFIKASI PRODUK</h3>
-        <p id="specContent"></p>
-        <button onclick="closeSpecs()">CLOSE</button>
+        </div>
     </div>
 </div>
 
+<!-- HALAMAN LAIN -->
 <div class="page" id="preorder">
     <header><h2>PRE ORDER</h2></header>
     <div class="products" id="list-preorder"></div>
@@ -245,18 +240,44 @@
         <h2>TENTANG KAMI</h2>
         <p style="opacity:0.6; line-height:2; font-size:13px;">
             Soccer culture, street attitude.<br>
-            Gloriam is built for those who carry football into everyday life — not just as a game, but as an identity.<br><br>Founded in 2024, Gloriam represents passion, loyalty, and pride. Every piece is designed to reflect the spirit of the streets and the energy of the game.<br><br>We stand for those who live football beyond the pitch.
-Make a stand with pride.
+            Gloriam is built for those who carry football into everyday life — not just as a game, but as an identity.<br><br>Founded in 2024, Gloriam represents passion, loyalty, and pride. Every piece is designed to reflect the spirit of the streets and the energy of the game.<br><br>We stand for those who live football beyond the pitch. Make a stand with pride.
         </p>
     </div>
     <div id="footer-about" style="margin-top:-130px;"></div>
+</div>
+
+<!-- SEMUA MODAL DI LUAR PAGE -->
+<div id="sizeModal" class="modal-overlay" onclick="closeSize()">
+    <div style="max-width:500px; width:100%;">
+        <img src="/size.jpg" style="width:100%; border-radius:15px;">
+    </div>
+</div>
+
+<div id="specsModal" class="modal-overlay" onclick="closeSpecs()">
+    <div class="specs-box" onclick="event.stopPropagation()">
+        <h3>SPESIFIKASI PRODUK</h3>
+        <p id="specContent"></p>
+        <button onclick="closeSpecs()">CLOSE</button>
+    </div>
+</div>
+
+<div id="qrisModal" class="modal-overlay" onclick="closeQRIS()">
+    <div class="specs-box" onclick="event.stopPropagation()">
+        <h3 style="margin:0 0 15px 0; border-bottom:1px solid #222; padding-bottom:10px; font-size:16px; letter-spacing:1px;">QRIS PEMBAYARAN</h3>
+        <div style="background:#fff; padding:10px; border-radius:10px; margin-bottom:15px;">
+            <img src="/qris.jpg" alt="QRIS Gloriam" style="width:100%; display:block; border-radius:5px;">
+        </div>
+        <p style="font-size:12px; line-height:1.6; color:#bbb; margin:0; text-align:center;">
+            Silakan scan QRIS di atas melalui aplikasi Bank atau E-Wallet kamu.
+        </p>
+        <button onclick="closeQRIS()" style="margin-top:25px; padding:15px; font-size:12px; background:#111; color:#fff; border:1px solid #222;">TUTUP</button>
+    </div>
 </div>
 
 <div id="imageModal" class="modal-overlay" onclick="closeImage()">
     <img id="modalImg" src="" alt="Zoomed Image">
 </div>
 
-<script src="script.js"></script>
-
+<script type="module" src="script.js"></script>
 </body>
 </html>
