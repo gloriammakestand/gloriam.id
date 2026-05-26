@@ -67,36 +67,31 @@ async function previewBukti(input) {
     const file = input.files[0];
     if (!file) return;
 
-    // Tampilkan preview lokal dulu
     const reader = new FileReader();
     reader.onload = e => {
         const img = document.getElementById('previewImg');
         img.src = e.target.result;
         img.style.display = 'block';
-        // Tambahkan overlay loading di atas preview
         img.style.opacity = '0.4';
         img.style.filter = 'blur(3px)';
     };
     reader.readAsDataURL(file);
 
-    // Tampilkan status uploading
-    document.getElementById('labelBukti').innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right:6px;"></i>Mengupload...';
+    document.getElementById('labelBukti').innerText = '⏳ Mengupload...';
 
     const { uploadGambar } = await import('./firebase.js');
     uploadedBuktiURL = await uploadGambar(file, 'bukti');
 
     const previewImg = document.getElementById('previewImg');
     if (uploadedBuktiURL) {
-        // Upload sukses: hilangkan blur, tampilkan centang
         previewImg.style.opacity = '1';
         previewImg.style.filter = 'none';
-        document.getElementById('labelBukti').innerHTML = '<i class="fas fa-check-circle" style="color:#00c853; margin-right:6px;"></i>Upload berhasil!';
+        document.getElementById('labelBukti').innerText = '✓ Upload berhasil!';
     } else {
-        // Gagal: sembunyikan preview, tampilkan error
         previewImg.style.display = 'none';
         previewImg.style.opacity = '1';
         previewImg.style.filter = 'none';
-        document.getElementById('labelBukti').innerHTML = '<i class="fas fa-times-circle" style="color:#ff3b3b; margin-right:6px;"></i>Gagal upload, coba lagi';
+        document.getElementById('labelBukti').innerText = '✗ Gagal upload, coba lagi';
         uploadedBuktiURL = null;
     }
 }
