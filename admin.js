@@ -171,7 +171,9 @@ let editingProdukId = null;
                 <div class="produk-info">
                     <div class="produk-badge badge-${p.badge}">${p.status || p.badge}</div>
                     <div class="produk-name">${p.nama}</div>
-                    <div class="produk-price">Rp${parseInt(p.harga).toLocaleString('id-ID')}</div>
+                    <div class="produk-price">
+    Rp${Number(String(p.harga).replace(/\D/g,'')).toLocaleString('id-ID')}
+</div>
                     <div class="produk-actions">
                         <div class="btn-icon" onclick="editProduk('${p.id}')"><i class="fas fa-pen"></i></div>
                         <div class="btn-icon del" onclick="hapusProduk('${p.id}')"><i class="fas fa-trash"></i></div>
