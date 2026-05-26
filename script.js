@@ -524,3 +524,23 @@ function showPageSilent(id) {
 function vibrate(ms) {
     if (navigator.vibrate) navigator.vibrate(ms);
 }
+
+window.toggleSidebar = toggleSidebar;
+window.navTo = navTo;
+window.showPage = showPage;
+window.goDetail = goDetail;
+window.selOpt = selOpt;
+window.validateDetail = validateDetail;
+window.validateForm = validateForm;
+window.sendWA = sendWA;
+window.openSize = openSize;
+window.closeSize = closeSize;
+window.openSpecs = openSpecs;
+window.closeSpecs = closeSpecs;
+window.openQRIS = openQRIS;
+window.closeQRIS = closeQRIS;
+window.pilihBayar = pilihBayar;
+window.previewBukti = previewBukti;
+window.openImage = openImage;
+window.closeImage = closeImage;
+window.vibrate = vibrate;
