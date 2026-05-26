@@ -159,12 +159,41 @@ if (currentProdukFilter !== 'semua') {
 
             return `<div class="order-card">
                 <div class="order-top">
-                    <div>
-                        <div class="order-name">${o.nama}</div>
-                        <div class="order-time">${date}</div>
-                    </div>
-                    <div class="status-badge ${sc}">${st}</div>
-                </div>
+
+    <div>
+        <div class="order-name">${o.nama}</div>
+        <div class="order-time">${date}</div>
+    </div>
+
+    <div style="
+        display:flex;
+        align-items:center;
+        gap:10px;
+    ">
+
+        <button onclick="hapusOrder('${o.id}')"
+    style="
+        width:38px;
+        height:38px;
+        border:1px solid rgba(255,59,59,0.15);
+        border-radius:10px;
+        background:rgba(255,59,59,0.08);
+        color:#ff4d4d;
+        cursor:pointer;
+        backdrop-filter:blur(10px);
+    ">
+
+    <i class="fas fa-trash"></i>
+
+</button>
+
+        <div class="status-badge ${sc}">
+            ${st}
+        </div>
+
+    </div>
+
+</div>
                 <div class="order-info">
                     <div class="info-item">Produk <span>${o.produk}</span></div>
                     <div class="info-item">Warna / Size <span>${o.warna} / ${o.size}</span></div>
@@ -178,13 +207,6 @@ if (currentProdukFilter !== 'semua') {
         <i class="fas fa-image"></i> BUKTI
     </a>
 
-    <button class="btn-sm btn-reject"
-        onclick="hapusOrder('${o.id}')">
-
-        <i class="fas fa-trash"></i>
-        HAPUS
-
-    </button>
                     ${o.status === 'pending' ? `
                     <button class="btn-sm btn-approve" onclick="approveOrder('${o.id}')"><i class="fas fa-check"></i> APPROVE</button>
                     <button class="btn-sm btn-reject" onclick="rejectOrder('${o.id}')"><i class="fas fa-times"></i> TOLAK</button>
