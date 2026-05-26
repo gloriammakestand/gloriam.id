@@ -46,6 +46,35 @@ let products = [];
 let cart = { prod: null, size: '', color: '' };
 let lastPage = 'home'; // Default ke home
 
+let tipeBayar = 'lunas'; // default lunas
+
+function pilihBayar(tipe) {
+    tipeBayar = tipe;
+    if (tipe === 'lunas') {
+        document.getElementById('btnLunas').style.cssText = 'padding:16px; border:1.5px solid #fff; border-radius:12px; text-align:center; font-weight:700; font-size:13px; cursor:pointer; background:#fff; color:#000;';
+        document.getElementById('btnDP').style.cssText = 'padding:16px; border:1.5px solid #1a1a1a; border-radius:12px; text-align:center; font-weight:700; font-size:13px; cursor:pointer; background:#050505; color:#fff;';
+        document.getElementById('dpArea').style.display = 'none';
+    } else {
+        document.getElementById('btnDP').style.cssText = 'padding:16px; border:1.5px solid #fff; border-radius:12px; text-align:center; font-weight:700; font-size:13px; cursor:pointer; background:#fff; color:#000;';
+        document.getElementById('btnLunas').style.cssText = 'padding:16px; border:1.5px solid #1a1a1a; border-radius:12px; text-align:center; font-weight:700; font-size:13px; cursor:pointer; background:#050505; color:#fff;';
+        document.getElementById('dpArea').style.display = 'block';
+    }
+}
+
+function previewBukti(input) {
+    const file = input.files[0];
+    if (file) {
+        document.getElementById('labelBukti').innerText = file.name;
+        const reader = new FileReader();
+        reader.onload = e => {
+            const img = document.getElementById('previewImg');
+            img.src = e.target.result;
+            img.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
 function vibrate(ms) { 
     if (navigator.vibrate) {
         // Ini akan otomatis menangani baik angka tunggal (40) 
