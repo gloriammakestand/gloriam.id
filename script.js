@@ -253,11 +253,6 @@ function closeImage() {
     document.getElementById('imageModal').style.display = 'none';
 }
 
-// Fungsi untuk menutup modal (dipanggil saat klik area gelap)
-function closeImage() {
-    document.getElementById('imageModal').style.display = 'none';
-}
-
 function injectFooters() {
     const footerHTML = `
         <footer>
