@@ -64,14 +64,15 @@ export async function uploadGambar(file, tipe = "bukti") {
 
 // Ambil semua order (untuk admin)
 export async function getOrders() {
-    try {
-        const q = query(collection(db, "orders"), orderBy("createdAt", "desc"));
-        const snapshot = await getDocs(q);
-        return snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-    } catch (err) {
-        console.error("Gagal ambil order:", err);
-        return [];
-    }
+
+    const snap = await getDocs(
+        collection(db, "orders")
+    );
+
+    return snap.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+    }));
 }
 
 // Update status order
