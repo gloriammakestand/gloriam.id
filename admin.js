@@ -241,12 +241,26 @@ if (currentProdukFilter !== 'semua') {
     }
 
     function renderProduk() {
-        const list = document.getElementById('produkList');
-        if (allProduk.length === 0) {
-            list.innerHTML = `<div class="empty"><i class="fas fa-tshirt"></i><p>Belum ada produk</p></div>`;
-            return;
-        }
-        list.innerHTML = `<div class="produk-grid">${allProduk.map(p => `
+
+    const list = document.getElementById('produkList');
+
+    const sortedProduk = [...allProduk].sort(
+    (a, b) => (b.order || 0) - (a.order || 0)
+);
+
+    if (sortedProduk.length === 0) {
+        list.innerHTML = `
+            <div class="empty">
+                <i class="fas fa-tshirt"></i>
+                <p>Belum ada produk</p>
+            </div>
+        `;
+        return;
+    }
+
+    list.innerHTML = `
+        <div class="produk-grid">
+            ${sortedProduk.map(p => `
             <div class="produk-card">
                 <img src="${p.thumbnail || ''}" onerror="this.src=''">
                 <div class="produk-info">
@@ -340,17 +354,22 @@ if (currentProdukFilter !== 'semua') {
             }
 
             const data = {
-                nama: document.getElementById('pNama').value,
-                harga: document.getElementById('pHarga').value,
-                badge: document.getElementById('pBadge').value,
-                status: document.getElementById('pStatus').value,
-                warna: document.getElementById('pWarna').value,
-                stok: document.getElementById('pStok').value,
-                specs: document.getElementById('pSpecs').value,
-                showcase: document.getElementById('pShowcase').value,
-                thumbnail: thumbnailURL,
-                details
-            };
+
+    order: editingProdukId
+        ? allProduk.find(x => x.id === editingProdukId)?.order || Date.now()
+        : Date.now(),
+
+    nama: document.getElementById('pNama').value,
+    harga: document.getElementById('pHarga').value,
+    badge: document.getElementById('pBadge').value,
+    status: document.getElementById('pStatus').value,
+    warna: document.getElementById('pWarna').value,
+    stok: document.getElementById('pStok').value,
+    specs: document.getElementById('pSpecs').value,
+    showcase: document.getElementById('pShowcase').value,
+    thumbnail: thumbnailURL,
+    details
+};
 
             if (editingProdukId) {
                 await updateProduk(editingProdukId, data);
