@@ -196,6 +196,10 @@ async function fetchProducts() {
             showcase: p.showcase || 'no'
         }));
 
+products.sort(
+    (a, b) => (b.order || 0) - (a.order || 0)
+);
+
         renderAllSections();
         renderGallery();
 
