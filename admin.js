@@ -293,17 +293,29 @@ import { auth, loginAdmin, logoutAdmin, getOrders, updateOrderStatus, getProduk,
     }
 
     window.uploadGaleriFoto = async (input) => {
-        const files = Array.from(input.files);
-        if (!files.length) return;
-        showToast('MENGUPLOAD...');
-        for (const file of files) {
-            const url = await uploadGambar(file, 'galeri');
-            if (url) await saveGaleri(url);
+
+    const files = [...input.files];
+
+    if (!files.length) return;
+
+    showToast('UPLOAD FOTO...');
+
+    for (const file of files) {
+
+        const url = await uploadGambar(file, 'galeri');
+
+        if (url) {
+            await saveGaleri(url);
         }
-        await loadGaleri();
-        showToast('GALERI DIUPDATE ✓');
-        input.value = '';
-    };
+
+    }
+
+    await loadGaleri();
+
+    input.value = '';
+
+    showToast('GALERI BERHASIL ✓');
+};
 
     window.hapusGaleri = async (id) => {
         await deleteGaleri(id);
