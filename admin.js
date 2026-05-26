@@ -532,15 +532,32 @@ import { deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/fireb
 import { db } from "./firebase.js";
 
 async function hapusOrder(id) {
-    const konfirmasi = confirm("Hapus order ini?");
+
+    const konfirmasi =
+        confirm("Hapus order ini?");
+
     if (!konfirmasi) return;
 
     try {
-        await deleteDoc(doc(db, "orders", id));
-        alert("Order berhasil dihapus");
-        location.reload();
+
+        await deleteDoc(
+            doc(db, "orders", id)
+        );
+
+        allOrders = allOrders.filter(
+            o => o.id !== id
+        );
+
+        isiFilterProduk();
+
+        renderOrders();
+
+        showToast("ORDER DIHAPUS");
+
     } catch (err) {
+
         console.error(err);
+
         alert("Gagal hapus order");
     }
 }
@@ -565,8 +582,13 @@ async function hapusProdukOrder() {
     try {
 
         const data = allOrders.filter(
-            o => o.produk === currentProdukFilter
-        );
+    o =>
+        o.produk === currentProdukFilter &&
+        (
+            currentFilter === 'semua'
+            || o.status === currentFilter
+        )
+);
 
         for (const order of data) {
 
