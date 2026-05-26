@@ -400,8 +400,8 @@ async function sendWA() {
     const dp = tipeBayar === 'dp' ? document.getElementById('inDP').value : '';
 
     // Validasi bukti
-    if (!buktiFile) return triggerAlert("UPLOAD BUKTI BAYAR!");
-    if (tipeBayar === 'dp' && !dp) return triggerAlert("ISI NOMINAL DP!");
+    if (!buktiFile) return triggerAlert("UPLOAD BUKTI BAYAR DULU!");
+if (tipeBayar === 'dp' && !dp) return triggerAlert("ISI NOMINAL DP!");
 if (tipeBayar === 'dp' && parseInt(dp) < 60000) return triggerAlert("DP MINIMAL Rp60.000!");
 
     // Tampilkan loading
@@ -443,7 +443,11 @@ if (tipeBayar === 'dp' && parseInt(dp) < 60000) return triggerAlert("DP MINIMAL 
         }).catch(err => console.error("Gagal kirim ke spreadsheet:", err));
 
         // 5. Arahkan ke WhatsApp
-        const text = `*GLORIAM ORDER*\n\n${cart.prod.name}\nWarna: ${cart.color}\nSize: ${cart.size}\nTotal: Rp${cart.prod.price}\nPembayaran: ${tipeBayar === 'dp' ? `DP Rp${dp}` : 'LUNAS'}\n\n*Data Pengiriman*\nNama: ${n}\nWhatsApp: ${p}\nAlamat: ${a}\n\nBukti: ${buktiURL}`;
+        const infoBayar = tipeBayar === 'lunas' 
+    ? 'LUNAS' 
+    : `DP Rp${parseInt(dp).toLocaleString('id-ID')} dari Rp${parseInt(cart.prod.price).toLocaleString('id-ID')}`;
+
+const text = `*GLORIAM ORDER*\n\n*Produk:* ${cart.prod.name}\n*Warna:* ${cart.color}\n*Size:* ${cart.size}\n*Harga:* Rp${parseInt(cart.prod.price).toLocaleString('id-ID')}\n*Pembayaran:* ${infoBayar}\n\n*Data Pengiriman*\n*Nama:* ${n}\n*WhatsApp:* ${p}\n*Alamat:* ${a}\n\n*Bukti Bayar:*\n${buktiURL}`;
         window.open(`https://wa.me/6283898588562?text=${encodeURIComponent(text)}`);
 
     } catch (err) {
