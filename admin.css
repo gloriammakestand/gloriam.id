@@ -690,3 +690,28 @@
             .mobile-nav { display: none; }
             .mobile-header { display: none; }
         }
+
+.galeri-item {
+    position: relative;
+}
+
+.galeri-move {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.galeri-move button {
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(0,0,0,0.8);
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+}
