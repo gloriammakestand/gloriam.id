@@ -16,8 +16,15 @@ export const db = getFirestore(app);
 export const auth = getAuth(app);
 
 // Cloudinary config
-export const CLOUDINARY_CLOUD = "dekjgqu7q";
-export const CLOUDINARY_PRESET = "gloriam-bukti";
+// Cloudinary Config
+export const CLOUDINARY_BUKTI_CLOUD = "dekjgqu7q";
+export const CLOUDINARY_BUKTI_PRESET = "gloriam-bukti";
+
+export const CLOUDINARY_PRODUK_CLOUD = "dpkmdjfbt";
+export const CLOUDINARY_PRODUK_PRESET = "gloriam-produk";
+
+export const CLOUDINARY_GALERI_CLOUD = "dpkmdjfbt";
+export const CLOUDINARY_GALERI_PRESET = "gloriam-galeri";
 
 // Simpan order ke Firestore
 export async function saveOrder(orderData) {
@@ -35,23 +42,23 @@ export async function saveOrder(orderData) {
 }
 
 // Upload bukti ke Cloudinary
-export async function uploadBukti(file) {
+export async function uploadGambar(file, tipe = "bukti") {
+    const config = {
+        bukti: { cloud: CLOUDINARY_BUKTI_CLOUD, preset: CLOUDINARY_BUKTI_PRESET },
+        produk: { cloud: CLOUDINARY_PRODUK_CLOUD, preset: CLOUDINARY_PRODUK_PRESET },
+        galeri: { cloud: CLOUDINARY_GALERI_CLOUD, preset: CLOUDINARY_GALERI_PRESET }
+    };
+    const { cloud, preset } = config[tipe];
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", CLOUDINARY_PRESET);
-    formData.append("folder", "bukti-bayar");
-
+    formData.append("upload_preset", preset);
     try {
-        const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`, {
-            method: "POST",
-            body: formData
+        const res = await fetch(`https://api.cloudinary.com/v1_1/${cloud}/image/upload`, {
+            method: "POST", body: formData
         });
         const data = await res.json();
         return data.secure_url;
-    } catch (err) {
-        console.error("Gagal upload bukti:", err);
-        return null;
-    }
+    } catch (err) { console.error("Gagal upload:", err); return null; }
 }
 
 // Ambil semua order (untuk admin)
