@@ -149,6 +149,22 @@ export async function deleteGaleri(id) {
     } catch (err) { console.error("Gagal hapus galeri:", err); return false; }
 }
 
+export async function updateGaleri(id, data) {
+
+    try {
+
+        await updateDoc(doc(db, "galeri", id), data);
+
+        return true;
+
+    } catch (err) {
+
+        console.error("Gagal update galeri:", err);
+
+        return false;
+    }
+}
+
 // Login admin
 export async function loginAdmin(email, password) {
     try {
