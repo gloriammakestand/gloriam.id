@@ -73,28 +73,32 @@ async function previewBukti(input) {
         const img = document.getElementById('previewImg');
         img.src = e.target.result;
         img.style.display = 'block';
+        // Tambahkan overlay loading di atas preview
+        img.style.opacity = '0.4';
+        img.style.filter = 'blur(3px)';
     };
     reader.readAsDataURL(file);
 
-    // Upload ke Cloudinary langsung
-    document.getElementById('labelBukti').innerText = 'Mengupload...';
+    // Tampilkan status uploading
+    document.getElementById('labelBukti').innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right:6px;"></i>Mengupload...';
+
     const { uploadGambar } = await import('./firebase.js');
     uploadedBuktiURL = await uploadGambar(file, 'bukti');
 
+    const previewImg = document.getElementById('previewImg');
     if (uploadedBuktiURL) {
-        document.getElementById('labelBukti').innerText = '✓ Upload berhasil!';
+        // Upload sukses: hilangkan blur, tampilkan centang
+        previewImg.style.opacity = '1';
+        previewImg.style.filter = 'none';
+        document.getElementById('labelBukti').innerHTML = '<i class="fas fa-check-circle" style="color:#00c853; margin-right:6px;"></i>Upload berhasil!';
     } else {
-        document.getElementById('labelBukti').innerText = '✗ Gagal upload, coba lagi';
+        // Gagal: sembunyikan preview, tampilkan error
+        previewImg.style.display = 'none';
+        previewImg.style.opacity = '1';
+        previewImg.style.filter = 'none';
+        document.getElementById('labelBukti').innerHTML = '<i class="fas fa-times-circle" style="color:#ff3b3b; margin-right:6px;"></i>Gagal upload, coba lagi';
         uploadedBuktiURL = null;
     }
-}
-
-function vibrate(ms) { 
-    if (navigator.vibrate) {
-        // Ini akan otomatis menangani baik angka tunggal (40) 
-        // maupun array ([50, 50, 50])
-        navigator.vibrate(ms); 
-    } 
 }
 
 window.onload = async () => {
