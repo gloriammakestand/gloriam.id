@@ -193,8 +193,10 @@ async function fetchProducts() {
             thumbnail: p.thumbnail || '',
             details: p.details || [],
             specs: p.specs || '',
-            showcase: p.showcase || 'no'
-        }));
+            showcase: p.showcase || 'no',
+
+order: p.order || 0
+}));
 
 products.sort(
     (a, b) => (b.order || 0) - (a.order || 0)
