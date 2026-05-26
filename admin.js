@@ -325,6 +325,7 @@ if (currentProdukFilter !== 'semua') {
         document.getElementById('pStok').value = '';
         document.getElementById('pSpecs').value = '';
         document.getElementById('pShowcase').value = 'yes';
+        document.getElementById('pDP').value = 'yes';
         document.getElementById('prevThumb').style.display = 'none';
         [0,1,2,3,4].forEach(i => {
             const img = document.getElementById('prevDet'+i);
@@ -351,6 +352,7 @@ if (currentProdukFilter !== 'semua') {
         document.getElementById('pStok').value = p.stok || '';
         document.getElementById('pSpecs').value = p.specs || '';
         document.getElementById('pShowcase').value = p.showcase || 'yes';
+        document.getElementById('pDP').value = p.dpAllowed || 'yes';
 
         const thumb = document.getElementById('prevThumb');
         if (p.thumbnail) { thumb.src = p.thumbnail; thumb.style.display = 'block'; }
@@ -406,6 +408,7 @@ if (currentProdukFilter !== 'semua') {
     stok: document.getElementById('pStok').value,
     specs: document.getElementById('pSpecs').value,
     showcase: document.getElementById('pShowcase').value,
+    dpAllowed: document.getElementById('pDP').value,
     thumbnail: thumbnailURL,
     details
 };
