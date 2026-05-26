@@ -23,6 +23,7 @@ import {
     let allProduk = [];
     let allGaleri = [];
     let currentFilter = 'semua';
+    let currentProdukFilter = 'semua';
     let editingProdukId = null;
 
     // ===== AUTH =====
@@ -80,9 +81,13 @@ import {
 
     // ===== ORDER =====
     async function loadOrders() {
-        allOrders = await getOrders();
-        renderOrders();
-    }
+
+    allOrders = await getOrders();
+
+    isiFilterProduk();
+
+    renderOrders();
+}
 
     window.filterOrder = (filter, el) => {
         currentFilter = filter;
@@ -91,9 +96,53 @@ import {
         renderOrders();
     };
 
+function isiFilterProduk() {
+
+    const select =
+        document.getElementById('filterProduk');
+
+    if (!select) return;
+
+    const produkUnik =
+        [...new Set(allOrders.map(o => o.produk))];
+
+    select.innerHTML = `
+        <option value="semua">
+            Semua Produk
+        </option>
+    `;
+
+    produkUnik.forEach(nama => {
+
+        select.innerHTML += `
+            <option value="${nama}">
+                ${nama}
+            </option>
+        `;
+    });
+}
+
+window.filterProdukOrder = (produk) => {
+
+    currentProdukFilter = produk;
+
+    renderOrders();
+};
+
     function renderOrders() {
         const list = document.getElementById('orderList');
-        const filtered = currentFilter === 'semua' ? allOrders : allOrders.filter(o => o.status === currentFilter);
+        let filtered = currentFilter === 'semua'
+    ? allOrders
+    : allOrders.filter(
+        o => o.status === currentFilter
+    );
+
+if (currentProdukFilter !== 'semua') {
+
+    filtered = filtered.filter(
+        o => o.produk === currentProdukFilter
+    );
+}
 
         if (filtered.length === 0) {
             list.innerHTML = `<div class="empty"><i class="fas fa-box-open"></i><p>Belum ada order</p></div>`;
@@ -125,7 +174,17 @@ import {
                     <div class="info-item">Alamat <span>${o.alamat}</span></div>
                 </div>
                 <div class="order-actions">
-                    <a href="${o.buktiURL}" target="_blank" class="btn-sm btn-bukti"><i class="fas fa-image"></i> BUKTI</a>
+    <a href="${o.buktiURL}" target="_blank" class="btn-sm btn-bukti">
+        <i class="fas fa-image"></i> BUKTI
+    </a>
+
+    <button class="btn-sm btn-reject"
+        onclick="hapusOrder('${o.id}')">
+
+        <i class="fas fa-trash"></i>
+        HAPUS
+
+    </button>
                     ${o.status === 'pending' ? `
                     <button class="btn-sm btn-approve" onclick="approveOrder('${o.id}')"><i class="fas fa-check"></i> APPROVE</button>
                     <button class="btn-sm btn-reject" onclick="rejectOrder('${o.id}')"><i class="fas fa-times"></i> TOLAK</button>
@@ -468,3 +527,65 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 
 });
+
+import { deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { db } from "./firebase.js";
+
+async function hapusOrder(id) {
+    const konfirmasi = confirm("Hapus order ini?");
+    if (!konfirmasi) return;
+
+    try {
+        await deleteDoc(doc(db, "orders", id));
+        alert("Order berhasil dihapus");
+        location.reload();
+    } catch (err) {
+        console.error(err);
+        alert("Gagal hapus order");
+    }
+}
+
+window.hapusOrder = hapusOrder;
+
+async function hapusProdukOrder() {
+
+    if (currentProdukFilter === 'semua') {
+
+        return alert(
+            "Pilih produk dulu"
+        );
+    }
+
+    const yakin = confirm(
+        `Hapus semua order ${currentProdukFilter}?`
+    );
+
+    if (!yakin) return;
+
+    try {
+
+        const data = allOrders.filter(
+            o => o.produk === currentProdukFilter
+        );
+
+        for (const order of data) {
+
+            await deleteDoc(
+                doc(db, "orders", order.id)
+            );
+        }
+
+        alert("Semua order berhasil dihapus");
+
+        await loadOrders();
+
+    } catch(err) {
+
+        console.error(err);
+
+        alert("Gagal hapus");
+    }
+}
+
+window.hapusProdukOrder =
+    hapusProdukOrder;
