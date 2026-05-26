@@ -202,6 +202,7 @@ async function fetchProducts() {
             details: p.details || [],
             specs: p.specs || '',
             showcase: p.showcase || 'no',
+            dpAllowed: p.dpAllowed || 'yes',
 
 order: p.order || 0
 }));
@@ -407,6 +408,18 @@ function goDetail(id) {
     });
     document.getElementById('sizeArea').innerHTML = sHTML + `</div>`;
 
+const dpBtn = document.getElementById('btnDP');
+
+if (p.dpAllowed === 'no') {
+    dpBtn.style.display = 'none';
+
+    // paksa kembali lunas
+    pilihBayar('lunas');
+
+} else {
+    dpBtn.style.display = 'block';
+}
+
     // Pindah halaman
     showPage('detail');
 }
@@ -558,6 +571,15 @@ function goDetailSilent(p) {
         sHTML += `<div class="${isAvail ? '' : 'disabled'}" onclick="${isAvail ? `selOpt('size','${s}',this)` : ''}">${s}</div>`;
     });
     document.getElementById('sizeArea').innerHTML = sHTML + `</div>`;
+
+const dpBtn = document.getElementById('btnDP');
+
+if (p.dpAllowed === 'no') {
+    dpBtn.style.display = 'none';
+    pilihBayar('lunas');
+} else {
+    dpBtn.style.display = 'block';
+}
 }
 
 function showPageSilent(id) {
