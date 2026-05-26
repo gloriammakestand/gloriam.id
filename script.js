@@ -396,36 +396,62 @@ async function sendWA() {
     const n = document.getElementById('inName').value;
     const p = document.getElementById('inPhone').value;
     const a = document.getElementById('inAddress').value;
+    const buktiFile = document.getElementById('inputBukti').files[0];
+    const dp = tipeBayar === 'dp' ? document.getElementById('inDP').value : '';
 
-    // Data yang dikirim ke Spreadsheet (Warna & Size dipisah)
-    const orderData = {
-        nama: n,
-        wa: p,
-        alamat: a,
-        produk: cart.prod.name,
-        warna: cart.color,
-        size: cart.size,
-        harga: cart.prod.price
-    };
+    // Validasi bukti
+    if (!buktiFile) return triggerAlert("UPLOAD BUKTI BAYAR!");
+    if (tipeBayar === 'dp' && !dp) return triggerAlert("ISI NOMINAL DP!");
 
-    // URL Web App Google Apps Script terbaru kamu
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwXBtryzfkaN2skkCDNAsv0jYV3i5UI7vdjTn1-opSGymVOTBNAPtBqbRvVC2ZnjQM2BA/exec';
+    // Tampilkan loading
+    const btn = document.querySelector('#summary button[onclick="sendWA()"]');
+    btn.innerText = 'UPLOADING...';
+    btn.disabled = true;
 
-    // 🔥 Kirim ke Google Sheets (Background Process)
-    fetch(SCRIPT_URL, {
-        method: "POST",
-        mode: "no-cors", 
-        cache: "no-cache",
-        headers: {
-            "Content-Type": "text/plain"
-        },
-        body: JSON.stringify(orderData)
-    }).catch(err => console.error("Gagal kirim ke spreadsheet:", err));
+    try {
+        // 1. Upload bukti ke Cloudinary
+        const { uploadBukti, saveOrder } = await import('./firebase.js');
+        const buktiURL = await uploadBukti(buktiFile);
+        if (!buktiURL) throw new Error("Gagal upload bukti");
 
-    // 🔥 Langsung arahkan ke WhatsApp
-    const text = `*GLORIAM ORDER*\n\n${cart.prod.name}\nWarna: ${cart.color}\nSize: ${cart.size}\nTotal: Rp${cart.prod.price}\n\n*Data Pengiriman*\nNama: ${n}\nWhatsApp: ${p}\nAlamat: ${a}`;
+        // 2. Data order
+        const orderData = {
+            nama: n,
+            wa: p,
+            alamat: a,
+            produk: cart.prod.name,
+            warna: cart.color,
+            size: cart.size,
+            harga: cart.prod.price,
+            tipeBayar: tipeBayar,
+            dp: dp,
+            buktiURL: buktiURL
+        };
 
-    window.open(`https://wa.me/6283898588562?text=${encodeURIComponent(text)}`);
+        // 3. Simpan ke Firebase
+        await saveOrder(orderData);
+
+        // 4. Kirim ke Google Sheets
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwXBtryzfkaN2skkCDNAsv0jYV3i5UI7vdjTn1-opSGymVOTBNAPtBqbRvVC2ZnjQM2BA/exec';
+        fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            cache: "no-cache",
+            headers: { "Content-Type": "text/plain" },
+            body: JSON.stringify({...orderData, buktiURL})
+        }).catch(err => console.error("Gagal kirim ke spreadsheet:", err));
+
+        // 5. Arahkan ke WhatsApp
+        const text = `*GLORIAM ORDER*\n\n${cart.prod.name}\nWarna: ${cart.color}\nSize: ${cart.size}\nTotal: Rp${cart.prod.price}\nPembayaran: ${tipeBayar === 'dp' ? `DP Rp${dp}` : 'LUNAS'}\n\n*Data Pengiriman*\nNama: ${n}\nWhatsApp: ${p}\nAlamat: ${a}\n\nBukti: ${buktiURL}`;
+        window.open(`https://wa.me/6283898588562?text=${encodeURIComponent(text)}`);
+
+    } catch (err) {
+        console.error(err);
+        triggerAlert("GAGAL! COBA LAGI.");
+    } finally {
+        btn.innerText = 'CHECKOUT (WA)';
+        btn.disabled = false;
+    }
 }
 
 function openSize() { document.getElementById('sizeModal').style.display='flex'; }
