@@ -67,19 +67,88 @@
     <div class="main">
 
         <!-- TAB ORDER -->
-        <div class="tab-content active" id="tab-order">
-            <div class="page-header">
-                <div class="page-title">ORDER</div>
-                <div class="page-desc">Kelola dan approve pesanan masuk</div>
-            </div>
-            <div class="filter-bar">
-                <button class="filter-btn active" onclick="filterOrder('semua',this)">SEMUA</button>
-                <button class="filter-btn" onclick="filterOrder('pending',this)">PENDING</button>
-                <button class="filter-btn" onclick="filterOrder('approved',this)">APPROVED</button>
-                <button class="filter-btn" onclick="filterOrder('rejected',this)">DITOLAK</button>
-            </div>
-            <div id="orderList"><div class="loading"><i class="fas fa-spinner fa-spin"></i> Memuat...</div></div>
+<div class="tab-content active" id="tab-order">
+
+    <div class="page-header">
+        <div class="page-title">ORDER</div>
+        <div class="page-desc">
+            Kelola dan approve pesanan masuk
         </div>
+    </div>
+
+    <div class="filter-bar">
+        <button class="filter-btn active"
+            onclick="filterOrder('semua',this)">
+            SEMUA
+        </button>
+
+        <button class="filter-btn"
+            onclick="filterOrder('pending',this)">
+            PENDING
+        </button>
+
+        <button class="filter-btn"
+            onclick="filterOrder('approved',this)">
+            APPROVED
+        </button>
+
+        <button class="filter-btn"
+            onclick="filterOrder('rejected',this)">
+            DITOLAK
+        </button>
+    </div>
+
+    <div style="
+        display:flex;
+        gap:10px;
+        margin-top:14px;
+        margin-bottom:18px;
+        flex-wrap:wrap;
+    ">
+
+        <select id="filterProduk"
+            onchange="filterProdukOrder(this.value)"
+            style="
+                background:#111;
+                color:#fff;
+                border:1px solid #333;
+                padding:12px 14px;
+                border-radius:10px;
+                font-size:13px;
+                font-weight:600;
+            ">
+
+            <option value="semua">
+                Semua Produk
+            </option>
+
+        </select>
+
+        <button onclick="hapusProdukOrder()"
+            style="
+                background:#c62828;
+                color:#fff;
+                border:none;
+                padding:12px 16px;
+                border-radius:10px;
+                font-weight:700;
+                cursor:pointer;
+            ">
+
+            Hapus Semua Filter
+
+        </button>
+
+    </div>
+
+    <div id="orderList">
+        <div class="loading">
+            <i class="fas fa-spinner fa-spin"></i>
+            Memuat...
+        </div>
+    </div>
+
+</div>
 
         <!-- TAB PRODUK -->
         <div class="tab-content" id="tab-produk">
