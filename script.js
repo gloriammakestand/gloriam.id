@@ -501,7 +501,7 @@ if (!buktiURL) throw new Error("Gagal upload bukti");
     ? 'LUNAS' 
     : `DP ${formatRupiah(dp)} dari ${formatRupiah(cart.prod.price)}`;
 
-const text = `*GLORIAM ORDER*\n\n*Produk:* ${cart.prod.name}\n*Warna:* ${cart.color}\n*Size:* ${cart.size}\n**Harga:* ${formatRupiah(cart.prod.price)}\n*Pembayaran:* ${infoBayar}\n\n*Data Pengiriman*\n*Nama:* ${n}\n*WhatsApp:* ${p}\n*Alamat:* ${a}\n\n*Bukti Bayar:*\n${buktiURL}`;
+const text = `*GLORIAM ORDER*\n\n*Produk:* ${cart.prod.name}\n*Warna:* ${cart.color}\n*Size:* ${cart.size}\n*Harga:* ${formatRupiah(cart.prod.price)}\n*Pembayaran:* ${infoBayar}\n\n*Data Pengiriman*\n*Nama:* ${n}\n*WhatsApp:* ${p}\n*Alamat:* ${a}\n\n*Bukti Bayar:*\n${buktiURL}`;
         window.open(`https://wa.me/6283898588562?text=${encodeURIComponent(text)}`);
 
     } catch (err) {
