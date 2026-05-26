@@ -298,23 +298,82 @@ import { auth, loginAdmin, logoutAdmin, getOrders, updateOrderStatus, getProduk,
 
     if (!files.length) return;
 
-    showToast('UPLOAD FOTO...');
+    const uploadArea = document.querySelector('.upload-area');
 
-    for (const file of files) {
+    uploadArea.innerHTML = `
+        <div style="
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            gap:12px;
+            padding:20px;
+        ">
+            <i class="fas fa-spinner fa-spin" 
+               style="font-size:32px;color:#00c853;"></i>
+
+            <div style="
+                font-size:12px;
+                font-weight:700;
+                letter-spacing:1px;
+            ">
+                MENGUPLOAD ${files.length} FOTO...
+            </div>
+        </div>
+    `;
+
+    let success = 0;
+
+    for (let i = 0; i < files.length; i++) {
+
+        const file = files[i];
+
+        uploadArea.innerHTML = `
+            <div style="
+                display:flex;
+                flex-direction:column;
+                align-items:center;
+                justify-content:center;
+                gap:12px;
+                padding:20px;
+            ">
+                <i class="fas fa-spinner fa-spin" 
+                   style="font-size:32px;color:#00c853;"></i>
+
+                <div style="
+                    font-size:12px;
+                    font-weight:700;
+                    letter-spacing:1px;
+                ">
+                    UPLOAD ${i + 1} / ${files.length}
+                </div>
+            </div>
+        `;
 
         const url = await uploadGambar(file, 'galeri');
 
         if (url) {
             await saveGaleri(url);
+            success++;
         }
-
     }
 
     await loadGaleri();
 
     input.value = '';
 
-    showToast('GALERI BERHASIL ✓');
+    uploadArea.innerHTML = `
+        <i class="fas fa-camera"></i>
+        Tap untuk upload foto galeri
+        <input type="file"
+            id="inputGaleri"
+            accept="image/*"
+            multiple
+            style="display:none"
+            onchange="uploadGaleriFoto(this)">
+    `;
+
+    showToast(success + ' FOTO BERHASIL ✓');
 };
 
     window.hapusGaleri = async (id) => {
