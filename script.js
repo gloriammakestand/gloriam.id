@@ -228,7 +228,18 @@ function renderList(items, containerId) {
                 <img src="${p.thumbnail}"> <div style="padding:25px">
                     <h3>${p.name}</h3>
                     <p style="opacity:0.5; font-weight:600;">${isSold ? 'OUT OF STOCK' : 'Rp' + p.price}</p>
-                    <button onclick="vibrate(40); goDetail('${p.id}')" ${isSold ? 'disabled' : ''}>${isSold ? 'SOLD' : 'SELECT'}</button>
+                    <button onclick="
+    sessionStorage.setItem(
+        'lastPage',
+        document.querySelector('.page.active').id
+    );
+    vibrate(40);
+    goDetail('${p.id}');
+" ${isSold ? 'disabled' : ''}>
+
+    ${isSold ? 'SOLD' : 'SELECT'}
+
+</button>
                 </div>
             </div>`;
     });
