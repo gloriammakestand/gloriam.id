@@ -1,3 +1,4 @@
+import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, updateDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
@@ -82,6 +83,59 @@ export async function updateOrderStatus(orderId, status) {
         console.error("Gagal update status:", err);
         return false;
     }
+}
+
+// ===== PRODUK =====
+export async function saveProduk(data) {
+    try {
+        await addDoc(collection(db, "produk"), { ...data, createdAt: new Date().toISOString() });
+        return true;
+    } catch (err) { console.error("Gagal simpan produk:", err); return false; }
+}
+
+export async function getProduk() {
+    try {
+        const q = query(collection(db, "produk"), orderBy("createdAt", "desc"));
+        const snapshot = await getDocs(q);
+        return snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+    } catch (err) { console.error("Gagal ambil produk:", err); return []; }
+}
+
+export async function updateProduk(id, data) {
+    try {
+        await updateDoc(doc(db, "produk", id), data);
+        return true;
+    } catch (err) { console.error("Gagal update produk:", err); return false; }
+}
+
+export async function deleteProduk(id) {
+    try {
+        await deleteDoc(doc(db, "produk", id));
+        return true;
+    } catch (err) { console.error("Gagal hapus produk:", err); return false; }
+}
+
+// ===== GALERI =====
+export async function saveGaleri(url) {
+    try {
+        await addDoc(collection(db, "galeri"), { url, createdAt: new Date().toISOString() });
+        return true;
+    } catch (err) { console.error("Gagal simpan galeri:", err); return false; }
+}
+
+export async function getGaleri() {
+    try {
+        const q = query(collection(db, "galeri"), orderBy("createdAt", "desc"));
+        const snapshot = await getDocs(q);
+        return snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+    } catch (err) { console.error("Gagal ambil galeri:", err); return []; }
+}
+
+export async function deleteGaleri(id) {
+    try {
+        await deleteDoc(doc(db, "galeri", id));
+        return true;
+    } catch (err) { console.error("Gagal hapus galeri:", err); return false; }
 }
 
 // Login admin
