@@ -402,6 +402,7 @@ async function sendWA() {
     // Validasi bukti
     if (!buktiFile) return triggerAlert("UPLOAD BUKTI BAYAR!");
     if (tipeBayar === 'dp' && !dp) return triggerAlert("ISI NOMINAL DP!");
+if (tipeBayar === 'dp' && parseInt(dp) < 60000) return triggerAlert("DP MINIMAL Rp60.000!");
 
     // Tampilkan loading
     const btn = document.querySelector('#summary button[onclick="sendWA()"]');
