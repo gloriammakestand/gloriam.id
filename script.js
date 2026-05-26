@@ -220,7 +220,7 @@ function renderList(items, containerId) {
         container.innerHTML += `
             <div class="card ${isSold ? 'sold-out-display' : ''}">
                 <div class="badge ${p.badge}">${p.status}</div>
-                <img src="${p.thumbnail}"> <div style="padding:25px">
+                <img src="${p.thumbnail}" loading="lazy"> <div style="padding:25px">
                     <h3>${p.name}</h3>
                     <p style="opacity:0.5; font-weight:600;">${isSold ? 'OUT OF STOCK' : 'Rp' + p.price}</p>
                     <button onclick="vibrate(40); goDetail(${p.id})" ${isSold ? 'disabled' : ''}>${isSold ? 'SOLD' : 'SELECT'}</button>
