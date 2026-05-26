@@ -531,6 +531,25 @@ function vibrate(ms) {
     if (navigator.vibrate) navigator.vibrate(ms);
 }
 
+function navBack() {
+
+    vibrate(20);
+
+    const activePage =
+        document.querySelector('.page.active')?.id;
+
+    const orderPages = ['detail', 'form', 'summary'];
+
+    if (orderPages.includes(activePage)) {
+
+        showPage(lastPage || 'home');
+
+        return;
+    }
+
+    history.back();
+}
+
 window.toggleSidebar = toggleSidebar;
 window.navTo = navTo;
 window.showPage = showPage;
@@ -550,3 +569,4 @@ window.previewBukti = previewBukti;
 window.openImage = openImage;
 window.closeImage = closeImage;
 window.vibrate = vibrate;
+window.navBack = navBack;
