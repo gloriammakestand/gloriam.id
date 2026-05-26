@@ -327,6 +327,19 @@ function showPage(id) {
     document.getElementById(id).scrollTop = 0;
 }
 
+function navBack() {
+    vibrate(30);
+
+    // kalau ada history sebelumnya
+    if (window.history.length > 1) {
+        history.back();
+        return;
+    }
+
+    // fallback kalau buka direct link
+    showPage(lastPage || 'home');
+}
+
 function goDetail(id) {
     const p = products.find(x => x.id === id);
     if (!p) return;
@@ -529,25 +542,6 @@ function showPageSilent(id) {
 
 function vibrate(ms) {
     if (navigator.vibrate) navigator.vibrate(ms);
-}
-
-function navBack() {
-
-    vibrate(20);
-
-    const activePage =
-        document.querySelector('.page.active')?.id;
-
-    const orderPages = ['detail', 'form', 'summary'];
-
-    if (orderPages.includes(activePage)) {
-
-        showPage(lastPage || 'home');
-
-        return;
-    }
-
-    history.back();
 }
 
 window.toggleSidebar = toggleSidebar;
