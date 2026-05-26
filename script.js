@@ -69,11 +69,21 @@ async function previewBukti(input) {
 
     const reader = new FileReader();
     reader.onload = e => {
-        const img = document.getElementById('previewImg');
-        img.src = e.target.result;
-        img.style.display = 'block';
-        img.style.opacity = '0.4';
-        img.style.filter = 'blur(3px)';
+        const previewImg = document.getElementById('previewImg');
+        previewImg.src = e.target.result;
+        previewImg.style.display = 'block';
+        previewImg.style.opacity = '0.4';
+        previewImg.style.filter = 'blur(2px)';
+
+        // Tambah spinner di atas gambar
+        const existing = document.getElementById('spinnerOverlay');
+        if (existing) existing.remove();
+        const spinner = document.createElement('div');
+        spinner.id = 'spinnerOverlay';
+        spinner.className = 'spinner-overlay';
+        spinner.innerHTML = '<i class="fas fa-spinner"></i>';
+        previewImg.parentElement.style.position = 'relative';
+        previewImg.parentElement.appendChild(spinner);
     };
     reader.readAsDataURL(file);
 
@@ -83,6 +93,9 @@ async function previewBukti(input) {
     uploadedBuktiURL = await uploadGambar(file, 'bukti');
 
     const previewImg = document.getElementById('previewImg');
+    const spinner = document.getElementById('spinnerOverlay');
+    if (spinner) spinner.remove();
+
     if (uploadedBuktiURL) {
         previewImg.style.opacity = '1';
         previewImg.style.filter = 'none';
