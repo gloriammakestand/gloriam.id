@@ -501,7 +501,7 @@ function goDetailSilent(p) {
 
     let cHTML = `<div class="section-label">PILIH WARNA</div><div class="option-box">`;
     p.colors.forEach(c => {
-        cHTML += `<div class="${cart.color === c ? 'active' : ''}" onclick="selOpt('color','${c}',this)">${c}</div>`;
+        cHTML += `<div class="${p.colors.length === 1 ? 'active' : ''}" onclick="selOpt('color','${c}',this)">${c}</div>`;
     });
     document.getElementById('colorArea').innerHTML = cHTML + `</div>`;
 
@@ -514,17 +514,13 @@ function goDetailSilent(p) {
 }
 
 function showPageSilent(id) {
-    if (META[id]) updateMeta(META[id].title, META[id].desc);
-    const menuBtn = document.querySelector('.menu-btn');
     const orderPages = ['detail', 'form', 'summary'];
-
-    if (orderPages.includes(id)) {
-        menuBtn.style.display = 'none';
-    } else {
-        menuBtn.style.display = 'flex';
-    }
-
+    const menuBtn = document.querySelector('.menu-btn');
+    if (orderPages.includes(id)) menuBtn.style.display = 'none';
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(id).classList.add('active');
-    document.getElementById(id).scrollTop = 0;
+}
+
+function vibrate(ms) {
+    if (navigator.vibrate) navigator.vibrate(ms);
 }
