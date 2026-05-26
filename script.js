@@ -39,6 +39,14 @@ function slugify(text) {
         .trim();
 }
 
+function formatRupiah(value) {
+
+    return 'Rp' + Number(
+        String(value).replace(/\D/g,'')
+    ).toLocaleString('id-ID');
+
+}
+
 let galleryImages = []; // Untuk menyimpan link dari kolom Q
 
 import { getProduk, getGaleri } from './firebase.js';
@@ -233,7 +241,7 @@ function renderList(items, containerId) {
                 <div class="badge ${p.badge}">${p.status}</div>
                 <img src="${p.thumbnail}"> <div style="padding:25px">
                     <h3>${p.name}</h3>
-                    <p style="opacity:0.5; font-weight:600;">${isSold ? 'OUT OF STOCK' : 'Rp' + p.price}</p>
+                    <p style="opacity:0.5; font-weight:600;">${isSold ? 'OUT OF STOCK' : formatRupiah(p.price)}</p>
                     <button onclick="
     sessionStorage.setItem(
         'lastPage',
@@ -368,7 +376,8 @@ function goDetail(id) {
     cart = { prod: p, size: '', color: p.colors.length === 1 ? p.colors[0] : '' };
 
     document.getElementById('detName').innerText = p.name;
-    document.getElementById('detPrice').innerText = 'Rp' + p.price;
+    document.getElementById('detPrice').innerText =
+    formatRupiah(p.price);
 
     const slider = document.getElementById('detImgs');
 
@@ -429,7 +438,8 @@ function validateForm() { vibrate(40);
     if(!n || !p || !a) return triggerAlert("LENGKAPI DATA!");
     document.getElementById('sumProd').innerText = cart.prod.name;
     document.getElementById('sumVar').innerText = `${cart.color} | ${cart.size}`;
-    document.getElementById('sumPrice').innerText = 'Rp' + cart.prod.price;
+    document.getElementById('sumPrice').innerText =
+    formatRupiah(cart.prod.price);
     document.getElementById('sumCust').innerHTML = `<strong>${n}</strong><br>${p}<br>${a}`;
     showPage('summary');
 }
@@ -489,9 +499,9 @@ if (!buktiURL) throw new Error("Gagal upload bukti");
         // 5. Arahkan ke WhatsApp
         const infoBayar = tipeBayar === 'lunas' 
     ? 'LUNAS' 
-    : `DP Rp${parseInt(dp).toLocaleString('id-ID')} dari Rp${parseInt(cart.prod.price).toLocaleString('id-ID')}`;
+    : `DP ${formatRupiah(dp)} dari ${formatRupiah(cart.prod.price)}`;
 
-const text = `*GLORIAM ORDER*\n\n*Produk:* ${cart.prod.name}\n*Warna:* ${cart.color}\n*Size:* ${cart.size}\n*Harga:* Rp${parseInt(cart.prod.price).toLocaleString('id-ID')}\n*Pembayaran:* ${infoBayar}\n\n*Data Pengiriman*\n*Nama:* ${n}\n*WhatsApp:* ${p}\n*Alamat:* ${a}\n\n*Bukti Bayar:*\n${buktiURL}`;
+const text = `*GLORIAM ORDER*\n\n*Produk:* ${cart.prod.name}\n*Warna:* ${cart.color}\n*Size:* ${cart.size}\n**Harga:* ${formatRupiah(cart.prod.price)}\n*Pembayaran:* ${infoBayar}\n\n*Data Pengiriman*\n*Nama:* ${n}\n*WhatsApp:* ${p}\n*Alamat:* ${a}\n\n*Bukti Bayar:*\n${buktiURL}`;
         window.open(`https://wa.me/6283898588562?text=${encodeURIComponent(text)}`);
 
     } catch (err) {
@@ -525,7 +535,8 @@ function closeQRIS() {
 
 function goDetailSilent(p) {
     document.getElementById('detName').innerText = p.name;
-    document.getElementById('detPrice').innerText = 'Rp' + p.price;
+    document.getElementById('detPrice').innerText =
+    formatRupiah(p.price);
 
     const slider = document.getElementById('detImgs');
     if (p.details && p.details.length > 0) {
