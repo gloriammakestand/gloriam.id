@@ -611,7 +611,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 });
 
-import { deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 import { db } from "./firebase.js";
 
 async function hapusOrder(id) {
