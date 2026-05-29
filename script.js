@@ -223,19 +223,6 @@ window.onload = async () => {
 };
 
 
-
-products.sort(
-    (a, b) => (b.order || 0) - (a.order || 0)
-);
-
-        renderAllSections();
-        renderGallery();
-
-    } catch (err) {
-        console.error('Gagal ambil Firestore:', err);
-    }
-}
-
 function renderAllSections() { 
     // Beranda: Hanya produk yang kolom Showcase-nya diisi 'yes'
     renderList(products.filter(p => p.showcase === 'yes'), 'list-home');
