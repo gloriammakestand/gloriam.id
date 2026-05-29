@@ -206,6 +206,24 @@ export function listenProduk(callback) {
     });
 }
 
+export function listenGaleri(callback) {
+
+    const q = query(
+        collection(db, "galeri"),
+        orderBy("order", "asc")
+    );
+
+    return onSnapshot(q, (snapshot) => {
+
+        const data = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }));
+
+        callback(data);
+    });
+}
+
 // Login admin
 export async function loginAdmin(email, password) {
     try {
