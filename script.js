@@ -49,7 +49,10 @@ function formatRupiah(value) {
 
 let galleryImages = []; // Untuk menyimpan link dari kolom Q
 
-import { getProduk, getGaleri } from './firebase.js';
+import {
+    listenProduk,
+    listenGaleri
+} from './firebase.js';
 let products = [];
 let cart = { prod: null, size: '', color: '' };
 let lastPage = 'home'; // Default ke home
