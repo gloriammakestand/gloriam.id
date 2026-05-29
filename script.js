@@ -180,14 +180,16 @@ window.onload = async () => {
             goDetailSilent(found);
             // Tampilkan halaman yang sesuai
             showPageSilent(pageId);
-            history.replaceState(
-    {
-        page: pageId,
-        product: productSlug
-    },
-    '',
-    `/${productSlug}/${pageId}`
-);
+            if (!path.includes('/detail')) {
+    history.replaceState(
+        {
+            page: pageId,
+            product: productSlug
+        },
+        '',
+        `/${productSlug}/detail`
+    );
+}
         } else {
             // Produk tidak ditemukan, redirect home
             history.replaceState({ page: 'home' }, '', '/');
@@ -368,7 +370,7 @@ function showPage(id) {
     '',
     `/${productSlug}/${id}`
 );
-
+}
     if (orderPages.includes(id)) {
         menuBtn.style.display = 'none';
     } else {
