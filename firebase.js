@@ -188,6 +188,24 @@ export async function updateGaleri(id, data) {
     }
 }
 
+export function listenProduk(callback) {
+
+    const q = query(
+        collection(db, "produk"),
+        orderBy("order", "desc")
+    );
+
+    return onSnapshot(q, (snapshot) => {
+
+        const data = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }));
+
+        callback(data);
+    });
+}
+
 // Login admin
 export async function loginAdmin(email, password) {
     try {
