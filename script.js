@@ -119,11 +119,47 @@ async function previewBukti(input) {
         uploadedBuktiURL = null;
     }
 }
-
 window.onload = async () => {
-    history.replaceState({ page: 'home' }, '', window.location.pathname);
-    await fetchProducts();
-    setTimeout(() => document.getElementById('loader').classList.add('hide'), 1000);
+
+    history.replaceState(
+        { page: 'home' },
+        '',
+        window.location.pathname
+    );
+
+    listenProduk((firestoreProducts) => {
+
+        products = firestoreProducts.map(p => ({
+            id: p.id,
+            name: p.nama,
+            price: p.harga,
+            badge: p.badge?.toLowerCase() || '',
+            status: p.status || '',
+            colors: p.warna ? p.warna.split('/').map(c => c.trim()) : [],
+            stock: p.stok ? p.stok.split('/').map(s => s.trim()) : [],
+            thumbnail: p.thumbnail || '',
+            details: p.details || [],
+            specs: p.specs || '',
+            showcase: p.showcase || 'no',
+            dpAllowed: p.dpAllowed || 'yes',
+            order: p.order || 0
+        }));
+
+        renderAllSections();
+    });
+
+    listenGaleri((firestoreGaleri) => {
+
+        galleryImages =
+            firestoreGaleri.map(g => g.url);
+
+        renderGallery();
+    });
+
+    setTimeout(() =>
+        document.getElementById('loader').classList.add('hide'),
+        1000
+    );
 
     const path = window.location.pathname.replace(/^\//, '').toLowerCase();
 
@@ -186,29 +222,7 @@ window.onload = async () => {
     });
 };
 
-async function fetchProducts() {
-    try {
-        const firestoreProducts = await getProduk();
-        const firestoreGaleri = await getGaleri();
 
-        galleryImages = firestoreGaleri.map(g => g.url);
-
-        products = firestoreProducts.map(p => ({
-            id: p.id,
-            name: p.nama,
-            price: p.harga,
-            badge: p.badge?.toLowerCase() || '',
-            status: p.status || '',
-            colors: p.warna ? p.warna.split('/').map(c => c.trim()) : [],
-            stock: p.stok ? p.stok.split('/').map(s => s.trim()) : [],
-            thumbnail: p.thumbnail || '',
-            details: p.details || [],
-            specs: p.specs || '',
-            showcase: p.showcase || 'no',
-            dpAllowed: p.dpAllowed || 'yes',
-
-order: p.order || 0
-}));
 
 products.sort(
     (a, b) => (b.order || 0) - (a.order || 0)
