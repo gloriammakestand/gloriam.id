@@ -150,20 +150,6 @@ window.onload = async () => {
     );
 
     renderAllSections();
-});
-
-    listenGaleri((firestoreGaleri) => {
-
-        galleryImages =
-            firestoreGaleri.map(g => g.url);
-
-        renderGallery();
-    });
-
-    setTimeout(() =>
-        document.getElementById('loader').classList.add('hide'),
-        1000
-    );
 
     const path = window.location.pathname.replace(/^\//, '').toLowerCase();
 
@@ -199,6 +185,22 @@ window.onload = async () => {
             showPage(targetPage);
         }
     }
+});
+
+    listenGaleri((firestoreGaleri) => {
+
+        galleryImages =
+            firestoreGaleri.map(g => g.url);
+
+        renderGallery();
+    });
+
+    setTimeout(() =>
+        document.getElementById('loader').classList.add('hide'),
+        1000
+    );
+
+    
 
     const orderPages = ['detail', 'form', 'summary'];
     window.addEventListener('popstate', (e) => {
