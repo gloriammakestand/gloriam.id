@@ -155,7 +155,7 @@ window.onload = async () => {
 
     // Cek apakah path adalah order page
     const orderMatch =
-    path.match(/^(.+?)\/(detail|form|summary)$/)
+    path.match(/^([^\/]+)\/(detail|form|summary)$/)
     ||
     (
         path.match(/^([^\/]+)\/?$/)
@@ -180,6 +180,14 @@ window.onload = async () => {
             goDetailSilent(found);
             // Tampilkan halaman yang sesuai
             showPageSilent(pageId);
+            history.replaceState(
+    {
+        page: pageId,
+        product: productSlug
+    },
+    '',
+    `/${productSlug}/${pageId}`
+);
         } else {
             // Produk tidak ditemukan, redirect home
             history.replaceState({ page: 'home' }, '', '/');
@@ -355,8 +363,11 @@ function showPage(id) {
     // URL dinamis untuk order pages
     if (orderPages.includes(id) && cart.prod) {
         const productSlug = slugify(cart.prod.name);
-        history.pushState({ page: id, product: productSlug }, '', `/order/${productSlug}/${id}`);
-    }
+        history.pushState(
+    { page: id, product: productSlug },
+    '',
+    `/${productSlug}/${id}`
+);
 
     if (orderPages.includes(id)) {
         menuBtn.style.display = 'none';
@@ -605,14 +616,6 @@ function showPageSilent(id) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(id).classList.add('active');
 }
-history.replaceState(
-    {
-        page: pageId,
-        product: productSlug
-    },
-    '',
-    `/${productSlug}/${pageId}`
-);
 
 function vibrate(ms) {
     if (navigator.vibrate) navigator.vibrate(ms);
