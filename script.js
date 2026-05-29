@@ -154,8 +154,14 @@ window.onload = async () => {
     const path = window.location.pathname.replace(/^\//, '').toLowerCase();
 
     // Cek apakah path adalah order page
-    const orderMatch = path.match(/^order\/(.+?)\/(detail|form|summary)$/) || 
-                   (path.match(/^order\/([^/]+)$/) ? [null, path.replace('order/', ''), 'detail'] : null);
+    const orderMatch =
+    path.match(/^(.+?)\/(detail|form|summary)$/)
+    ||
+    (
+        path.match(/^([^\/]+)\/?$/)
+        ? [null, path.replace(/\/$/, ''), 'detail']
+        : null
+    );
     if (orderMatch) {
         const productSlug = orderMatch[1]; // contoh: soccer-madness
         const pageId = orderMatch[2];      // detail, form, atau summary
@@ -599,6 +605,14 @@ function showPageSilent(id) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(id).classList.add('active');
 }
+history.replaceState(
+    {
+        page: pageId,
+        product: productSlug
+    },
+    '',
+    `/${productSlug}/${pageId}`
+);
 
 function vibrate(ms) {
     if (navigator.vibrate) navigator.vibrate(ms);
