@@ -129,24 +129,28 @@ window.onload = async () => {
 
     listenProduk((firestoreProducts) => {
 
-        products = firestoreProducts.map(p => ({
-            id: p.id,
-            name: p.nama,
-            price: p.harga,
-            badge: p.badge?.toLowerCase() || '',
-            status: p.status || '',
-            colors: p.warna ? p.warna.split('/').map(c => c.trim()) : [],
-            stock: p.stok ? p.stok.split('/').map(s => s.trim()) : [],
-            thumbnail: p.thumbnail || '',
-            details: p.details || [],
-            specs: p.specs || '',
-            showcase: p.showcase || 'no',
-            dpAllowed: p.dpAllowed || 'yes',
-            order: p.order || 0
-        }));
+    products = firestoreProducts.map(p => ({
+        id: p.id,
+        name: p.nama,
+        price: p.harga,
+        badge: p.badge?.toLowerCase() || '',
+        status: p.status || '',
+        colors: p.warna ? p.warna.split('/').map(c => c.trim()) : [],
+        stock: p.stok ? p.stok.split('/').map(s => s.trim()) : [],
+        thumbnail: p.thumbnail || '',
+        details: p.details || [],
+        specs: p.specs || '',
+        showcase: p.showcase || 'no',
+        dpAllowed: p.dpAllowed || 'yes',
+        order: p.order || 0
+    }));
 
-        renderAllSections();
-    });
+    products.sort(
+        (a, b) => (b.order || 0) - (a.order || 0)
+    );
+
+    renderAllSections();
+});
 
     listenGaleri((firestoreGaleri) => {
 
