@@ -178,14 +178,14 @@ window.onload = async () => {
             goDetailSilent(found);
             // Tampilkan halaman yang sesuai
             showPageSilent(pageId);
-            if (!path.includes('/detail')) {
+            if (path.includes('/detail')) {
     history.replaceState(
         {
             page: pageId,
             product: productSlug
         },
         '',
-        `/${productSlug}/detail`
+        `/${productSlug}`
     );
 }
         } else {
@@ -361,13 +361,25 @@ function showPage(id) {
     }
 
     // URL dinamis untuk order pages
-    if (orderPages.includes(id) && cart.prod) {
-        const productSlug = slugify(cart.prod.name);
-        history.pushState(
-    { page: id, product: productSlug },
-    '',
-    `/${productSlug}/${id}`
-);
+    // URL dinamis untuk order pages
+if (orderPages.includes(id) && cart.prod) {
+    const productSlug = slugify(cart.prod.name);
+
+    let url = `/${productSlug}`;
+
+    if (id === 'form') {
+        url = `/${productSlug}/form`;
+    }
+
+    if (id === 'summary') {
+        url = `/${productSlug}/summary`;
+    }
+
+    history.pushState(
+        { page: id, product: productSlug },
+        '',
+        url
+    );
 }
     if (orderPages.includes(id)) {
         menuBtn.style.display = 'none';
