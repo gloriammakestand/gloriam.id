@@ -190,10 +190,17 @@ if (path.endsWith('/summary')) {
             goDetailSilent(found);
             // Tampilkan halaman yang sesuai
             showPageSilent(pageId);
-            if (path.includes('/detail')) {
+            if (!document.referrer.includes(window.location.hostname)) {
+
     history.replaceState(
+        { page: 'home' },
+        '',
+        '/'
+    );
+
+    history.pushState(
         {
-            page: pageId,
+            page: 'detail',
             product: productSlug
         },
         '',
