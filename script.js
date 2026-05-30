@@ -159,10 +159,22 @@ window.onload = async () => {
     ||
     path.match(/^([^\/]+)\/$/)
     ||
-    path.match(/^([^\/]+)\/detail$/);
+    path.match(/^([^\/]+)\/detail$/)
+    ||
+    path.match(/^([^\/]+)\/form$/)
+    ||
+    path.match(/^([^\/]+)\/summary$/);
     if (orderMatch) {
         const productSlug = orderMatch[1]; // contoh: soccer-madness
-        const pageId = 'detail';      // detail, form, atau summary
+        let pageId = 'detail'; // detail, form, atau summary
+
+if (path.endsWith('/form')) {
+    pageId = 'form';
+}
+
+if (path.endsWith('/summary')) {
+    pageId = 'summary';
+}      
 
         // Cari produk berdasarkan slug
         const found = products.find(p => slugify(p.name) === productSlug);
