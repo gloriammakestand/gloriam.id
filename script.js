@@ -468,14 +468,12 @@ function goDetail(id) {
 
 const dpBtn = document.getElementById('btnDP');
 
-console.log('DP Allowed:', p.dpAllowed);
-alert('DP Allowed: ' + p.dpAllowed);
-
 if (p.dpAllowed === 'no') {
     dpBtn.style.display = 'none';
 
     // paksa kembali lunas
     pilihBayar('lunas');
+alert('DP DISEMBUNYIKAN');
 
 } else {
     dpBtn.style.display = 'block';
@@ -635,12 +633,10 @@ function goDetailSilent(p) {
 
 const dpBtn = document.getElementById('btnDP');
 
-console.log('DP Allowed:', p.dpAllowed);
-alert('DP Allowed: ' + p.dpAllowed);
-
 if (p.dpAllowed === 'no') {
     dpBtn.style.display = 'none';
     pilihBayar('lunas');
+alert('DP DISEMBUNYIKAN');
 } else {
     dpBtn.style.display = 'block';
 }
