@@ -473,7 +473,6 @@ if (p.dpAllowed === 'no') {
 
     // paksa kembali lunas
     pilihBayar('lunas');
-alert('DP DISEMBUNYIKAN');
 
 } else {
     dpBtn.style.display = 'block';
@@ -514,7 +513,15 @@ function validateForm() { vibrate(40);
     formatRupiah(cart.prod.price);
     document.getElementById('sumCust').innerHTML = `<strong>${n}</strong><br>${p}<br>${a}`;
 
-alert('Summary DP: ' + cart.prod.dpAllowed);
+if (cart.prod.dpAllowed === 'no') {
+
+    document.getElementById('btnDP').style.display = 'none';
+
+} else {
+
+    document.getElementById('btnDP').style.display = 'block';
+
+}
     showPage('summary');
 }
 
@@ -638,7 +645,6 @@ const dpBtn = document.getElementById('btnDP');
 if (p.dpAllowed === 'no') {
     dpBtn.style.display = 'none';
     pilihBayar('lunas');
-alert('DP DISEMBUNYIKAN');
 } else {
     dpBtn.style.display = 'block';
 }
