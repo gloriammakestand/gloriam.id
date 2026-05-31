@@ -515,13 +515,16 @@ function validateForm() { vibrate(40);
 
 if (cart.prod.dpAllowed === 'no') {
 
-    document.getElementById('btnDP').style.display = 'none';
+    document.getElementById('paymentTypeArea').style.display = 'none';
+    document.getElementById('dpArea').style.display = 'none';
+    tipeBayar = 'lunas';
 
 } else {
 
-    document.getElementById('btnDP').style.display = 'block';
+    document.getElementById('paymentTypeArea').style.display = 'block';
 
 }
+
     showPage('summary');
 }
 
