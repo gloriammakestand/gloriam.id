@@ -513,6 +513,8 @@ function validateForm() { vibrate(40);
     document.getElementById('sumPrice').innerText =
     formatRupiah(cart.prod.price);
     document.getElementById('sumCust').innerHTML = `<strong>${n}</strong><br>${p}<br>${a}`;
+
+alert('Summary DP: ' + cart.prod.dpAllowed);
     showPage('summary');
 }
 
