@@ -468,6 +468,8 @@ function goDetail(id) {
 
 const dpBtn = document.getElementById('btnDP');
 
+console.log('DP Allowed:', p.dpAllowed);
+
 if (p.dpAllowed === 'no') {
     dpBtn.style.display = 'none';
 
@@ -631,6 +633,8 @@ function goDetailSilent(p) {
     document.getElementById('sizeArea').innerHTML = sHTML + `</div>`;
 
 const dpBtn = document.getElementById('btnDP');
+
+console.log('DP Allowed:', p.dpAllowed);
 
 if (p.dpAllowed === 'no') {
     dpBtn.style.display = 'none';
