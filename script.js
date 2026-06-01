@@ -571,7 +571,7 @@ if (!buktiURL) throw new Error("Gagal upload bukti");
         await saveOrder(orderData);
 
         // 4. Kirim ke Google Sheets
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwXBtryzfkaN2skkCDNAsv0jYV3i5UI7vdjTn1-opSGymVOTBNAPtBqbRvVC2ZnjQM2BA/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwezvCW3_8uBhPEY9GrU_3Ue6MzAv1_GNhXauBZSI9Bj5QRAeeVitzLBtH5twBkSULVfA/exec';
         fetch(SCRIPT_URL, {
             method: "POST",
             mode: "no-cors",
