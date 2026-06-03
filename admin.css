@@ -646,7 +646,7 @@
 /* MOBILE */
         @media (max-width: 600px) {
             .sidebar { display: none; }
-            .main { margin-left: 0; padding: 80px 16px 20px; }
+            .main { margin-left: 0; padding: 80px 16px 90px; }
             .mobile-nav {
                 position: fixed;
                 bottom: 0; left: 0; right: 0;
