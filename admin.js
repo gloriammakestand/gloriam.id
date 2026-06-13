@@ -202,9 +202,36 @@ if (currentProdukFilter !== 'semua') {
 
 </div>
                 <div class="order-info">
-                    <div class="info-item">Produk <span>${o.produk}</span></div>
-                    <div class="info-item">Warna / Size <span>${o.warna} / ${o.size}</span></div>
-                    <div class="info-item">Harga <span>Rp${Number(String(o.harga).replace(/\D/g,'')).toLocaleString('id-ID')}</span></div>
+
+<div class="info-item">
+Produk
+<span>
+
+${
+Array.isArray(o.produk)
+
+? o.produk.map((p,i)=>`
+<b>Produk ${i+1}</b><br>
+${p.nama}<br>
+${p.warna} / ${p.size}<br><br>
+`).join('')
+
+: `
+<b>Produk 1</b><br>
+${o.produk}<br>
+${o.warna} / ${o.size}
+`
+}
+
+</span>
+</div>
+
+<div class="info-item">
+Harga
+<span>
+Rp${Number(String(o.harga).replace(/\D/g,'')).toLocaleString('id-ID')}
+</span>
+</div>
                     <div class="info-item">Pembayaran <span>${bayar}</span></div>
                     <div class="info-item">WhatsApp <span>${o.wa}</span></div>
                     <div class="info-item">Alamat <span>${o.alamat}</span></div>
