@@ -214,10 +214,26 @@ async function sendCartWA() {
         ).join('\n');
 
         const orderData = {
-            nama: n, wa: p, alamat: a,
-            produk: cartItems.map(i => `${i.prod.name} (${i.color}|${i.size})`).join(', '),
-            harga: total, tipeBayar, dp, buktiURL
-        };
+    nama: n,
+    wa: p,
+    alamat: a,
+
+    produk: cartItems.map(i => ({
+        nama: i.prod.name,
+        warna: i.color,
+        size: i.size,
+        harga: i.prod.price
+    })),
+
+    produkText: cartItems.map(i =>
+        `${i.prod.name} (${i.color}|${i.size})`
+    ).join(', '),
+
+    harga: total,
+    tipeBayar,
+    dp,
+    buktiURL
+};
 
         await saveOrder(orderData);
 
