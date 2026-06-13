@@ -114,7 +114,12 @@
 
 <p onclick="openSpecs()" style="color:#00c853; font-size:12px; font-weight:700; margin-top:10px; text-decoration:underline; cursor:pointer;">Product Specifications (Bahan & Detail)</p>
 
-            <div class="btn-container"><button onclick="validateDetail()">NEXT</button></div>
+            <div class="btn-container" style="display:flex; gap:10px;">
+                <button onclick="addToCart()" style="flex:0 0 auto; padding:0 18px; background:#0a0a0a; border:1.5px solid #1a1a1a; color:#fff; font-size:12px; letter-spacing:1px; border-radius:12px; cursor:pointer; font-family:inherit; font-weight:700; display:flex; align-items:center; gap:7px; white-space:nowrap;">
+                    <i class="fas fa-bag-shopping" style="font-size:14px;"></i> ADD
+                </button>
+                <button onclick="validateDetail()" style="flex:1;">NEXT</button>
+            </div>
         </div>
     </div>
 
@@ -173,13 +178,13 @@
 <div id="paymentTypeArea" style="margin-top:20px;">
     <div style="font-size:11px; font-weight:700; color:#555; letter-spacing:1px; margin-bottom:12px;">TIPE PEMBAYARAN</div>
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-        <div id="btnLunas" onclick="pilihBayar('lunas')" style="padding:16px; border:1.5px solid #fff; border-radius:12px; text-align:center; font-weight:700; font-size:13px; cursor:pointer; background:#fff; color:#000;">LUNAS</div>
-        <div id="btnDP" onclick="pilihBayar('dp')" style="padding:16px; border:1.5px solid #1a1a1a; border-radius:12px; text-align:center; font-weight:700; font-size:13px; cursor:pointer; background:#050505; color:#fff;">DP</div>
+        <div id="sumBtnLunas" onclick="pilihBayar('lunas')" style="padding:16px; border:1.5px solid #fff; border-radius:12px; text-align:center; font-weight:700; font-size:13px; cursor:pointer; background:#fff; color:#000;">LUNAS</div>
+        <div id="sumBtnDP" onclick="pilihBayar('dp')" style="padding:16px; border:1.5px solid #1a1a1a; border-radius:12px; text-align:center; font-weight:700; font-size:13px; cursor:pointer; background:#050505; color:#fff;">DP</div>
     </div>
 </div>
 
 <!-- INPUT DP -->
-<div id="dpArea" style="display:none; margin-top:15px;">
+<div id="sumDpArea" style="display:none; margin-top:15px;">
     <div style="font-size:11px; font-weight:700; color:#555; letter-spacing:1px; margin-bottom:10px;">NOMINAL DP</div>
     <input type="number" id="inDP" placeholder="Rp..." style="width:100%; padding:18px; background:#0a0a0a; border:1.5px solid #1a1a1a; color:#fff; border-radius:15px; font-family:inherit; font-size:15px;">
     <p style="font-size:10px; color:#555; margin-top:8px;">*Minimal DP Rp60.000</p>
@@ -277,6 +282,127 @@
 
 <div id="imageModal" class="modal-overlay" onclick="closeImage()">
     <img id="modalImg" src="" alt="Zoomed Image">
+</div>
+
+<!-- FLOATING CART BUTTON -->
+<div id="floatingCartBtn" onclick="openCart()" style="display:none; position:fixed; bottom:28px; right:20px; z-index:999; width:54px; height:54px; background:#fff; border-radius:50%; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 4px 20px rgba(0,0,0,0.5);">
+    <i class="fas fa-bag-shopping" style="font-size:20px; color:#000;"></i>
+    <div id="cartBadge" style="display:none; position:absolute; top:-4px; right:-4px; background:#00c853; color:#000; font-size:10px; font-weight:900; width:20px; height:20px; border-radius:50%; align-items:center; justify-content:center; font-family:inherit;">0</div>
+</div>
+
+<!-- CART ADDED TOAST -->
+<div id="cartToast" class="toast" style="background:#111; border:1px solid #00c853; color:#00c853;">
+    <i class="fas fa-check" style="margin-right:6px;"></i> Ditambahkan ke keranjang!
+</div>
+
+<!-- CART PAGE -->
+<div class="page" id="cartPage">
+    <div class="back-btn" onclick="vibrate(30); history.back()">← BACK</div>
+    <div class="detail-container" style="padding-top:80px;">
+        <h2 style="margin-bottom:24px;">KERANJANG</h2>
+        <div id="cartList"></div>
+        <div id="cartTotalArea" style="margin-top:16px; padding:16px 20px; background:#0a0a0a; border:1px solid #1a1a1a; border-radius:15px; display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:12px; font-weight:700; color:#555; letter-spacing:1px;">TOTAL</span>
+            <span id="cartTotal" style="font-size:18px; font-weight:700; color:#00c853;">Rp0</span>
+        </div>
+        <div id="cartCheckoutBtn" style="display:none;">
+            <div class="btn-container" style="margin-top:16px;">
+                <button onclick="goToCartCheckout()">CHECKOUT</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CART FORM PAGE -->
+<div class="page" id="cartForm">
+    <div class="back-btn" onclick="vibrate(30); history.back()">← BACK</div>
+    <div class="detail-container" style="padding-top:80px;">
+        <h2 style="margin-bottom:30px;">SHIPPING INFO</h2>
+        <div class="input-group">
+            <label>FULL NAME</label>
+            <input type="text" id="cartInName" placeholder="Nama Lengkap...">
+        </div>
+        <div class="input-group">
+            <label>WHATSAPP</label>
+            <input type="number" id="cartInPhone" placeholder="08xxx">
+        </div>
+        <div class="input-group">
+            <label>ADDRESS</label>
+            <textarea id="cartInAddress" rows="4" placeholder="Alamat Lengkap..."></textarea>
+            <p style="font-size: 10px; color: #555; margin-top: 8px;">*Mohon diisi lengkap untuk memudahkan pengiriman.</p>
+        </div>
+        <div class="btn-container"><button onclick="validateCartForm()">CONTINUE</button></div>
+    </div>
+</div>
+
+<!-- CART SUMMARY PAGE -->
+<div class="page" id="cartSummary">
+    <div class="back-btn" onclick="vibrate(30); history.back()">← BACK</div>
+    <div class="detail-container" style="padding-top:80px;">
+        <h2 style="margin-bottom:20px;">ORDER SUMMARY</h2>
+
+        <!-- Items -->
+        <div style="background:#0a0a0a; padding:20px; border-radius:15px; border:1px solid #1a1a1a;">
+            <div id="cartSumItems"></div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px; padding-top:16px; border-top:1px solid #1a1a1a;">
+                <span style="font-size:12px; font-weight:700; color:#555; letter-spacing:1px;">TOTAL</span>
+                <span id="cartSumTotal" style="font-size:16px; font-weight:700; color:#00c853;"></span>
+            </div>
+        </div>
+
+        <!-- Customer -->
+        <div style="background:#0a0a0a; padding:20px; border-radius:15px; border:1px solid #1a1a1a; margin-top:16px;">
+            <span style="font-size:11px; font-weight:700; color:#555; letter-spacing:1px;">DATA PENGIRIMAN</span>
+            <p id="cartSumCust" style="font-size:13px; line-height:1.8; margin:12px 0 0;"></p>
+        </div>
+
+        <!-- Rekening -->
+        <div style="background:#0a0a0a; border:1px solid #1a1a1a; padding:20px; border-radius:15px; margin-top:16px;">
+            <span style="font-size:11px; font-weight:700; color:#555; letter-spacing:1px;">REKENING PEMBAYARAN</span>
+            <div style="margin-top:15px; font-size:15px; line-height:1.8; font-weight:600;">
+                MANDIRI: 1370023790229<br>
+                DANA: 081910421976<br>
+                <span style="opacity:0.6; font-size:13px;">A.N Dias Adhitya Purnama Putra</span>
+            </div>
+            <div style="margin-top:15px; border-top:1px solid #1a1a1a; padding-top:15px;">
+                <p onclick="openQRIS()" style="color:#00c853; font-size:12px; font-weight:700; cursor:pointer; margin:0;">
+                    <i class="fas fa-qrcode" style="margin-right:5px;"></i> Atau lihat QRIS PEMBAYARAN (Tap di sini)
+                </p>
+            </div>
+        </div>
+
+        <!-- Tipe Bayar -->
+        <div id="cartPaymentTypeArea" style="margin-top:20px;">
+            <div style="font-size:11px; font-weight:700; color:#555; letter-spacing:1px; margin-bottom:12px;">TIPE PEMBAYARAN</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                <div id="btnLunas" onclick="pilihBayar('lunas')" style="padding:16px; border:1.5px solid #fff; border-radius:12px; text-align:center; font-weight:700; font-size:13px; cursor:pointer; background:#fff; color:#000;">LUNAS</div>
+                <div id="btnDP" onclick="pilihBayar('dp')" style="padding:16px; border:1.5px solid #1a1a1a; border-radius:12px; text-align:center; font-weight:700; font-size:13px; cursor:pointer; background:#050505; color:#fff;">DP</div>
+            </div>
+        </div>
+        <div id="dpArea" style="display:none; margin-top:15px;">
+            <div style="font-size:11px; font-weight:700; color:#555; letter-spacing:1px; margin-bottom:10px;">NOMINAL DP</div>
+            <input type="number" id="cartInDP" placeholder="Rp..." style="width:100%; padding:18px; background:#0a0a0a; border:1.5px solid #1a1a1a; color:#fff; border-radius:15px; font-family:inherit; font-size:15px;">
+            <p style="font-size:10px; color:#555; margin-top:8px;">*Minimal DP Rp60.000</p>
+        </div>
+
+        <!-- Upload Bukti -->
+        <div style="margin-top:20px;">
+            <div style="font-size:11px; font-weight:700; color:#555; letter-spacing:1px; margin-bottom:12px;">UPLOAD BUKTI BAYAR</div>
+            <label for="cartInputBukti" style="display:block; padding:20px; border:1.5px dashed #1a1a1a; border-radius:15px; text-align:center; cursor:pointer; color:#555; font-size:13px;">
+                <i class="fas fa-camera" style="font-size:24px; margin-bottom:8px; display:block;"></i>
+                <span id="cartLabelBukti">Tap untuk upload foto bukti</span>
+            </label>
+            <input type="file" id="cartInputBukti" accept="image/*" style="display:none;" onchange="previewCartBukti(this)">
+            <img id="cartPreviewImg" src="" style="display:none; width:100%; border-radius:12px; margin-top:12px; border:1px solid #1a1a1a;">
+        </div>
+
+        <p style="font-size:10px; color:#555; text-align:center; margin-top:25px; line-height:1.5;">
+            Tekan checkout dan anda akan diarahkan otomatis ke<br>WhatsApp admin.
+        </p>
+        <div class="btn-container" style="margin-top:15px;">
+            <button onclick="sendCartWA()" style="background:#00c853; color:#fff;">CHECKOUT (WA)</button>
+        </div>
+    </div>
 </div>
 
 <script type="module" src="script.js"></script>
