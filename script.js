@@ -95,9 +95,28 @@ function showCartToast() {
 
 function removeCartItem(id) {
     vibrate(20);
+
     cartItems = cartItems.filter(i => i.id !== id);
+
     updateCartBadge();
     renderCartPage();
+
+    if (cartItems.length === 0) {
+
+        const floatingBtn =
+            document.getElementById('floatingCartBtn');
+
+        if (floatingBtn) {
+            floatingBtn.style.display = 'none';
+        }
+
+        if (
+            document.getElementById('cartPage')
+            .classList.contains('active')
+        ) {
+            showPage(lastPage || 'home');
+        }
+    }
 }
 
 function renderCartPage() {
