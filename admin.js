@@ -223,8 +223,22 @@ if (currentProdukFilter !== 'semua') {
 </div>
                 <div class="order-info">
                     <div class="info-item">Produk <span>${o.produk}</span></div>
-                    <div class="info-item">Warna / Size <span>${o.warna} / ${o.size}</span></div>
-                    <div class="info-item">Harga <span>Rp${Number(String(o.harga).replace(/\D/g,'')).toLocaleString('id-ID')}</span></div>
+                    <div <div class="info-item">
+Produk
+<span>
+
+${
+Array.isArray(o.produk)
+
+? o.produk.map(p =>
+`${p.nama} (${p.warna}/${p.size})`
+).join('<br>')
+
+: `${o.produk} (${o.warna}/${o.size})`
+}
+
+</span>
+</div>
                     <div class="info-item">Pembayaran <span>${bayar}</span></div>
                     <div class="info-item">WhatsApp <span>${o.wa}</span></div>
                     <div class="info-item">Alamat <span>${o.alamat}</span></div>
