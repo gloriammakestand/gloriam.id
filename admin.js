@@ -236,7 +236,6 @@ Array.isArray(o.produk)
         Rp${Number(String(o.harga).replace(/\D/g,'')).toLocaleString('id-ID')}
     </span>
 </div>
-                    <div class="info-item">Harga <span>Rp${Number(String(o.harga).replace(/\D/g,'')).toLocaleString('id-ID')}</span></div>
                     <div class="info-item">Pembayaran <span>${bayar}</span></div>
                     <div class="info-item">WhatsApp <span>${o.wa}</span></div>
                     <div class="info-item">Alamat <span>${o.alamat}</span></div>
