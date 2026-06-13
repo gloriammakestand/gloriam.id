@@ -695,7 +695,13 @@ async function hapusProdukOrder() {
             o =>
                 (
                     currentProdukFilter === 'semua'
-                    || o.produk === currentProdukFilter
+                    || (
+ Array.isArray(o.produk)
+ ? o.produk.some(
+      p => p.nama === currentProdukFilter
+   )
+ : o.produk === currentProdukFilter
+)
                 )
                 &&
                 (
