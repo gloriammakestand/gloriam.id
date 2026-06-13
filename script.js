@@ -390,6 +390,11 @@ window.onload = async () => {
 
     const path = window.location.pathname.replace(/^\//, '').toLowerCase();
 
+if (path === 'admin') {
+    window.location.href = '/admin.html';
+    return;
+}
+
     // Cek apakah path adalah order page
     const orderMatch =
     path.match(/^([^\/]+)$/)
