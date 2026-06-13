@@ -110,8 +110,19 @@ function isiFilterProduk() {
 
     if (!select) return;
 
-    const produkUnik =
-        [...new Set(allOrders.map(o => o.produk))];
+    const produkUnik = [
+  ...new Set(
+    allOrders.flatMap(o => {
+
+      if (Array.isArray(o.produk)) {
+        return o.produk.map(p => p.nama);
+      }
+
+      return [o.produk];
+
+    })
+  )
+];
 
     select.innerHTML = `
         <option value="semua">
@@ -146,9 +157,18 @@ window.filterProdukOrder = (produk) => {
 
 if (currentProdukFilter !== 'semua') {
 
-    filtered = filtered.filter(
-        o => o.produk === currentProdukFilter
-    );
+    filtered = filtered.filter(o => {
+
+    if (Array.isArray(o.produk)) {
+
+        return o.produk.some(
+            p => p.nama === currentProdukFilter
+        );
+
+    }
+
+    return o.produk === currentProdukFilter;
+});
 }
 
         if (filtered.length === 0) {
