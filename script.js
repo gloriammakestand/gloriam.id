@@ -242,7 +242,7 @@ async function sendCartWA() {
             .catch(err => console.error("Gagal kirim ke spreadsheet:", err));
 
         const text = `*GLORIAM ORDER (KERANJANG)*\n\n*Produk:*\n${produkList}\n\n*Total:* ${formatRupiah(total)}\n*Pembayaran:* ${infoBayar}\n\n*Data Pengiriman*\n*Nama:* ${n}\n*WhatsApp:* ${p}\n*Alamat:* ${a}\n\n*Bukti Bayar:*\n${buktiURL}`;
-        window.open(`https://wa.me/6283898588562?text=${encodeURIComponent(text)}`);
+        window.open(`https://wa.me/6285725706337?text=${encodeURIComponent(text)}`);
 
         // Reset keranjang
         cartItems = [];
