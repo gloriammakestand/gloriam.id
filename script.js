@@ -166,6 +166,25 @@ function validateCartForm() {
     const a = document.getElementById('cartInAddress').value;
     if (!n || !p || !a) return triggerAlert("LENGKAPI DATA!");
 
+    // Cek apakah ada SALAH SATU produk di keranjang yang TIDAK BISA DP
+    const adaProdukTanpaDP = cartItems.some(item => item.prod.dpAllowed === 'no');
+
+    // Elemen UI pilihan bayar di cartSummary
+    const paymentArea = document.getElementById('cartPaymentTypeArea'); // area container pilihan bayar jika ada
+    const btnDP = document.getElementById('btnDP');
+
+    if (adaProdukTanpaDP) {
+        // Jika ada produk yang gak bisa DP -> paksa LUNAS & sembunyikan tombol DP
+        tipeBayar = 'lunas';
+        pilihBayar('lunas');
+        if (btnDP) btnDP.style.display = 'none';
+        if (paymentArea) paymentArea.style.display = 'none';
+    } else {
+        // Jika SEMUA produk bisa DP -> tampilkan opsi DP
+        if (btnDP) btnDP.style.display = 'block';
+        if (paymentArea) paymentArea.style.display = 'block';
+    }
+
     // Render cart summary
     const itemsHTML = cartItems.map(item => `
         <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid #1a1a1a;">
@@ -185,6 +204,7 @@ function validateCartForm() {
     showPage('cartSummary');
 }
 
+
 async function sendCartWA() {
     vibrate(40);
     const n = document.getElementById('cartInName').value;
@@ -202,7 +222,7 @@ async function sendCartWA() {
     btn.disabled = true;
 
     try {
-        const { saveOrder, uploadGambar } = await import('./firebase.js');
+        const { saveOrder } = await import('./firebase.js');
         const buktiURL = uploadedCartBuktiURL;
         if (!buktiURL) throw new Error("Gagal upload bukti");
 
@@ -214,26 +234,21 @@ async function sendCartWA() {
         ).join('\n');
 
         const orderData = {
-    nama: n,
-    wa: p,
-    alamat: a,
-
-    produk: cartItems.map(i => ({
-        nama: i.prod.name,
-        warna: i.color,
-        size: i.size,
-        harga: i.prod.price
-    })),
-
-    produkText: cartItems.map(i =>
-        `${i.prod.name} (${i.color}|${i.size})`
-    ).join(', '),
-
-    harga: total,
-    tipeBayar,
-    dp,
-    buktiURL
-};
+            nama: n,
+            wa: p,
+            alamat: a,
+            produk: cartItems.map(i => ({
+                nama: i.prod.name,
+                warna: i.color,
+                size: i.size,
+                harga: i.prod.price
+            })),
+            produkText: cartItems.map(i => `${i.prod.name} (${i.color}|${i.size})`).join(', '),
+            harga: total,
+            tipeBayar,
+            dp: tipeBayar === 'dp' ? dp : '',
+            buktiURL
+        };
 
         await saveOrder(orderData);
 
@@ -257,6 +272,7 @@ async function sendCartWA() {
         btn.disabled = false;
     }
 }
+
 
 let uploadedCartBuktiURL = null;
 
