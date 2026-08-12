@@ -594,7 +594,7 @@ function injectFooters() {
             <div class="footer-contact-title">KONTAK KAMI :</div>
             <div class="footer-contact-info">
                 Saluran WhatsApp : <a href="https://whatsapp.com/channel/0029Vb7jjbj8vd1GK8ZiTz0y" target="_blank"><i class="fab fa-whatsapp"></i> Klik Disini</a><br>
-                WhatsApp : <a href="https://wa.me/6283898588562">083898588562</a><br>
+                WhatsApp : <a href="https://wa.me/6285725706337">085725706337</a><br>
                 Email : <a href="mailto:gloriammakestand@gmail.com">gloriammakestand@gmail.com</a>
             </div>
             <p class="copyright">© 2026 Gloriam Store. All rights reserved.</p>
@@ -836,7 +836,7 @@ if (!buktiURL) throw new Error("Gagal upload bukti");
     : `DP ${formatRupiah(dp)} dari ${formatRupiah(cart.prod.price)}`;
 
 const text = `*GLORIAM ORDER*\n\n*Produk:* ${cart.prod.name}\n*Warna:* ${cart.color}\n*Size:* ${cart.size}\n*Harga:* ${formatRupiah(cart.prod.price)}\n*Pembayaran:* ${infoBayar}\n\n*Data Pengiriman*\n*Nama:* ${n}\n*WhatsApp:* ${p}\n*Alamat:* ${a}\n\n*Bukti Bayar:*\n${buktiURL}`;
-        window.open(`https://wa.me/6283898588562?text=${encodeURIComponent(text)}`);
+        window.open(`https://wa.me/6285725706337?text=${encodeURIComponent(text)}`);
 
     } catch (err) {
         console.error(err);
