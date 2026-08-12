@@ -297,7 +297,7 @@ async function previewCartBukti(input) {
         previewImg.parentElement.appendChild(spinner);
     };
     reader.readAsDataURL(file);
-    document.getElementById('cartLabelBukti').innerText = '⏳ Mengupload...';
+    document.getElementById('cartLabelBukti').innerText = ' Mengupload...';
 
     const { uploadGambar } = await import('./firebase.js');
     uploadedCartBuktiURL = await uploadGambar(file, 'bukti');
@@ -309,12 +309,12 @@ async function previewCartBukti(input) {
     if (uploadedCartBuktiURL) {
         previewImg.style.opacity = '1';
         previewImg.style.filter = 'none';
-        document.getElementById('cartLabelBukti').innerText = '✓ Upload berhasil!';
+        document.getElementById('cartLabelBukti').innerText = ' Upload berhasil!';
     } else {
         previewImg.style.display = 'none';
         previewImg.style.opacity = '1';
         previewImg.style.filter = 'none';
-        document.getElementById('cartLabelBukti').innerText = '✗ Gagal upload, coba lagi';
+        document.getElementById('cartLabelBukti').innerText = ' Gagal upload, coba lagi';
         uploadedCartBuktiURL = null;
     }
 }
