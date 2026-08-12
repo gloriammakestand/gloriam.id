@@ -256,7 +256,7 @@ async function sendCartWA() {
         fetch(SCRIPT_URL, { method:"POST", mode:"no-cors", cache:"no-cache", headers:{"Content-Type":"text/plain"}, body: JSON.stringify(orderData) })
             .catch(err => console.error("Gagal kirim ke spreadsheet:", err));
 
-        const text = `*GLORIAM ORDER (KERANJANG)*\n\n*Produk:*\n${produkList}\n\n*Total:* ${formatRupiah(total)}\n*Pembayaran:* ${infoBayar}\n\n*Data Pengiriman*\n*Nama:* ${n}\n*WhatsApp:* ${p}\n*Alamat:* ${a}\n\n*Bukti Bayar:*\n${buktiURL}`;
+        const text = `*GLORIAM ORDER (KERANJANG)*\n\n*Produk:*\n${produkList}\n\n*Total:* ${formatRupiah(total)},\n*Pembayaran:* ${infoBayar}\n\n*Data Pengiriman*\n*Nama:* ${n}\n*WhatsApp:* ${p}\n*Alamat:* ${a}\n\n*Bukti Bayar:*\n${buktiURL}`;
         window.open(`https://wa.me/6285725706337?text=${encodeURIComponent(text)}`);
 
         // Reset keranjang
