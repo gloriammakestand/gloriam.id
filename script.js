@@ -588,7 +588,7 @@ function injectFooters() {
             <div class="footer-slogan">MAKE STAND WITH PRIDE</div>
             <div class="footer-socials">
                 <a href="https://www.instagram.com/gloriam____?igsh=d2Z5dTFiMHdxMHgy" target="_blank" onclick="vibrate(30)"><i class="fab fa-instagram"></i></a>
-                <a href="https://wa.me/6283898588562" target="_blank" onclick="vibrate(30)"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://wa.me/6285725706337" target="_blank" onclick="vibrate(30)"><i class="fab fa-whatsapp"></i></a>
                 <a href="https://shopee.co.id/gloriam__" target="_blank" onclick="vibrate(30)"><i class="fas fa-shopping-bag"></i></a>
             </div>
             <div class="footer-contact-title">KONTAK KAMI :</div>
